@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -102,7 +104,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
     setState(() => _isLoading = true);
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(
-          position.latitude, position.longitude);
+          position.latitude, position.longitude, localeIdentifier: "ar");
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
         String detectedCity = place.locality ?? '';
@@ -112,26 +114,71 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
         if (detectedCity.isEmpty) {
           detectedCity = place.administrativeArea ?? '';
         }
-        if (detectedCity.isEmpty) {
-          detectedCity = 'الرياض';
+        
+        if (detectedCity.isNotEmpty) {
+          setState(() {
+            _currentCity = detectedCity;
+            _currentAddress =
+                "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}"
+                    .replaceAll(RegExp(r',\s*,'), ',')
+                    .replaceAll(RegExp(r'^,\s*'), '')
+                    .replaceAll(RegExp(r',\s*$'), '');
+            _isLoading = false;
+          });
+          return;
         }
-        setState(() {
-          _currentCity = detectedCity;
-          _currentAddress =
-              "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}"
-                  .replaceAll(RegExp(r',\s*,'), ',')
-                  .replaceAll(RegExp(r'^,\s*'), '')
-                  .replaceAll(RegExp(r',\s*$'), '');
-          _isLoading = false;
-        });
       }
     } catch (e) {
-      setState(() {
-        _currentCity = "الرياض";
-        _currentAddress = "${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}";
-        _isLoading = false;
-      });
+      // Ignore geocoding error and fallback to http
     }
+
+    try {
+      final apiKey = 'AIzaSyB7WvJHIW8rwl2r_ghBdZra5TgqBqw4VS0';
+      final url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&language=ar&key=$apiKey';
+      
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['status'] == 'OK' && (data['results'] as List).isNotEmpty) {
+          final result = data['results'][0];
+          String detectedCity = '';
+          
+          for (var component in result['address_components']) {
+            final types = component['types'] as List;
+            if (types.contains('locality') || types.contains('administrative_area_level_2')) {
+              detectedCity = component['long_name'];
+              break;
+            }
+          }
+          
+          if (detectedCity.isEmpty) {
+            for (var component in result['address_components']) {
+              final types = component['types'] as List;
+              if (types.contains('administrative_area_level_1')) {
+                detectedCity = component['long_name'];
+                break;
+              }
+            }
+          }
+          
+          setState(() {
+            _currentCity = detectedCity.isNotEmpty ? detectedCity : 'الرياض';
+            _currentAddress = result['formatted_address'] ?? "${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}";
+            _isLoading = false;
+          });
+          return;
+        }
+      }
+    } catch (e) {
+      // Ignore http error
+    }
+
+    // Final fallback
+    setState(() {
+      _currentCity = "الرياض";
+      _currentAddress = "${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}";
+      _isLoading = false;
+    });
   }
 
   // البحث عن مكان بالاسم
