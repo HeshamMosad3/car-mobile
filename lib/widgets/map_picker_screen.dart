@@ -104,7 +104,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
     setState(() => _isLoading = true);
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(
-          position.latitude, position.longitude, localeIdentifier: "ar");
+          position.latitude, position.longitude);
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
         String detectedCity = place.locality ?? '';
