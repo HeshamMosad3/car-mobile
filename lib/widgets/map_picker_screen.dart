@@ -22,6 +22,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
 
   LatLng _currentPosition = const LatLng(24.7136, 46.6753); // Riyadh default
   String _currentAddress = "جاري تحديد الموقع...";
+  String _currentCity = "الرياض";
   bool _isLoading = true;
   bool _isSearching = false;
   bool _isLocating = false;
@@ -104,7 +105,18 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
           position.latitude, position.longitude);
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
+        String detectedCity = place.locality ?? '';
+        if (detectedCity.isEmpty) {
+          detectedCity = place.subAdministrativeArea ?? '';
+        }
+        if (detectedCity.isEmpty) {
+          detectedCity = place.administrativeArea ?? '';
+        }
+        if (detectedCity.isEmpty) {
+          detectedCity = 'الرياض';
+        }
         setState(() {
+          _currentCity = detectedCity;
           _currentAddress =
               "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}"
                   .replaceAll(RegExp(r',\s*,'), ',')
@@ -115,6 +127,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
       }
     } catch (e) {
       setState(() {
+        _currentCity = "الرياض";
         _currentAddress = "${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}";
         _isLoading = false;
       });
@@ -397,6 +410,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
                               'lat': _currentPosition.latitude,
                               'lng': _currentPosition.longitude,
                               'address': _currentAddress,
+                              'city': _currentCity,
                             });
                           },
                   ),

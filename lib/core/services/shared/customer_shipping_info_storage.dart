@@ -10,6 +10,7 @@ class CustomerShippingInfoStorage {
     required String name,
     required String phone,
     required String address,
+    String? city,
     double? lat,
     double? lng,
   }) async {
@@ -17,6 +18,7 @@ class CustomerShippingInfoStorage {
       'name': name,
       'phone': phone,
       'address': address,
+      'city': city,
       'lat': lat,
       'lng': lng,
     });

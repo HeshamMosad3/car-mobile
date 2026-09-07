@@ -35,7 +35,10 @@ class _HomeVendorPageState extends State<HomeVendorPage> {
     super.initState();
     FcmService.onMessage();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NotificationBadgeProvider>().startRealTimePolling();
+      final userId = context.read<AuthProvider>().currentUseModel?.id;
+        if (userId != null) {
+          context.read<NotificationBadgeProvider>().startRealtimeListening(userId);
+        }
     });
   }
 

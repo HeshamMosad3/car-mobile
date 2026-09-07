@@ -46,6 +46,7 @@ class _ConfirmShippingRequestScreenState extends State<ConfirmShippingRequestScr
   
   double? _lat;
   double? _lng;
+  String _city = 'الرياض';
 
   @override
   void initState() {
@@ -60,6 +61,7 @@ class _ConfirmShippingRequestScreenState extends State<ConfirmShippingRequestScr
         _nameController.text = saved['name'] ?? '';
         _phoneController.text = saved['phone'] ?? '';
         _addressController.text = saved['address'] ?? '';
+        _city = saved['city'] ?? 'الرياض';
         _lat = (saved['lat'] as num?)?.toDouble();
         _lng = (saved['lng'] as num?)?.toDouble();
       });
@@ -120,7 +122,10 @@ class _ConfirmShippingRequestScreenState extends State<ConfirmShippingRequestScr
                       setState(() {
                         _lat = result['lat'];
                         _lng = result['lng'];
-                        _addressController.text = result['address'];
+                        _addressController.text = result['address'] ?? '';
+                        if (result['city'] != null && result['city'].toString().trim().isNotEmpty) {
+                          _city = result['city'].toString().trim();
+                        }
                       });
                     }
                   },
@@ -174,6 +179,7 @@ class _ConfirmShippingRequestScreenState extends State<ConfirmShippingRequestScr
                           name: _nameController.text.trim(),
                           phone: _phoneController.text.trim(),
                           address: _addressController.text.trim(),
+                          city: _city,
                           lat: _lat,
                           lng: _lng,
                         );
@@ -187,8 +193,8 @@ class _ConfirmShippingRequestScreenState extends State<ConfirmShippingRequestScr
                           'responseId': widget.responseId,
                           'vendorId' : widget.vendorId,
                           'idNumberUser' : '0000000000', // Dummy 
-                          'cityOriginDimensions': _nameController.text.trim(), // Send name here to avoid modifying backend schema
-                          'addressOriginDimensions' : _addressController.text.trim() + mapUrl, // Combine address and URL
+                          'cityOriginDimensions': _city.isNotEmpty ? _city : 'الرياض',
+                          'addressOriginDimensions' : 'الاسم: ${_nameController.text.trim()} - ${_addressController.text.trim()}$mapUrl',
                           'phoneOriginDimensions' : _phoneController.text.trim(),
                         });
                       },

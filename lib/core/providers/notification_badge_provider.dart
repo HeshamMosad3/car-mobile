@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../data_sources/local/secure_storage.dart';
+import '../data_sources/remote/reverb_service.dart';
 import '../services/shared/notification_service.dart';
 
 class NotificationBadgeProvider extends ChangeNotifier {
   final NotificationService _service;
-  Timer? _pollingTimer;
+  StreamSubscription<Map<String, dynamic>>? _realtimeSubscription;
 
   Map<String, int> unreadCounts = {
     'customer_requests': 0,
@@ -21,41 +21,39 @@ class NotificationBadgeProvider extends ChangeNotifier {
 
   NotificationBadgeProvider(this._service);
 
-  void startRealTimePolling() {
-    _pollingTimer?.cancel();
-    fetchUnreadCounts();
-    _pollingTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
-      final loggedIn = await SecureStorage.isLoggedIn();
-      if (loggedIn) {
-        await fetchUnreadCounts();
-      } else {
-        stopRealTimePolling();
+  /// Replaces the old 4-second polling. Call this once per session
+  /// (e.g. in initState of the home screen) with the logged-in user's id.
+  Future<void> startRealtimeListening(int userId) async {
+    await stopRealtimeListening();
+
+    // Initial fetch so the badge is correct as soon as the screen opens.
+    await fetchUnreadCounts();
+
+    final stream = await ReverbService.instance.listenToPrivateChannel('user.$userId');
+    _realtimeSubscription = stream.listen((message) {
+      // The event just tells us "something changed" — we re-fetch the
+      // authoritative counts from the API rather than trusting the event
+      // payload shape, since it's simpler and avoids format mismatches.
+      if (message['event'] == 'notification.badge.updated') {
+        fetchUnreadCounts();
       }
     });
   }
 
-  void stopRealTimePolling() {
-    _pollingTimer?.cancel();
-    _pollingTimer = null;
+  Future<void> stopRealtimeListening() async {
+    await _realtimeSubscription?.cancel();
+    _realtimeSubscription = null;
   }
 
   int getCount(String category, {int? entityId}) {
     if (entityId != null) {
       return entityUnreadCounts[category]?[entityId] ?? 0;
     }
-    // Main section count from outside:
-    // Sum up all unread entity counts for this section if any exist
     final entityMap = entityUnreadCounts[category];
     if (entityMap != null && entityMap.isNotEmpty) {
       int sum = 0;
       entityMap.forEach((_, count) {
-        if (count > 0) {
-          if (category == 'conversations') {
-            sum += 1;
-          } else {
-            sum += count;
-          }
-        }
+        if (count > 0) sum += count;
       });
       return sum;
     }
@@ -75,7 +73,6 @@ class NotificationBadgeProvider extends ChangeNotifier {
   }
 
   void _parseRawData(Map<String, dynamic> data) {
-    // 1. Parse Section Totals
     if (data['sections'] is Map) {
       final sections = data['sections'] as Map;
       sections.forEach((key, value) {
@@ -91,7 +88,6 @@ class NotificationBadgeProvider extends ChangeNotifier {
       });
     }
 
-    // 2. Parse Entity Breakdown
     if (data['entities'] is Map) {
       final entities = data['entities'] as Map;
       entities.forEach((secKey, secValue) {
@@ -109,25 +105,13 @@ class NotificationBadgeProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> markEntityRead({required String section, required int entityId, int? relatedRequestId}) async {
-    // Optimistic local update
+  Future<void> markEntityRead({required String section, required int entityId}) async {
     if (entityUnreadCounts[section] != null) {
       final currentEntityCount = entityUnreadCounts[section]?[entityId] ?? 0;
       if (currentEntityCount > 0) {
         entityUnreadCounts[section]?[entityId] = 0;
         unreadCounts[section] = (unreadCounts[section] ?? 0) - currentEntityCount;
         if ((unreadCounts[section] ?? 0) < 0) unreadCounts[section] = 0;
-
-        if (relatedRequestId != null && entityUnreadCounts['request_conversations'] != null) {
-          final reqCount = entityUnreadCounts['request_conversations']?[relatedRequestId] ?? 0;
-          if (reqCount > 0) {
-             entityUnreadCounts['request_conversations']?[relatedRequestId] = reqCount - currentEntityCount;
-             if ((entityUnreadCounts['request_conversations']?[relatedRequestId] ?? 0) < 0) {
-                entityUnreadCounts['request_conversations']?[relatedRequestId] = 0;
-             }
-          }
-        }
-
         notifyListeners();
       }
     }
@@ -159,7 +143,7 @@ class NotificationBadgeProvider extends ChangeNotifier {
   }
 
   void clearAll() {
-    stopRealTimePolling();
+    stopRealtimeListening();
     unreadCounts = {
       'customer_requests': 0,
       'company_responses': 0,

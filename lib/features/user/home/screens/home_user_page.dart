@@ -12,6 +12,7 @@ import '../../../../core/utils/size_config.dart';
 import '../../../../widgets/section_badge_widget.dart';
 import '../../../shared/account/screens/account_screen.dart';
 import '../../my_conversations/screens/user_conversations_screen.dart';
+import '../../../../core/providers/auth_provider.dart';
 import '../../my_requests/screens/my_requests_user_screen.dart';
 import '../widgets/home_app_bar_widget.dart';
 import 'home_user_screen.dart';
@@ -45,7 +46,10 @@ class _HomeUserPageState extends State<HomeUserPage> {
     super.initState();
     FcmService.onMessage();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NotificationBadgeProvider>().startRealTimePolling();
+      final userId = context.read<AuthProvider>().currentUseModel?.id;
+        if (userId != null) {
+          context.read<NotificationBadgeProvider>().startRealtimeListening(userId);
+        }
     });
   }
 

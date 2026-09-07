@@ -77,7 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (!widget.isVendor) {
         context.read<VendorProfileProvider>().fetchVendorProfile(context, widget.vendorId, refresh: true);
       }
-      context.read<NotificationBadgeProvider>().markEntityRead(section: 'conversations', entityId: widget.conversationId, relatedRequestId: widget.requestId);
+      context.read<NotificationBadgeProvider>().markEntityRead(section: 'conversations', entityId: widget.conversationId);
       final prov = Provider.of<ConversationProvider>(context, listen: false);
       prov.initProvider();
       prov.setActiveConversation(widget.conversationId);
@@ -526,6 +526,7 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
   
   double? _lat;
   double? _lng;
+  String _city = 'الرياض';
 
   @override
   void initState() {
@@ -540,6 +541,7 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
         _nameController.text = saved['name'] ?? '';
         _phoneController.text = saved['phone'] ?? '';
         _addressController.text = saved['address'] ?? '';
+        _city = saved['city'] ?? 'الرياض';
         _lat = (saved['lat'] as num?)?.toDouble();
         _lng = (saved['lng'] as num?)?.toDouble();
       });
@@ -610,7 +612,10 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
                         setState(() {
                           _lat = result['lat'];
                           _lng = result['lng'];
-                          _addressController.text = result['address'];
+                          _addressController.text = result['address'] ?? '';
+                          if (result['city'] != null && result['city'].toString().trim().isNotEmpty) {
+                            _city = result['city'].toString().trim();
+                          }
                         });
                       }
                     },
@@ -725,12 +730,13 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
                             name: _nameController.text.trim(),
                             phone: _phoneController.text.trim(),
                             address: _addressController.text.trim(),
+                            city: _city,
                             lat: _lat,
                             lng: _lng,
                           );
                           widget.onSend(jsonEncode({
                             'name': _nameController.text.toString(),
-                            'city': '', // Removed from UI
+                            'city': _city.isNotEmpty ? _city : 'الرياض',
                             'address' : _addressController.text.toString(),
                             'lat' : _lat,
                             'lng' : _lng,
