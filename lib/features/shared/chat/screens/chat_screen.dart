@@ -350,7 +350,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       label: widget.isVendor ? 'تم إرسال طلب الشحن': 'طلب الشحن',
                                       onTap: (){
                                         if(!widget.isVendor)
-                                        navigationPush(context, ConfirmShippingRequestScreen(requestId: widget.requestId, responseId: widget.responseId, vendorId: widget.responseId,));
+                                        navigationPush(context, ConfirmShippingRequestScreen(requestId: widget.requestId, responseId: widget.responseId, vendorId: widget.vendorId,));
                                       },
                                       textColor: AppColor.accentColor,
                                       primaryColor: Colors.transparent,
