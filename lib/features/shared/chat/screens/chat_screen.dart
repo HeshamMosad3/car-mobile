@@ -558,7 +558,7 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
     if (_selectedCity == null && _savedCityEn.isNotEmpty) {
       final match = cities.where((c) => c.cityNameEn == _savedCityEn).toList();
       if (match.isNotEmpty) {
-        setState(() => _selectedCity = match.first);
+        _selectedCity = match.first;
       }
     }
   }

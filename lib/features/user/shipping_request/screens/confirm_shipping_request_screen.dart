@@ -78,7 +78,7 @@ class _ConfirmShippingRequestScreenState
       final match =
           cities.where((c) => c.cityNameEn == _savedCityEn).toList();
       if (match.isNotEmpty) {
-        setState(() => _selectedCity = match.first);
+        _selectedCity = match.first;
       }
     }
   }
