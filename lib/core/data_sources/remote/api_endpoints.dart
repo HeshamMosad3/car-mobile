@@ -39,4 +39,7 @@ class ApiEndpoints {
   static const String uploadCommercialRecordImage = 'vendor/profile/upload-commercial-record';
   static const String payAppCommission = 'vendor/app-commission/pay';
 
+  // shared endpoints
+  static const String getCities = 'cities';
+
 }

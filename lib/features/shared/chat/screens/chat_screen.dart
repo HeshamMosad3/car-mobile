@@ -526,12 +526,15 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
   
   double? _lat;
   double? _lng;
-  String _city = 'الرياض';
+  CityModel? _selectedCity;
 
   @override
   void initState() {
     super.initState();
     _loadSavedInfo();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ShippingProvider>(context, listen: false).loadCities();
+    });
   }
 
   Future<void> _loadSavedInfo() async {
@@ -541,10 +544,22 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
         _nameController.text = saved['name'] ?? '';
         _phoneController.text = saved['phone'] ?? '';
         _addressController.text = saved['address'] ?? '';
-        _city = saved['city'] ?? 'الرياض';
         _lat = (saved['lat'] as num?)?.toDouble();
         _lng = (saved['lng'] as num?)?.toDouble();
+        // city will be restored after cities load via _tryRestoreCity
+        _savedCityEn = saved['city_en'] ?? saved['city'] ?? '';
       });
+    }
+  }
+
+  String _savedCityEn = '';
+
+  void _tryRestoreCity(List<CityModel> cities) {
+    if (_selectedCity == null && _savedCityEn.isNotEmpty) {
+      final match = cities.where((c) => c.cityNameEn == _savedCityEn).toList();
+      if (match.isNotEmpty) {
+        setState(() => _selectedCity = match.first);
+      }
     }
   }
 
@@ -600,6 +615,34 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
                       maxLength: 255,),
                   ),
                   const SizedBox(height: 16,),
+                  // Dropdown اختيار المدينة
+                  Consumer<ShippingProvider>(
+                    builder: (context, shippingProvider, _) {
+                      _tryRestoreCity(shippingProvider.cities);
+                      return DropdownButtonFormField<CityModel>(
+                        value: _selectedCity,
+                        isExpanded: true,
+                        decoration: InputDecoration(
+                          labelText: 'مدينة الإرسال',
+                          labelStyle: const TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                        ),
+                        hint: shippingProvider.isLoadingCities
+                            ? const Text('جاري تحميل المدن...')
+                            : const Text('اختر مدينة الإرسال'),
+                        items: shippingProvider.cities.map((city) {
+                          return DropdownMenuItem<CityModel>(
+                            value: city,
+                            child: Text(city.cityNameAr, textAlign: TextAlign.right),
+                          );
+                        }).toList(),
+                        onChanged: (val) => setState(() => _selectedCity = val),
+                        validator: (_) => _selectedCity == null ? 'يرجى اختيار مدينة الإرسال' : null,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16,),
                   GestureDetector(
                     onTap: () async {
                       final result = await Navigator.push(
@@ -613,15 +656,13 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
                           _lat = result['lat'];
                           _lng = result['lng'];
                           _addressController.text = result['address'] ?? '';
-                          if (result['city'] != null && result['city'].toString().trim().isNotEmpty) {
-                            _city = result['city'].toString().trim();
-                          }
+                          // لا نأخذ المدينة من الخريطة بعد الآن
                         });
                       }
                     },
                     child: AbsorbPointer(
                       child: CustomTextField(
-                        label: 'العنوان',
+                        label: 'العنوان التفصيلي (اختياري)',
                         controller: _addressController,
                         maxLines: null,
                         validator: (value) => FormValidatorUtils.textValidator(value,
@@ -730,13 +771,14 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
                             name: _nameController.text.trim(),
                             phone: _phoneController.text.trim(),
                             address: _addressController.text.trim(),
-                            city: _city,
+                            city: _selectedCity?.cityNameEn ?? '',
                             lat: _lat,
                             lng: _lng,
                           );
                           widget.onSend(jsonEncode({
                             'name': _nameController.text.toString(),
-                            'city': _city.isNotEmpty ? _city : 'الرياض',
+                            'city': _selectedCity?.cityNameEn ?? 'Riyadh',
+                            'city_ar': _selectedCity?.cityNameAr ?? 'الرياض',
                             'address' : _addressController.text.toString(),
                             'lat' : _lat,
                             'lng' : _lng,
