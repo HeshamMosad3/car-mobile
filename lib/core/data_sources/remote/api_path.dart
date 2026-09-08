@@ -1,6 +1,6 @@
 class ApiPath {
-  static const String BASE_HOST = 'https://car-production-93a1.up.railway.app/';
- // static const String BASE_HOST = 'http://10.0.2.2:8000/';
+  static const String BASE_HOST = 'https://car-production-0e61.up.railway.app/';
+  // static const String BASE_HOST = 'http://10.0.2.2:8000/';
   static const String baseUrl = BASE_HOST + 'api/v1/';
 
   static const String baseUrlImage = BASE_HOST + 'uploads/';
