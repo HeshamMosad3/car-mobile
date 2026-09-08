@@ -22,9 +22,6 @@ class ReverbService {
   // Must match REVERB_APP_KEY in the backend .env
   static const String _appKey = '0z58lxjbuvh5gyymgd0n';
 
-  // Must match REVERB_PORT in the backend .env
-  static const int _port = 8080;
-
   WebSocketChannel? _channel;
   String? _socketId;
   bool _connected = false;
@@ -33,17 +30,23 @@ class ReverbService {
       _channelControllers = {};
   final Set<String> _pendingSubscriptions = {};
 
-  /// Reuses the same host configured for the REST API (ApiPath.BASE_HOST),
-  /// so you only have to keep one IP/host in sync instead of two.
-  String get _reverbHost => Uri.parse(ApiPath.BASE_HOST).host;
+  String get _reverbHost => ApiPath.REVERB_HOST;
 
   bool get isConnected => _connected;
 
   Future<void> connect() async {
     if (_connected) return;
 
+    final isLocal = _reverbHost.contains('10.0.2.2') ||
+        _reverbHost.contains('127.0.0.1') ||
+        _reverbHost.contains('192.168.');
+    final scheme = isLocal ? 'ws' : 'wss';
+    final portPart = isLocal ? ':8080' : '';
+
     final wsUrl =
-        'ws://$_reverbHost:$_port/app/$_appKey?protocol=7&client=flutter&version=1.0&flash=false';
+        '$scheme://$_reverbHost$portPart/app/$_appKey?protocol=7&client=flutter&version=1.0&flash=false';
+
+    debugPrint('Connecting to Reverb WebSocket: $wsUrl');
 
     _channel = IOWebSocketChannel.connect(Uri.parse(wsUrl));
     _connected = true;
@@ -51,10 +54,12 @@ class ReverbService {
     _channel!.stream.listen(
       _handleMessage,
       onDone: () {
+        debugPrint('Reverb WebSocket disconnected');
         _connected = false;
         _socketId = null;
       },
-      onError: (_) {
+      onError: (err) {
+        debugPrint('Reverb WebSocket error: $err');
         _connected = false;
         _socketId = null;
       },
@@ -152,7 +157,7 @@ class ReverbService {
     final token = await SecureStorage.getToken();
     if (token == null || _socketId == null) return null;
 
-    final uri = Uri.parse('${ApiPath.BASE_HOST}broadcasting/auth');
+    final uri = Uri.parse('${ApiPath.BASE_HOST}api/broadcasting/auth');
 
     try {
       final response = await http.post(
