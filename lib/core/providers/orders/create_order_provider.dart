@@ -205,15 +205,21 @@ class CreateOrderProvider extends ChangeNotifier {
       if(response?.success ?? false){
         DialogUtils().showConfirmDialog(context, message: response?.message ?? '', confirm: () async {
           _toggleLoading();
-          final _res = await _requestService.confirmPriceShippingRequest(
-              body: {
-                'id': response?.result?.shippingRequestId ?? 0
-              });
-          if(_res?.success ?? false){
-            navigationPushAndRemoveUntil(context, HomeUserPage());
-            ToastHelper.showSuccess(response?.message ?? '');
-          }else{
-            ToastHelper.showError(response?.message ?? '');
+          try {
+            final _res = await _requestService.confirmPriceShippingRequest(
+                body: {
+                  'id': response?.result?.shippingRequestId ?? 0
+                });
+            if(_res?.success ?? false){
+              navigationPushAndRemoveUntil(context, HomeUserPage());
+              ToastHelper.showSuccess(response?.message ?? '');
+            }else{
+              ToastHelper.showError(_res?.message ?? response?.message ?? '');
+            }
+          } catch (e) {
+            Helper.logDebug('confirmPriceShippingRequest error: $e');
+            ToastHelper.showError(e.toString());
+          } finally {
             _toggleLoading();
           }
         });
