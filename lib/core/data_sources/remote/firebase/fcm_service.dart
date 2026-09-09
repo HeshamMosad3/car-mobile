@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:car_mediator_mobile/core/helpers/helpers.dart';
@@ -9,7 +10,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../features/shared/notifications/screens/notifications_screen.dart';
+import '../../../../features/shared/chat/screens/chat_screen.dart';
+import '../../../../features/user/my_requests/screens/responses_my_request_screen.dart';
+import '../../../../features/vendor/new_requests/screens/details_new_request_screen.dart';
 import '../../../../widgets/components.dart';
+import '../../../providers/auth_provider.dart';
 import '../../../providers/conversation_provider.dart';
 import '../../../providers/notification_badge_provider.dart';
 import '../../local/secure_storage.dart';
@@ -116,30 +121,80 @@ class FcmService {
 
   }
 
+  static void _handleNotificationNavigation(Map<String, dynamic>? data) {
+    if (data == null) return;
+    print("---_handleNotificationNavigation--- payload: $data");
+    final _cxt = ContextUtils.globalContext;
+    if (_cxt == null) return;
+
+    try {
+      final category = data['category'];
+
+      if (category == 'conversations') {
+        final conversationId = data['conversation_id'];
+        if (conversationId != null) {
+          navigationPush(_cxt, ChatScreen(
+            conversationId: int.tryParse(conversationId.toString()) ?? 0,
+            requestId: int.tryParse(data['request_id']?.toString() ?? '0') ?? 0,
+            responseId: int.tryParse(data['response_id']?.toString() ?? '0') ?? 0,
+            vendorId: int.tryParse(data['vendor_id']?.toString() ?? '0') ?? 0,
+            receiverName: data['receiver_name']?.toString() ?? 'المحادثة',
+            receiverLogo: '',
+            myUserId: _cxt.read<AuthProvider>().currentUseModel?.id ?? 0,
+          ));
+          return;
+        }
+      } else if (category == 'company_responses') {
+        final targetId = data['target_id'];
+        if (targetId != null) {
+          navigationPush(_cxt, ResponsesMyRequestScreen(
+            requestId: int.tryParse(targetId.toString()) ?? 0,
+          ));
+          return;
+        }
+      } else if (category == 'customer_requests') {
+        final targetId = data['target_id'];
+        if (targetId != null) {
+          navigationPush(_cxt, DetailsNewRequestScreen(
+            requestId: int.tryParse(targetId.toString()) ?? 0,
+          ));
+          return;
+        }
+      }
+
+      // Default fallback
+      navigationPush(_cxt, NotificationsScreen());
+    } catch (e) {
+      log("Error navigating from notification: $e");
+      navigationPush(_cxt, NotificationsScreen());
+    }
+  }
+
   static Future<void> onTapNotification(NotificationResponse? response) async {
     if (response?.payload == null) return;
-    print('---onTapNotification--payload-------${response?.payload }---------');
-    final _cxt = ContextUtils.globalContext;
-    if(_cxt != null)
-      navigationPush(_cxt, NotificationsScreen());
+    print('---onTapNotification--payload-------${response?.payload}---------');
+    try {
+      final Map<String, dynamic> data = jsonDecode(response!.payload!);
+      _handleNotificationNavigation(data);
+    } catch (e) {
+      final _cxt = ContextUtils.globalContext;
+      if (_cxt != null) navigationPush(_cxt, NotificationsScreen());
+    }
   }
 
   static Future<void> initialMessage() async {
     //When App is Terminated
-    // when you click on notification app open from terminated state and
-    // you can get notification data in this method
-    var message =   await FirebaseMessaging.instance.getInitialMessage() ;
-    if (message != null){
-      print("----FirebaseMessaging----initalMessage------${message.toString}----");
-      final _cxt = ContextUtils.globalContext;
-      if(_cxt != null)
-        navigationPush(_cxt, NotificationsScreen());
+    var message = await FirebaseMessaging.instance.getInitialMessage();
+    if (message != null) {
+      print("----FirebaseMessaging----initalMessage------${message.toString()}----");
+      _handleNotificationNavigation(message.data);
     }
   }
 
   static Future<void> onMessage_OpenedApp() async {
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       print("--------FirebaseMessaging.onMessageOpenedApp.listen----------");
+      _handleNotificationNavigation(message.data);
     });
   }
 
@@ -171,7 +226,7 @@ class FcmService {
 
         await FcmService.localNotificationsPlugin.show(
           0, message.notification!.title, message.notification!.body, FcmService.platformChannelSpecifics,
-          payload: message.data.toString(),
+          payload: jsonEncode(message.data),
         );
       }
     });

@@ -299,53 +299,6 @@ test/widget_test.dart
 
 # Files
 
-## File: .gitignore
-````
- 1: # Miscellaneous
- 2: *.class
- 3: *.log
- 4: *.pyc
- 5: *.swp
- 6: .DS_Store
- 7: .atom/
- 8: .buildlog/
- 9: .history
-10: .svn/
-11: migrate_working_dir/
-12: 
-13: # IntelliJ related
-14: *.iml
-15: *.ipr
-16: *.iws
-17: .idea/
-18: 
-19: # The .vscode folder contains launch configuration and tasks you configure in
-20: # VS Code which you may wish to be included in version control, so this line
-21: # is commented out by default.
-22: #.vscode/
-23: 
-24: # Flutter/Dart/Pub related
-25: **/doc/api/
-26: **/ios/Flutter/.last_build_id
-27: .dart_tool/
-28: .flutter-plugins
-29: .flutter-plugins-dependencies
-30: .pub-cache/
-31: .pub/
-32: /build/
-33: 
-34: # Symbolication related
-35: app.*.symbols
-36: 
-37: # Obfuscation related
-38: app.*.map.json
-39: 
-40: # Android Studio will place build artifacts here
-41: /android/app/debug
-42: /android/app/profile
-43: /android/app/release
-````
-
 ## File: .metadata
 ````
  1: # This file tracks properties of this Flutter project.
@@ -378,6 +331,47 @@ test/widget_test.dart
 28:   unmanaged_files:
 29:     - 'lib/main.dart'
 30:     - 'ios/Runner.xcodeproj/project.pbxproj'
+````
+
+## File: analysis_options.yaml
+````yaml
+ 1: # This file configures the analyzer, which statically analyzes Dart code to
+ 2: # check for errors, warnings, and lints.
+ 3: #
+ 4: # The issues identified by the analyzer are surfaced in the UI of Dart-enabled
+ 5: # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+ 6: # invoked from the command line by running `flutter analyze`.
+ 7: 
+ 8: # The following line activates a set of recommended lints for Flutter apps,
+ 9: # packages, and plugins designed to encourage good coding practices.
+10: analyzer:
+11:   exclude:
+12:     - build/**
+13:     - android/**
+14:     - ios/**
+15:     - web/**
+16:     - windows/**
+17:     - macos/**
+18:     - linux/**
+19: include: package:flutter_lints/flutter.yaml
+20: 
+21: linter:
+22:   # The lint rules applied to this project can be customized in the
+23:   # section below to disable rules from the `package:flutter_lints/flutter.yaml`
+24:   # included above or to enable additional rules. A list of all available lints
+25:   # and their documentation is published at https://dart.dev/lints.
+26:   #
+27:   # Instead of disabling a lint rule for the entire project in the
+28:   # section below, it can also be suppressed for a single line of code
+29:   # or a specific dart file by using the `// ignore: name_of_lint` and
+30:   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
+31:   # producing the lint.
+32:   rules:
+33:     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
+34:     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+35: 
+36: # Additional information about this file can be found at
+37: # https://dart.dev/guides/language/analysis-options
 ````
 
 ## File: devtools_options.yaml
@@ -1452,66 +1446,6 @@ test/widget_test.dart
 99: // example: await SecureStorage.saveToken(token);
 ````
 
-## File: lib/core/data_sources/remote/api_endpoints.dart
-````dart
- 1: class ApiEndpoints {
- 2:   static const String checkCacheUpdates = 'cache/check-updates';
- 3:   static const String loginWithOtp = 'auth/login-with-otp';
- 4:   static const String register = 'auth/register';
- 5:   static const String registerVendor = 'vendor/register-vendor';
- 6:   static const String logout = 'auth/logout';
- 7: 
- 8:    static const String createConversation = 'chat/conversations/create-conversation';
- 9:    static const String sendMessageChat = 'chat/messages/send';
-10:    static const String userConversations = 'chat/conversations/user-conversations';
-11:    static const String vendorConversations = 'chat/conversations/vendor-conversations';
-12: 
-13:   // users endpoints
-14:   static const String checkEligibleVendors = 'user/request/check-eligible-vendors';
-15:   static const String confirmOrderRequest = 'user/request/confirm-request';
-16:   static const String ConfirmShippingRequest = 'user/request/confirm-shipping-request';
-17:   static const String ConfirmPriceShippingRequest = 'user/request/confirm-price-shipping-request';
-18:   static const String getMyRequestUser = 'user/my-requests';
-19:   static const String getResponsesMyRequest = 'user/my-requests/responses';
-20:   static const String getResponseRequestById = 'user/my-requests/response';
-21:   static const String complaintVendorService = 'user/complaints/complaint-vendor-service';
-22:   static const String updateStatusMyRequest = 'user/my-requests/update-status';
-23:   static const String getUserProfile = 'user/profile';
-24:   static const String updateUserProfile = 'user/profile/update';
-25: 
-26:   // vendor endpoints
-27:   static const String getAllNewRequestsVendor = 'vendor/new-requests/get-all-new-requests';
-28:   static const String detailsNewRequestsVendor = 'vendor/new-requests/details-new-requests';
-29:   static const String sendResponseRequestVendor = 'vendor/responses-requests/send-response-request';
-30:   static const String getMyResponseRequests = 'vendor/responses-requests/get-my-response-requests';
-31:   static const String detailResponseRequests = 'vendor/responses-requests/details-response-request';
-32:   static const String getCategoriesSpecialtyVendor = 'vendor/specialties/get-categories-specialty';
-33:   static const String updateCategorySpecialtyVendor = 'vendor/specialties/update-category-specialty';
-34:   static const String getVendorCitiesVendor = 'vendor/specialties/get-vendor-cities';
-35:   static const String updateVendorCitiesVendor = 'vendor/specialties/update-vendor-cities';
-36:   static const String getVendorBrandsCar = 'vendor/specialties/get-vendor-brands-car';
-37:   static const String getVendorProfile = 'vendor/profile';
-38:   static const String updateVendorProfile = 'vendor/profile/update';
-39:   static const String uploadCommercialRecordImage = 'vendor/profile/upload-commercial-record';
-40:   static const String payAppCommission = 'vendor/app-commission/pay';
-41: 
-42: }
-````
-
-## File: lib/core/data_sources/remote/api_path.dart
-````dart
- 1: class ApiPath {
- 2:   //static const String BASE_HOST = 'https://car-production-93a1.up.railway.app/';
- 3:   static const String BASE_HOST = 'http://10.0.2.2:8000/';
- 4:   static const String baseUrl = BASE_HOST + 'api/v1/';
- 5: 
- 6:   static const String baseUrlImage = BASE_HOST + 'uploads/';
- 7:   static const String categoriesIcon = 'categories-icon/';
- 8:   static const String uploadsPrivate = BASE_HOST + 'api/uploads-private/';
- 9:   static const String uploads = BASE_HOST + 'api/uploads/';
-10: }
-````
-
 ## File: lib/core/data_sources/remote/api_service.dart
 ````dart
  1: import 'dart:io';
@@ -1604,212 +1538,6 @@ test/widget_test.dart
 88:     return await _apiClient.multipartRequestSingleImage(path, headers: headers, fields: fields, file: file );
 89:   }
 90: }
-````
-
-## File: lib/core/data_sources/remote/reverb_service.dart
-````dart
-  1: import 'dart:async';
-  2: import 'dart:convert';
-  3: 
-  4: import 'package:http/http.dart' as http;
-  5: import 'package:web_socket_channel/io.dart';
-  6: import 'package:web_socket_channel/web_socket_channel.dart';
-  7: 
-  8: import '../local/secure_storage.dart';
-  9: import 'api_path.dart';
- 10: 
- 11: /// Singleton service that manages a single WebSocket connection to the
- 12: /// Laravel Reverb server, and exposes per-channel event streams so that
- 13: /// multiple providers/screens (notifications, chat, ...) can share one
- 14: /// connection instead of opening a new socket each.
- 15: class ReverbService {
- 16:   ReverbService._internal();
- 17: 
- 18:   static final ReverbService instance = ReverbService._internal();
- 19: 
- 20:   factory ReverbService() => instance;
- 21: 
- 22:   // Must match REVERB_APP_KEY in the backend .env
- 23:   static const String _appKey = '0z58lxjbuvh5gyymgd0n';
- 24: 
- 25:   // Must match REVERB_PORT in the backend .env
- 26:   static const int _port = 8080;
- 27: 
- 28:   WebSocketChannel? _channel;
- 29:   String? _socketId;
- 30:   bool _connected = false;
- 31: 
- 32:   final Map<String, StreamController<Map<String, dynamic>>>
- 33:       _channelControllers = {};
- 34:   final Set<String> _pendingSubscriptions = {};
- 35: 
- 36:   /// Reuses the same host configured for the REST API (ApiPath.BASE_HOST),
- 37:   /// so you only have to keep one IP/host in sync instead of two.
- 38:   String get _reverbHost => Uri.parse(ApiPath.BASE_HOST).host;
- 39: 
- 40:   bool get isConnected => _connected;
- 41: 
- 42:   Future<void> connect() async {
- 43:     if (_connected) return;
- 44: 
- 45:     final wsUrl =
- 46:         'ws://$_reverbHost:$_port/app/$_appKey?protocol=7&client=flutter&version=1.0&flash=false';
- 47: 
- 48:     _channel = IOWebSocketChannel.connect(Uri.parse(wsUrl));
- 49:     _connected = true;
- 50: 
- 51:     _channel!.stream.listen(
- 52:       _handleMessage,
- 53:       onDone: () {
- 54:         _connected = false;
- 55:         _socketId = null;
- 56:       },
- 57:       onError: (_) {
- 58:         _connected = false;
- 59:         _socketId = null;
- 60:       },
- 61:       cancelOnError: false,
- 62:     );
- 63:   }
- 64: 
- 65:   void _handleMessage(dynamic raw) {
- 66:     final Map<String, dynamic> decoded =
- 67:         jsonDecode(raw as String) as Map<String, dynamic>;
- 68:     final String? event = decoded['event'] as String?;
- 69: 
- 70:     if (event == 'pusher:connection_established') {
- 71:       final data =
- 72:           jsonDecode(decoded['data'] as String) as Map<String, dynamic>;
- 73:       _socketId = data['socket_id'] as String?;
- 74: 
- 75:       final pending = List<String>.from(_pendingSubscriptions);
- 76:       _pendingSubscriptions.clear();
- 77:       for (final channelName in pending) {
- 78:         _sendSubscribe(channelName);
- 79:       }
- 80:       return;
- 81:     }
- 82: 
- 83:     if (event == 'pusher:ping') {
- 84:       _channel?.sink.add(jsonEncode({'event': 'pusher:pong'}));
- 85:       return;
- 86:     }
- 87: 
- 88:     if (event == 'pusher:error') {
- 89:       return;
- 90:     }
- 91: 
- 92:     final String? channelName = decoded['channel'] as String?;
- 93:     if (channelName != null && _channelControllers.containsKey(channelName)) {
- 94:       dynamic payload = decoded['data'];
- 95:       if (payload is String) {
- 96:         try {
- 97:           payload = jsonDecode(payload);
- 98:         } catch (_) {
- 99:           // leave as raw string if it's not JSON
-100:         }
-101:       }
-102:       _channelControllers[channelName]!.add({
-103:         'event': event,
-104:         'data': payload,
-105:       });
-106:     }
-107:   }
-108: 
-109:   /// Subscribes to a private channel and returns a broadcast stream of
-110:   /// {event, data} maps received on it.
-111:   ///
-112:   /// [channelBaseName] is WITHOUT the "private-" prefix, e.g. "user.5"
-113:   /// or "conversation.12" — the prefix is added automatically.
-114:   Future<Stream<Map<String, dynamic>>> listenToPrivateChannel(
-115:       String channelBaseName) async {
-116:     final fullChannelName = 'private-$channelBaseName';
-117: 
-118:     _channelControllers[fullChannelName] ??=
-119:         StreamController<Map<String, dynamic>>.broadcast();
-120: 
-121:     if (!_connected) {
-122:       await connect();
-123:     }
-124: 
-125:     if (_socketId == null) {
-126:       _pendingSubscriptions.add(fullChannelName);
-127:     } else {
-128:       await _sendSubscribe(fullChannelName);
-129:     }
-130: 
-131:     return _channelControllers[fullChannelName]!.stream;
-132:   }
-133: 
-134:   Future<void> _sendSubscribe(String fullChannelName) async {
-135:     final authString = await _authorize(fullChannelName);
-136:     if (authString == null) return;
-137: 
-138:     _channel?.sink.add(jsonEncode({
-139:       'event': 'pusher:subscribe',
-140:       'data': {
-141:         'auth': authString,
-142:         'channel': fullChannelName,
-143:       },
-144:     }));
-145:   }
-146: 
-147:   /// Calls POST /broadcasting/auth to get the signed auth string required
-148:   /// by Reverb/Pusher protocol for private channels. This is NOT the same
-149:   /// as the Bearer token — it's an HMAC signature computed server-side
-150:   /// using REVERB_APP_SECRET, socket_id and the channel name.
-151:   Future<String?> _authorize(String fullChannelName) async {
-152:     final token = await SecureStorage.getToken();
-153:     if (token == null || _socketId == null) return null;
-154: 
-155:     final uri = Uri.parse('${ApiPath.BASE_HOST}broadcasting/auth');
-156: 
-157:     try {
-158:       final response = await http.post(
-159:         uri,
-160:         headers: {
-161:           'Authorization': 'Bearer $token',
-162:           'Accept': 'application/json',
-163:           'Content-Type': 'application/json',
-164:         },
-165:         body: jsonEncode({
-166:           'socket_id': _socketId,
-167:           'channel_name': fullChannelName,
-168:         }),
-169:       );
-170: 
-171:       if (response.statusCode == 200) {
-172:         final body = jsonDecode(response.body) as Map<String, dynamic>;
-173:         return body['auth'] as String?;
-174:       }
-175:     } catch (_) {
-176:       // network error, auth endpoint unreachable, etc. — caller streams
-177:       // simply won't receive events for this channel.
-178:     }
-179:     return null;
-180:   }
-181: 
-182:   void unsubscribe(String channelBaseName) {
-183:     final fullChannelName = 'private-$channelBaseName';
-184:     _channel?.sink.add(jsonEncode({
-185:       'event': 'pusher:unsubscribe',
-186:       'data': {'channel': fullChannelName},
-187:     }));
-188:     _channelControllers[fullChannelName]?.close();
-189:     _channelControllers.remove(fullChannelName);
-190:   }
-191: 
-192:   void disconnect() {
-193:     _channel?.sink.close();
-194:     _channel = null;
-195:     _connected = false;
-196:     _socketId = null;
-197:     for (final controller in _channelControllers.values) {
-198:       controller.close();
-199:     }
-200:     _channelControllers.clear();
-201:   }
-202: }
 ````
 
 ## File: lib/core/data_sources/remote/websocket_service.dart
@@ -2356,30 +2084,6 @@ test/widget_test.dart
 62:   }
 63: 
 64: }
-````
-
-## File: lib/core/providers/shipping_provider.dart
-````dart
- 1: import 'package:flutter/material.dart';
- 2: 
- 3: import '../../models/city_model.dart';
- 4: import '../services/shared/shipping_service.dart';
- 5: 
- 6: class ShippingProvider extends ChangeNotifier {
- 7:   final ShippingService _service;
- 8: 
- 9:   CityModel? myCitySelectedModel;
-10: 
-11:   ShippingProvider(this._service);
-12: 
-13:   void selectedMyCity(CityModel? model) {
-14:     myCitySelectedModel = model;
-15:     notifyListeners();
-16:   }
-17: 
-18: 
-19: 
-20: }
 ````
 
 ## File: lib/core/providers/users/profile_user_provider.dart
@@ -3683,17 +3387,6 @@ test/widget_test.dart
 84: }
 ````
 
-## File: lib/core/services/shared/shipping_service.dart
-````dart
-1: import '../../data_sources/remote/api_service.dart';
-2: 
-3: class ShippingService{
-4:   final ApiService _apiService;
-5: 
-6:   ShippingService(this._apiService);
-7: }
-````
-
 ## File: lib/core/services/user/my_requests/my_request_user_service.dart
 ````dart
  1: import 'package:flutter/cupertino.dart';
@@ -4721,6 +4414,327 @@ test/widget_test.dart
 40: }
 ````
 
+## File: lib/core/utils/dialogUtils.dart
+````dart
+  1: import 'package:car_mediator_mobile/core/utils/constants/extensions.dart';
+  2: import 'package:flutter/material.dart';
+  3: 
+  4: import '../../features/shared/auth/login_screen.dart';
+  5: import '../../widgets/components.dart';
+  6: import '../../widgets/customButton2.dart';
+  7: import 'constants/assets_path.dart';
+  8: import 'constants/colors_constants.dart';
+  9: 
+ 10: class DialogUtils{
+ 11:   DialogUtils._();
+ 12:   static final DialogUtils _instance = DialogUtils._();
+ 13:   factory DialogUtils() => _instance;
+ 14: 
+ 15:   Future<void> showOptionsDialog( BuildContext context,{required String title,
+ 16:     required String option1,required String option2,
+ 17:     required GestureTapCallback onTap1,
+ 18:     required GestureTapCallback onTap2}) {
+ 19:     return showDialog(
+ 20:         context: context,
+ 21:         builder: (BuildContext context) {
+ 22:           return AlertDialog(
+ 23:             title: Text(title),
+ 24:             content: SingleChildScrollView(
+ 25:               child: ListBody(
+ 26:                 children: [
+ 27:                   GestureDetector(
+ 28:                     onTap:onTap1,
+ 29:                     child: Text(option1),
+ 30:                   ),
+ 31:                   const Padding(padding: EdgeInsets.all(10)),
+ 32:                   GestureDetector(
+ 33:                     child: Text(option2),
+ 34:                     onTap:onTap2,
+ 35:                   ),
+ 36:                 ],
+ 37:               ),
+ 38:             ),
+ 39:           );
+ 40:         }
+ 41:     );
+ 42:   }
+ 43: 
+ 44:   Future showAdvancedDialog(BuildContext context,{ String? title , description ='' ,
+ 45:     String? iconPath, textCancel='خروج' ,String? textOk, Color? iconColor,
+ 46:     required GestureTapCallback onTabCancel, final GestureTapCallback? onTabOk ,Color colorCancelButton = Colors.redAccent, Color? colorOkButton, }) async {
+ 47:     return showDialog(context: context,
+ 48:         builder: (BuildContext context) {
+ 49:           return Dialog(
+ 50:             shape: RoundedRectangleBorder(
+ 51:               borderRadius: BorderRadius.circular(20),
+ 52:             ),
+ 53:             elevation: 0,
+ 54:             backgroundColor: Colors.transparent,
+ 55:             child: Container(
+ 56:               padding: const EdgeInsets.only(left: 16,top: 16, right: 16,bottom: 16),
+ 57:               margin: const EdgeInsets.only(top: 10),
+ 58:               decoration: BoxDecoration(
+ 59:                 shape: BoxShape.rectangle,
+ 60:                 color: Colors.white,
+ 61:                 borderRadius: BorderRadius.circular(20),
+ 62: 
+ 63:               ),
+ 64:               child: SingleChildScrollView(
+ 65:                 child: Column(
+ 66:                   mainAxisSize: MainAxisSize.min,
+ 67:                   children: <Widget>[
+ 68:                     Image.asset(iconPath ?? '',width: 70,height: 70,color: iconColor,),
+ 69:                     const SizedBox(height: 10.0,),
+ 70:                     title != null ? Text(title ,textAlign: TextAlign.center,style:  TextStyle(fontSize: 18,fontWeight: FontWeight.w600),) : const SizedBox() ,
+ 71:                     const SizedBox(height: 8.0,),
+ 72:                     Text(description,style:  TextStyle(fontSize: 16),textAlign: TextAlign.center,),
+ 73:                     description !=null || description !='' ? const SizedBox(height: 5,) : const SizedBox(height: 5,),
+ 74:                     const SizedBox(height: 8.0,),
+ 75:                     textOk == null ? CustomButton2(
+ 76:                       onPressed:onTabCancel ,
+ 77:                       width: double.infinity,
+ 78:                       margin:const EdgeInsets.only(left: 10.0 ,right: 10.0),
+ 79:                       text: textCancel,
+ 80:                     ) :Row(
+ 81:                       children: [
+ 82:                         Expanded(flex: 1,
+ 83:                           child: CustomButton2(
+ 84:                             onPressed:onTabOk ?? (){},
+ 85:                             margin:const EdgeInsets.only(left: 5.0 ,right: 5.0),
+ 86:                             text: textOk,
+ 87:                             bgColor: colorOkButton ?? AppColor.primaryColor,
+ 88:                             borderColor: colorOkButton ?? AppColor.primaryColor,
+ 89:                           ),
+ 90:                         ),
+ 91:                         Expanded(flex: 1,
+ 92:                           child: CustomButton2(
+ 93:                             onPressed:onTabCancel ,
+ 94:                             margin:const EdgeInsets.only(left: 5.0 ,right: 5.0),
+ 95:                             bgColor: colorCancelButton,
+ 96:                             borderColor: colorCancelButton,
+ 97:                             text: textCancel,
+ 98:                           ),
+ 99:                         ),
+100:                       ],
+101:                     ),
+102:                   ],
+103:                 ),
+104:               ),
+105:             ),
+106:           );
+107: 
+108:         }
+109:     );
+110:   }
+111: 
+112:   // Future uploadDialog(BuildContext context ,{required VoidCallback getImageFromGallery ,required VoidCallback getImageFromCamera}){
+113:   //   return showDialog(
+114:   //     context: context,
+115:   //     builder: (BuildContext context) {
+116:   //       return CustomAlertDialog(
+117:   //         height: 200,
+118:   //         widget: Padding(
+119:   //           padding: const EdgeInsets.all(10.0),
+120:   //           child: Column(
+121:   //             crossAxisAlignment: CrossAxisAlignment.start,
+122:   //             children: [
+123:   //               ListTile(
+124:   //                 leading: const Icon(
+125:   //                   Icons.add_photo_alternate_outlined,
+126:   //                 ),
+127:   //                 title: TextButton(
+128:   //                   child:  Text(
+129:   //                     myLocalizations(context,'gallery'),
+130:   //                     style: TextStyle(
+131:   //                       fontSize: 20,
+132:   //                       color: AppColor.PrimaryColor,
+133:   //                     ),
+134:   //                   ),
+135:   //                   onPressed: () {
+136:   //                     getImageFromGallery();
+137:   //                     Navigator.pop(context);
+138:   //                   },
+139:   //                 ),
+140:   //               ),
+141:   //               ListTile(
+142:   //                 leading:
+143:   //                 const Icon(Icons.add_a_photo_outlined),
+144:   //                 title: TextButton(
+145:   //                   child:  Text(
+146:   //                     myLocalizations(context,'camera'),
+147:   //                     style: TextStyle(
+148:   //                       fontSize: 20,
+149:   //                       color: AppColor.PrimaryColor,
+150:   //                     ),
+151:   //                   ),
+152:   //                   onPressed: () {
+153:   //                     getImageFromCamera();
+154:   //                     Navigator.pop(context);
+155:   //                   },
+156:   //                 ),
+157:   //               ),
+158:   //             ],
+159:   //           ),
+160:   //         ),
+161:   //       );
+162:   //     },
+163:   //   );
+164:   // }
+165: 
+166:   void showNoInternetDialog(BuildContext context){
+167:     WidgetsBinding.instance.addPostFrameCallback((_){
+168:       showAdvancedDialog(context,
+169:           description: context.loc.noInternetConnection,
+170:           textCancel: 'خروج',
+171:           iconPath: AssetsPath.icon_error,
+172:           onTabCancel: (){
+173:             Navigator.of(context).pop();
+174:           });
+175:     });
+176:   }
+177: 
+178:   void showLoginDialog(BuildContext context){
+179:     DialogUtils().showAdvancedDialog(context,description: 'الرجاء تسجيل الدخول',
+180:         iconPath: AssetsPath.login,
+181:         iconColor: AppColor.primaryColor,
+182:         textCancel: 'تسجيل الدخول',
+183:         onTabCancel: (){
+184:           Navigator.of(context).pop();
+185:           navigationPush(context, LoginScreen());
+186:         });
+187:   }
+188: 
+189:   void showErrorDialog(BuildContext context,{String? title , String? description}){
+190:     DialogUtils().showAdvancedDialog(context,title: 'خطاء' ?? '',
+191:         description: description,
+192:         iconPath: AssetsPath.icon_error,
+193:         onTabCancel: (){
+194:           Navigator.of(context).pop();
+195:         });
+196:   }
+197: 
+198:   void showSuccessDialog(BuildContext context,{String? title , String? description}){
+199:     DialogUtils().showAdvancedDialog(context,title: title,
+200:         description: description,
+201:         iconPath: AssetsPath.icon_success,
+202:         onTabCancel: (){
+203:           Navigator.of(context).pop();
+204:         });
+205:   }
+206: 
+207:   void showConfirmDialog(BuildContext context,{required String? message, required final VoidCallback confirm}){
+208:     DialogUtils().showAdvancedDialog(context,
+209:       description: message,
+210:       textCancel: 'إلغاء',
+211:       textOk: 'موافق',
+212:       colorCancelButton: AppColor.primaryColor,
+213:       colorOkButton: Colors.redAccent,
+214:       iconPath: AssetsPath.icon_info,
+215:       onTabCancel: (){
+216:         Navigator.of(context).pop();
+217:       },
+218:       onTabOk: () async {
+219:         Navigator.of(context).pop();
+220:         confirm();
+221:       },
+222:     );
+223:   }
+224: 
+225: // dynamic confirmAddAdsDialog({
+226: //   required BuildContext context,
+227: //   VoidCallback? onSave,
+228: //   TextEditingController? textController,
+229: // }) {
+230: //   return showDialog(
+231: //     context: context,
+232: //     useSafeArea: false,
+233: //     barrierDismissible: false,
+234: //     builder: (context) {
+235: //       return SafeArea(
+236: //         child: StatefulBuilder(
+237: //           builder: (BuildContext context,
+238: //               void Function(void Function()) setState) {
+239: //             return Dialog(
+240: //               insetPadding:
+241: //               const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+242: //               shape: RoundedRectangleBorder(
+243: //                   borderRadius: AppTheme.defaultRadius),
+244: //               backgroundColor: AppTheme.whiteColor,
+245: //               child: Padding(
+246: //                 padding: const EdgeInsets.all(16),
+247: //                 child: Column(
+248: //                   crossAxisAlignment: CrossAxisAlignment.center,
+249: //                   mainAxisSize: MainAxisSize.min,
+250: //                   children: [
+251: //                     const SizedBox(height: 10),
+252: //                     Image.asset(
+253: //                       'assets/images/logo1.png',
+254: //                       fit: BoxFit.cover,
+255: //                       width: 80,
+256: //                     ),
+257: //                     const SizedBox(height: 16),
+258: //                     Text(
+259: //                       "إستعادة كلمة السر",
+260: //                       style: AppTheme.body1.copyWith(
+261: //                         color: AppTheme.primaryColor,
+262: //                       ),
+263: //                     ),
+264: //                     const SizedBox(height: 6),
+265: //                     Row(
+266: //                       mainAxisAlignment: MainAxisAlignment.center,
+267: //                       children: [
+268: //                         // CircleAvatar(
+269: //                         //   backgroundColor: Colors.white,
+270: //                         //   child: SvgPicture.asset(
+271: //                         //     'assets/icons/success.svg',
+272: //                         //   ),
+273: //                         // ),
+274: //                         // const SizedBox(width: 16),
+275: //                         Expanded(
+276: //                           child: Center(
+277: //                             child: Text(
+278: //                               "تم ارسال كلمة سر مؤقتة للبريد الألكتروني الخاص بك. يرجى مراجعة ذلك.",
+279: //                               style: AppTheme.body1,
+280: //                               textAlign: TextAlign.center,
+281: //                             ),
+282: //                           ),
+283: //                         ),
+284: //                       ],
+285: //                     ),
+286: //                     const SizedBox(height: 16),
+287: //                     Row(
+288: //                       children: [
+289: //                         Expanded(
+290: //                             child: AppButton(
+291: //                               text: "حسناً",
+292: //                               onPressed: () {
+293: //                                 Get.back();
+294: //                               },
+295: //                             )),
+296: //                       ],
+297: //                     ),
+298: //                   ],
+299: //                 ),
+300: //               ),
+301: //             );
+302: //           },
+303: //         ),
+304: //       );
+305: //     },
+306: //   );
+307: // }
+308: 
+309: // void showLoginDialog(BuildContext context){
+310: //   Navigator.of(context).push(new MaterialPageRoute<Null>(
+311: //       builder: (BuildContext context) {
+312: //         return LoginScreen();
+313: //       },
+314: //       fullscreenDialog: true,
+315: //   ));
+316: // }
+317: }
+````
+
 ## File: lib/core/utils/image_picker_bottom_sheet_utils.dart
 ````dart
   1: import 'dart:io';
@@ -5734,6 +5748,58 @@ test/widget_test.dart
 101: }
 ````
 
+## File: lib/features/user/home/widgets/home_app_bar_widget.dart
+````dart
+ 1: import 'package:badges/badges.dart' as badges;
+ 2: import 'package:car_mediator_mobile/core/styles/styles.dart';
+ 3: import 'package:car_mediator_mobile/core/utils/constants/extensions.dart';
+ 4: import 'package:car_mediator_mobile/widgets/images/custom_image.dart';
+ 5: import 'package:flutter/material.dart';
+ 6: 
+ 7: import '../../../../core/utils/constants/assets_path.dart';
+ 8: import '../../../../core/utils/constants/colors_constants.dart';
+ 9: import '../../../../core/utils/size_config.dart';
+10: import '../../../../widgets/components.dart';
+11: import '../../../shared/notifications/screens/notifications_screen.dart';
+12: 
+13: class HomeAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+14:   const HomeAppBarWidget({super.key});
+15: 
+16:   @override
+17:   Widget build(BuildContext context) {
+18: 
+19:     return AppBar(
+20:       backgroundColor: Colors.white,
+21:       title: Row(
+22:         children: [
+23:            const SizedBox(width: 5),
+24:           Column(
+25:             crossAxisAlignment: CrossAxisAlignment.start,
+26:             children: [
+27:               Text('مـرحبـاً', style: txtLightSemiBold035,),
+28:                Text(
+29:                 context.loc.appName,
+30:                 style: txtSemiBold033,
+31:               ),
+32:             ],
+33:           ),
+34:         ],
+35:       ),
+36:       elevation: 0,
+37:       actions: const [],
+38:       leadingWidth: SizeConfig.widthResponsive(0.18),
+39:       titleSpacing: 0,
+40:       leading: const Padding(padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+41:       child: CustomImageWidget(assetImage: AssetsPath.logo, bgColor: AppColor.secondaryColor, color: AppColor.primaryColor,),
+42:     ));
+43:   }
+44: 
+45:   // height of appbar
+46:   @override
+47:   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+48: }
+````
+
 ## File: lib/features/user/my_requests/screens/details_response_my_request_screen.dart
 ````dart
   1: import 'package:car_mediator_mobile/core/providers/common_provider.dart';
@@ -6488,6 +6554,60 @@ test/widget_test.dart
 192:   }
 193: 
 194: }
+````
+
+## File: lib/features/vendor/home/widgets/app_bar_home_vendor_page.dart
+````dart
+ 1: import 'package:badges/badges.dart' as badges;
+ 2: import 'package:car_mediator_mobile/core/styles/styles.dart';
+ 3: import 'package:car_mediator_mobile/core/utils/constants/extensions.dart';
+ 4: import 'package:car_mediator_mobile/widgets/images/custom_image.dart';
+ 5: import 'package:flutter/material.dart';
+ 6: import 'package:provider/provider.dart';
+ 7: 
+ 8: import '../../../../core/providers/auth_provider.dart';
+ 9: import '../../../../core/utils/constants/assets_path.dart';
+10: import '../../../../core/utils/constants/colors_constants.dart';
+11: import '../../../../core/utils/size_config.dart';
+12: import '../../../../widgets/components.dart';
+13: import '../../../shared/notifications/screens/notifications_screen.dart';
+14: 
+15: class AppBarHomeVendorPage extends StatelessWidget implements PreferredSizeWidget {
+16:   const AppBarHomeVendorPage({super.key});
+17: 
+18:   @override
+19:   Widget build(BuildContext context) {
+20:     final _provider = context.read<AuthProvider>();
+21:     return AppBar(
+22:         backgroundColor: Colors.white,
+23:         title: Row(
+24:           children: [
+25:             const SizedBox(width: 5),
+26:             Column(
+27:               crossAxisAlignment: CrossAxisAlignment.start,
+28:               children: [
+29:                 Text('مـرحبـاً', style: txtLightSemiBold035,),
+30:                 Text(
+31:                     _provider.currentUseModel?.companyNameAr ?? context.loc.appName,
+32:                   style: txtSemiBold033,
+33:                 ),
+34:               ],
+35:             ),
+36:           ],
+37:         ),
+38:         elevation: 0,
+39:         actions: const [],
+40:         leadingWidth: SizeConfig.widthResponsive(0.18),
+41:         titleSpacing: 0,
+42:         leading:  Padding(padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+43:           child: CustomImageWidget(urlImage: _provider.currentUseModel?.logo),
+44:         ));
+45:   }
+46: 
+47:   // height of appbar
+48:   @override
+49:   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+50: }
 ````
 
 ## File: lib/features/vendor/new_requests/widgets/availability_request_card_selector_widget.dart
@@ -10893,6 +11013,128 @@ test/widget_test.dart
 18: }
 ````
 
+## File: README.md
+````markdown
+  1: # 🚗 تطبيق وسيط السيارات - Car Mediator Mobile App
+  2: 
+  3: تطبيق فلاتر (Flutter Mobile App) لمنصة وسيط السيارات، متاح لعملاء ومزودي الخدمة (التجار) للبحث، تقديم الطلبات، التواصل، وتحديد مناطق وقنوات التغطية في المملكة العربية السعودية.
+  4: 
+  5: ---
+  6: 
+  7: ## 🔗 روابط مهمة (Important Links)
+  8: 
+  9: - **رابط الريبو (GitHub Repository)**: [https://github.com/Ahmedsayed732004444/car-mobile.git](https://github.com/Ahmedsayed732004444/car-mobile.git)
+ 10: - **السيرفر المباشر (Production Backend API)**: `https://car-production-93a1.up.railway.app/`
+ 11: 
+ 12: ---
+ 13: 
+ 14: ## 🛠️ المتطلبات الأساسية (Prerequisites)
+ 15: 
+ 16: قبل البدء، تأكد من تثبيت الأدوات التالية على جهازك:
+ 17: 
+ 18: 1. **Flutter SDK** (إصدار 3.0.0 أو أحدث).
+ 19: 2. **Dart SDK** (يأتي مدمجاً مع Flutter).
+ 20: 3. **محرر أكواد**: [VS Code](https://code.visualstudio.com/) أو [Android Studio](https://developer.android.com/studio).
+ 21: 4. **محاكي أو جهاز حقيقي**: Android Emulator أو جهاز محمول متصل عبر الوصلة (USB Debugging).
+ 22: 
+ 23: ---
+ 24: 
+ 25: ## 🚀 طريقة التشغيل بالتفصيل (Step-by-Step Running Guide)
+ 26: 
+ 27: ### 1️⃣ الخطوة الأولى: تحميل المشروع (Clone Repository)
+ 28: افتح مجلد المشاريع في الـ Terminal أو PowerShell وقم باستنساخ المشروع:
+ 29: 
+ 30: ```bash
+ 31: git clone https://github.com/Ahmedsayed732004444/car-mobile.git
+ 32: cd car-mobile
+ 33: ```
+ 34: 
+ 35: ---
+ 36: 
+ 37: ### 2️⃣ الخطوة الثانية: تثبيت الحزم والمكتبات (Install Dependencies)
+ 38: قم بتنزيل كافة مكتبات فلاتر المعتمدة للمشروع:
+ 39: 
+ 40: ```bash
+ 41: flutter pub get
+ 42: ```
+ 43: 
+ 44: ---
+ 45: 
+ 46: ### 3️⃣ الخطوة الثالثة: التأكد من تشغيل المحاكي/الجهاز (Check Active Devices)
+ 47: لتفقد الأجهزة المتاحة لتشغيل التطبيق عليها:
+ 48: 
+ 49: ```bash
+ 50: flutter devices
+ 51: ```
+ 52: 
+ 53: - **في حال استخدام Android Studio**: قم بفتح الـ Device Manager وتشغيل المحاكي (Virtual Device).
+ 54: - **في حال استخدام جهاز حقيقي**: قم بتفعيل وضع التنسيق (USB Debugging).
+ 55: 
+ 56: ---
+ 57: 
+ 58: ### 4️⃣ الخطوة الرابعة: تشغيل التطبيق (Run Application)
+ 59: 
+ 60: #### 🔹 التشغيل العادي (Default Run):
+ 61: ```bash
+ 62: flutter run
+ 63: ```
+ 64: 
+ 65: #### 🔹 التشغيل على محاكي محدد (Run on Specific Emulator):
+ 66: إذا كان لديك أكثر من محاكي يعمل في نفس الوقت:
+ 67: ```bash
+ 68: flutter run -d emulator-5554
+ 69: ```
+ 70: 
+ 71: #### 🔹 التشغيل بوضع الأداء المتقدم (Release Mode):
+ 72: ```bash
+ 73: flutter run --release
+ 74: ```
+ 75: 
+ 76: ---
+ 77: 
+ 78: ## ⚡ اختصارات التحديث الفوري أثناء التشغيل (Hot Reload Shortcuts)
+ 79: 
+ 80: أثناء تشغيل التطبيق بالـ Terminal، يمكنك استخدام الاختصارات التالية لتسريع التطوير:
+ 81: 
+ 82: | الاختصار | الوظيفة |
+ 83: | :--- | :--- |
+ 84: | **`r`** | **Hot Reload**: تحديث وتطبيق الكود فورياً على الشاشات خلال 1 ثانية دون إغلاق التطبيق. |
+ 85: | **`R`** | **Hot Restart**: إعادة تشغيل التطبيق وتنظيف الـ State خلال ثانيتين. |
+ 86: | **`q`** | **Quit**: إغلاق التطبيق وإنهاء جلسة التشغيل. |
+ 87: 
+ 88: ---
+ 89: 
+ 90: ## 📦 استخراج ملف الـ APK النهائي (Build Release APK)
+ 91: 
+ 92: لإنشاء ملف APK جاهز للتثبيت والتجربة على أجهزة الأندرويد المحمولة:
+ 93: 
+ 94: ```bash
+ 95: flutter build apk --release
+ 96: ```
+ 97: 
+ 98: سيكون الملف الجاهز متوفراً في المسار التالي:
+ 99: `build/app/outputs/flutter-apk/app-release.apk`
+100: 
+101: ---
+102: 
+103: ## 📁 هيكلية المشروع الأساسية (Project Architecture)
+104: 
+105: ```text
+106: lib/
+107: ├── core/                  # المكونات الأساسية (الخدمات، الشبكة API، المزودات Providers، الألوان والتصميم)
+108: ├── features/              # الميزات والواجهات المقسمة حسب النوع:
+109: │   ├── shared/            # التسجيل، كود التحقق OTP، الإشعارات، والمحادثات
+110: │   ├── user/              # واجهات العميل (إنشاء الطلب، تحديد المدن، طلباتي)
+111: │   └── vendor/            # واجهات مزود الخدمة (التخصصات، الاستجابة للطلبات، العمولات)
+112: ├── models/                # نماذج البيانات (Models & Data Parsing)
+113: └── widgets/               # المكونات والودجت Reusable Components
+114: ```
+115: 
+116: ---
+117: 
+118: ✨ **تم إعداد دليل التشغيل بنجاح!**
+````
+
 ## File: test/widget_test.dart
 ````dart
 1: import 'package:flutter_test/flutter_test.dart';
@@ -10902,6 +11144,61 @@ test/widget_test.dart
 5:     // Placeholder test
 6:   });
 7: }
+````
+
+## File: .gitignore
+````
+ 1: # Miscellaneous
+ 2: *.class
+ 3: *.log
+ 4: *.pyc
+ 5: *.swp
+ 6: .DS_Store
+ 7: .atom/
+ 8: .buildlog/
+ 9: .history
+10: .svn/
+11: migrate_working_dir/
+12: 
+13: # IntelliJ related
+14: *.iml
+15: *.ipr
+16: *.iws
+17: .idea/
+18: 
+19: # The .vscode folder contains launch configuration and tasks you configure in
+20: # VS Code which you may wish to be included in version control, so this line
+21: # is commented out by default.
+22: #.vscode/
+23: 
+24: # Flutter/Dart/Pub related
+25: **/doc/api/
+26: **/ios/Flutter/.last_build_id
+27: .dart_tool/
+28: .flutter-plugins
+29: .flutter-plugins-dependencies
+30: .pub-cache/
+31: .pub/
+32: /build/
+33: 
+34: # Symbolication related
+35: app.*.symbols
+36: 
+37: # Obfuscation related
+38: app.*.map.json
+39: 
+40: # Android Studio will place build artifacts here
+41: /android/app/debug
+42: /android/app/profile
+43: /android/app/release
+44: /android/.cxx/
+45: /android/app/intermediates/
+46: /android/app/generated/
+47: /android/app/outputs/
+48: /android/app/tmp/
+49: /android/app/kotlin/
+50: /android/app/gmpAppId/
+51: /android/app/deeplink.json
 ````
 
 ## File: .repomixignore
@@ -10919,47 +11216,6 @@ test/widget_test.dart
 11: *.lock
 12: *.log
 13: .git/
-````
-
-## File: analysis_options.yaml
-````yaml
- 1: # This file configures the analyzer, which statically analyzes Dart code to
- 2: # check for errors, warnings, and lints.
- 3: #
- 4: # The issues identified by the analyzer are surfaced in the UI of Dart-enabled
- 5: # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
- 6: # invoked from the command line by running `flutter analyze`.
- 7: 
- 8: # The following line activates a set of recommended lints for Flutter apps,
- 9: # packages, and plugins designed to encourage good coding practices.
-10: analyzer:
-11:   exclude:
-12:     - build/**
-13:     - android/**
-14:     - ios/**
-15:     - web/**
-16:     - windows/**
-17:     - macos/**
-18:     - linux/**
-19: include: package:flutter_lints/flutter.yaml
-20: 
-21: linter:
-22:   # The lint rules applied to this project can be customized in the
-23:   # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-24:   # included above or to enable additional rules. A list of all available lints
-25:   # and their documentation is published at https://dart.dev/lints.
-26:   #
-27:   # Instead of disabling a lint rule for the entire project in the
-28:   # section below, it can also be suppressed for a single line of code
-29:   # or a specific dart file by using the `// ignore: name_of_lint` and
-30:   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-31:   # producing the lint.
-32:   rules:
-33:     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-34:     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
-35: 
-36: # Additional information about this file can be found at
-37: # https://dart.dev/guides/language/analysis-options
 ````
 
 ## File: lib/core/data_sources/remote/api_client.dart
@@ -11160,6 +11416,55 @@ test/widget_test.dart
 194:     }
 195:   }
 196: }
+````
+
+## File: lib/core/data_sources/remote/api_endpoints.dart
+````dart
+ 1: class ApiEndpoints {
+ 2:   static const String checkCacheUpdates = 'cache/check-updates';
+ 3:   static const String loginWithOtp = 'auth/login-with-otp';
+ 4:   static const String register = 'auth/register';
+ 5:   static const String registerVendor = 'vendor/register-vendor';
+ 6:   static const String logout = 'auth/logout';
+ 7: 
+ 8:    static const String createConversation = 'chat/conversations/create-conversation';
+ 9:    static const String sendMessageChat = 'chat/messages/send';
+10:    static const String userConversations = 'chat/conversations/user-conversations';
+11:    static const String vendorConversations = 'chat/conversations/vendor-conversations';
+12: 
+13:   // users endpoints
+14:   static const String checkEligibleVendors = 'user/request/check-eligible-vendors';
+15:   static const String confirmOrderRequest = 'user/request/confirm-request';
+16:   static const String ConfirmShippingRequest = 'user/request/confirm-shipping-request';
+17:   static const String ConfirmPriceShippingRequest = 'user/request/confirm-price-shipping-request';
+18:   static const String getMyRequestUser = 'user/my-requests';
+19:   static const String getResponsesMyRequest = 'user/my-requests/responses';
+20:   static const String getResponseRequestById = 'user/my-requests/response';
+21:   static const String complaintVendorService = 'user/complaints/complaint-vendor-service';
+22:   static const String updateStatusMyRequest = 'user/my-requests/update-status';
+23:   static const String getUserProfile = 'user/profile';
+24:   static const String updateUserProfile = 'user/profile/update';
+25: 
+26:   // vendor endpoints
+27:   static const String getAllNewRequestsVendor = 'vendor/new-requests/get-all-new-requests';
+28:   static const String detailsNewRequestsVendor = 'vendor/new-requests/details-new-requests';
+29:   static const String sendResponseRequestVendor = 'vendor/responses-requests/send-response-request';
+30:   static const String getMyResponseRequests = 'vendor/responses-requests/get-my-response-requests';
+31:   static const String detailResponseRequests = 'vendor/responses-requests/details-response-request';
+32:   static const String getCategoriesSpecialtyVendor = 'vendor/specialties/get-categories-specialty';
+33:   static const String updateCategorySpecialtyVendor = 'vendor/specialties/update-category-specialty';
+34:   static const String getVendorCitiesVendor = 'vendor/specialties/get-vendor-cities';
+35:   static const String updateVendorCitiesVendor = 'vendor/specialties/update-vendor-cities';
+36:   static const String getVendorBrandsCar = 'vendor/specialties/get-vendor-brands-car';
+37:   static const String getVendorProfile = 'vendor/profile';
+38:   static const String updateVendorProfile = 'vendor/profile/update';
+39:   static const String uploadCommercialRecordImage = 'vendor/profile/upload-commercial-record';
+40:   static const String payAppCommission = 'vendor/app-commission/pay';
+41: 
+42:   // shared endpoints
+43:   static const String getCities = 'cities';
+44: 
+45: }
 ````
 
 ## File: lib/core/providers/auth_provider.dart
@@ -11420,6 +11725,43 @@ test/widget_test.dart
 109: //
 ````
 
+## File: lib/core/providers/shipping_provider.dart
+````dart
+ 1: import 'package:flutter/material.dart';
+ 2: 
+ 3: import '../../models/city_model.dart';
+ 4: import '../services/shared/shipping_service.dart';
+ 5: 
+ 6: class ShippingProvider extends ChangeNotifier {
+ 7:   final ShippingService _service;
+ 8: 
+ 9:   ShippingProvider(this._service);
+10: 
+11:   List<CityModel> cities = [];
+12:   bool isLoadingCities = false;
+13:   CityModel? myCitySelectedModel;
+14: 
+15:   void selectedMyCity(CityModel? model) {
+16:     myCitySelectedModel = model;
+17:     notifyListeners();
+18:   }
+19: 
+20:   Future<void> loadCities() async {
+21:     if (cities.isNotEmpty) return; // already loaded, skip
+22:     isLoadingCities = true;
+23:     notifyListeners();
+24: 
+25:     final result = await _service.getCities();
+26:     if (result != null && result.success) {
+27:       cities = result.cityModelList;
+28:     }
+29: 
+30:     isLoadingCities = false;
+31:     notifyListeners();
+32:   }
+33: }
+````
+
 ## File: lib/core/providers/users/my_request_user_provider.dart
 ````dart
   1: import 'package:flutter/material.dart';
@@ -11658,94 +12000,141 @@ test/widget_test.dart
 105: }
 ````
 
-## File: lib/core/services/shared/customer_shipping_info_storage.dart
+## File: lib/core/services/shared/notification_service.dart
 ````dart
- 1: import 'dart:convert';
- 2: import 'package:flutter_secure_storage/flutter_secure_storage.dart';
- 3: 
- 4: class CustomerShippingInfoStorage {
- 5:   static const _storage = FlutterSecureStorage();
- 6:   static const _key = 'customer_shipping_info';
- 7: 
- 8:   /// حفظ بيانات الزبون
- 9:   static Future<void> save({
-10:     required String name,
-11:     required String phone,
-12:     required String address,
-13:     double? lat,
-14:     double? lng,
-15:   }) async {
-16:     final data = jsonEncode({
-17:       'name': name,
-18:       'phone': phone,
-19:       'address': address,
-20:       'lat': lat,
-21:       'lng': lng,
-22:     });
-23:     await _storage.write(key: _key, value: data);
-24:   }
-25: 
-26:   /// استرجاع بيانات الزبون المحفوظة
-27:   static Future<Map<String, dynamic>?> load() async {
-28:     final raw = await _storage.read(key: _key);
-29:     if (raw == null) return null;
-30:     try {
-31:       return jsonDecode(raw) as Map<String, dynamic>;
-32:     } catch (_) {
-33:       return null;
-34:     }
-35:   }
-36: 
-37:   /// حذف البيانات المحفوظة
-38:   static Future<void> clear() async {
-39:     await _storage.delete(key: _key);
-40:   }
-41: }
+  1: import 'package:car_mediator_mobile/core/services/base_service.dart';
+  2: import 'package:flutter/cupertino.dart';
+  3: 
+  4: import '../../../models/notification_model.dart';
+  5: import '../../data_sources/remote/api_service.dart';
+  6: import '../../errors/api_exceptions.dart';
+  7: import '../../helpers/toast_helper.dart';
+  8: 
+  9: class NotificationService extends BaseService  {
+ 10:   final ApiService _apiService;
+ 11: 
+ 12:   NotificationService(this._apiService);
+ 13: 
+ 14:   Future<NotificationResponseModel?> getNotifications({ required int page}) async {
+ 15:     try {
+ 16:       final response = await _apiService.getData('notifications', queryParams: {'page': page.toString()});
+ 17:       return NotificationResponseModel.fromJson(response);
+ 18:     } on ApiException catch (e) {
+ 19:       ToastHelper.showError(e.message);
+ 20:       debugPrint('API Error: ${e.message}, StatusCode: ${e.statusCode}');
+ 21:       return null;
+ 22:     } catch (e) {
+ 23:       debugPrint('Unexpected Error: $e');
+ 24:       ToastHelper.showError('حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى.');
+ 25:       return null;
+ 26:     }
+ 27:   }
+ 28: 
+ 29:   Future<Map<String, int>?> getUnreadCounts() async {
+ 30:     try {
+ 31:       final response = await _apiService.getData('notifications/unread-counts');
+ 32:       if (response != null && response['success'] == true && response['data'] != null) {
+ 33:         final Map<String, dynamic> data = response['data'];
+ 34:         final Map<String, int> result = {};
+ 35:         data.forEach((key, value) {
+ 36:           if (value is num) {
+ 37:             result[key] = value.toInt();
+ 38:           }
+ 39:         });
+ 40:         if (data['sections'] is Map) {
+ 41:           (data['sections'] as Map).forEach((key, value) {
+ 42:             if (value is num) {
+ 43:               result[key.toString()] = value.toInt();
+ 44:             }
+ 45:           });
+ 46:         }
+ 47:         return result;
+ 48:       }
+ 49:       return null;
+ 50:     } catch (e) {
+ 51:       debugPrint('Error fetching unread counts: $e');
+ 52:       return null;
+ 53:     }
+ 54:   }
+ 55: 
+ 56:   Future<Map<String, dynamic>?> getRawUnreadCountsData() async {
+ 57:     try {
+ 58:       final response = await _apiService.getData('notifications/unread-counts');
+ 59:       if (response != null && response['success'] == true && response['data'] != null) {
+ 60:         return response['data'] as Map<String, dynamic>;
+ 61:       }
+ 62:       return null;
+ 63:     } catch (e) {
+ 64:       debugPrint('Error fetching raw unread counts: $e');
+ 65:       return null;
+ 66:     }
+ 67:   }
+ 68: 
+ 69:   Future<Map<String, dynamic>?> markEntityRead({required String section, required int entityId}) async {
+ 70:     try {
+ 71:       final response = await _apiService.postData(
+ 72:         'notifications/mark-entity-read',
+ 73:         body: {'section': section, 'entity_id': entityId},
+ 74:       );
+ 75:       if (response != null && response['success'] == true && response['data'] != null) {
+ 76:         return response['data'] as Map<String, dynamic>;
+ 77:       }
+ 78:       return null;
+ 79:     } catch (e) {
+ 80:       debugPrint('Error marking entity read: $e');
+ 81:       return null;
+ 82:     }
+ 83:   }
+ 84: 
+ 85:   Future<Map<String, int>?> markCategoryRead(String category) async {
+ 86:     try {
+ 87:       final response = await _apiService.postData('notifications/mark-category-read', body: {'category': category});
+ 88:       if (response != null && response['success'] == true && response['data'] != null) {
+ 89:         final Map<String, dynamic> data = response['data'];
+ 90:         final Map<String, int> result = {};
+ 91:         data.forEach((key, value) {
+ 92:           if (value is num) {
+ 93:             result[key] = value.toInt();
+ 94:           }
+ 95:         });
+ 96:         if (data['sections'] is Map) {
+ 97:           (data['sections'] as Map).forEach((key, value) {
+ 98:             if (value is num) {
+ 99:               result[key.toString()] = value.toInt();
+100:             }
+101:           });
+102:         }
+103:         return result;
+104:       }
+105:       return null;
+106:     } catch (e) {
+107:       debugPrint('Error marking category read: $e');
+108:       return null;
+109:     }
+110:   }
+111: }
 ````
 
-## File: lib/core/services/shared/vendor_shipping_info_storage.dart
+## File: lib/core/services/shared/shipping_service.dart
 ````dart
- 1: import 'dart:convert';
- 2: import 'package:flutter_secure_storage/flutter_secure_storage.dart';
- 3: 
- 4: class VendorShippingInfoStorage {
- 5:   static const _storage = FlutterSecureStorage();
- 6:   static const _key = 'vendor_shipping_info';
- 7: 
- 8:   /// حفظ بيانات التاجر
- 9:   static Future<void> save({
-10:     required String name,
-11:     required String phone,
-12:     required String address,
-13:     double? lat,
-14:     double? lng,
-15:   }) async {
-16:     final data = jsonEncode({
-17:       'name': name,
-18:       'phone': phone,
-19:       'address': address,
-20:       'lat': lat,
-21:       'lng': lng,
-22:     });
-23:     await _storage.write(key: _key, value: data);
-24:   }
-25: 
-26:   /// استرجاع بيانات التاجر المحفوظة
-27:   static Future<Map<String, dynamic>?> load() async {
-28:     final raw = await _storage.read(key: _key);
-29:     if (raw == null) return null;
-30:     try {
-31:       return jsonDecode(raw) as Map<String, dynamic>;
-32:     } catch (_) {
-33:       return null;
-34:     }
-35:   }
-36: 
-37:   /// حذف البيانات المحفوظة
-38:   static Future<void> clear() async {
-39:     await _storage.delete(key: _key);
-40:   }
-41: }
+ 1: import '../../data_sources/remote/api_endpoints.dart';
+ 2: import '../../data_sources/remote/api_service.dart';
+ 3: import '../../../models/city_model.dart';
+ 4: import '../base_service.dart';
+ 5: 
+ 6: class ShippingService extends BaseService {
+ 7:   final ApiService _apiService;
+ 8: 
+ 9:   ShippingService(this._apiService);
+10: 
+11:   Future<CityResultModel?> getCities() async {
+12:     return getService(
+13:       apiService: _apiService,
+14:       endpoint: ApiEndpoints.getCities,
+15:       fromJson: (json) => CityResultModel.fromJson(json),
+16:     );
+17:   }
+18: }
 ````
 
 ## File: lib/core/utils/date_parser_utils.dart
@@ -11896,327 +12285,6 @@ test/widget_test.dart
 144:     }
 145:   }
 146: }
-````
-
-## File: lib/core/utils/dialogUtils.dart
-````dart
-  1: import 'package:car_mediator_mobile/core/utils/constants/extensions.dart';
-  2: import 'package:flutter/material.dart';
-  3: 
-  4: import '../../features/shared/auth/login_screen.dart';
-  5: import '../../widgets/components.dart';
-  6: import '../../widgets/customButton2.dart';
-  7: import 'constants/assets_path.dart';
-  8: import 'constants/colors_constants.dart';
-  9: 
- 10: class DialogUtils{
- 11:   DialogUtils._();
- 12:   static final DialogUtils _instance = DialogUtils._();
- 13:   factory DialogUtils() => _instance;
- 14: 
- 15:   Future<void> showOptionsDialog( BuildContext context,{required String title,
- 16:     required String option1,required String option2,
- 17:     required GestureTapCallback onTap1,
- 18:     required GestureTapCallback onTap2}) {
- 19:     return showDialog(
- 20:         context: context,
- 21:         builder: (BuildContext context) {
- 22:           return AlertDialog(
- 23:             title: Text(title),
- 24:             content: SingleChildScrollView(
- 25:               child: ListBody(
- 26:                 children: [
- 27:                   GestureDetector(
- 28:                     onTap:onTap1,
- 29:                     child: Text(option1),
- 30:                   ),
- 31:                   const Padding(padding: EdgeInsets.all(10)),
- 32:                   GestureDetector(
- 33:                     child: Text(option2),
- 34:                     onTap:onTap2,
- 35:                   ),
- 36:                 ],
- 37:               ),
- 38:             ),
- 39:           );
- 40:         }
- 41:     );
- 42:   }
- 43: 
- 44:   Future showAdvancedDialog(BuildContext context,{ String? title , description ='' ,
- 45:     String? iconPath, textCancel='خروج' ,String? textOk, Color? iconColor,
- 46:     required GestureTapCallback onTabCancel, final GestureTapCallback? onTabOk ,Color colorCancelButton = Colors.redAccent, Color? colorOkButton, }) async {
- 47:     return showDialog(context: context,
- 48:         builder: (BuildContext context) {
- 49:           return Dialog(
- 50:             shape: RoundedRectangleBorder(
- 51:               borderRadius: BorderRadius.circular(20),
- 52:             ),
- 53:             elevation: 0,
- 54:             backgroundColor: Colors.transparent,
- 55:             child: Container(
- 56:               padding: const EdgeInsets.only(left: 16,top: 16, right: 16,bottom: 16),
- 57:               margin: const EdgeInsets.only(top: 10),
- 58:               decoration: BoxDecoration(
- 59:                 shape: BoxShape.rectangle,
- 60:                 color: Colors.white,
- 61:                 borderRadius: BorderRadius.circular(20),
- 62: 
- 63:               ),
- 64:               child: SingleChildScrollView(
- 65:                 child: Column(
- 66:                   mainAxisSize: MainAxisSize.min,
- 67:                   children: <Widget>[
- 68:                     Image.asset(iconPath ?? '',width: 70,height: 70,color: iconColor,),
- 69:                     const SizedBox(height: 10.0,),
- 70:                     title != null ? Text(title ,textAlign: TextAlign.center,style:  TextStyle(fontSize: 18,fontWeight: FontWeight.w600),) : const SizedBox() ,
- 71:                     const SizedBox(height: 8.0,),
- 72:                     Text(description,style:  TextStyle(fontSize: 16),textAlign: TextAlign.center,),
- 73:                     description !=null || description !='' ? const SizedBox(height: 5,) : const SizedBox(height: 5,),
- 74:                     const SizedBox(height: 8.0,),
- 75:                     textOk == null ? CustomButton2(
- 76:                       onPressed:onTabCancel ,
- 77:                       width: double.infinity,
- 78:                       margin:const EdgeInsets.only(left: 10.0 ,right: 10.0),
- 79:                       text: textCancel,
- 80:                     ) :Row(
- 81:                       children: [
- 82:                         Expanded(flex: 1,
- 83:                           child: CustomButton2(
- 84:                             onPressed:onTabOk ?? (){},
- 85:                             margin:const EdgeInsets.only(left: 5.0 ,right: 5.0),
- 86:                             text: textOk,
- 87:                             bgColor: colorOkButton ?? AppColor.primaryColor,
- 88:                             borderColor: colorOkButton ?? AppColor.primaryColor,
- 89:                           ),
- 90:                         ),
- 91:                         Expanded(flex: 1,
- 92:                           child: CustomButton2(
- 93:                             onPressed:onTabCancel ,
- 94:                             margin:const EdgeInsets.only(left: 5.0 ,right: 5.0),
- 95:                             bgColor: colorCancelButton,
- 96:                             borderColor: colorCancelButton,
- 97:                             text: textCancel,
- 98:                           ),
- 99:                         ),
-100:                       ],
-101:                     ),
-102:                   ],
-103:                 ),
-104:               ),
-105:             ),
-106:           );
-107: 
-108:         }
-109:     );
-110:   }
-111: 
-112:   // Future uploadDialog(BuildContext context ,{required VoidCallback getImageFromGallery ,required VoidCallback getImageFromCamera}){
-113:   //   return showDialog(
-114:   //     context: context,
-115:   //     builder: (BuildContext context) {
-116:   //       return CustomAlertDialog(
-117:   //         height: 200,
-118:   //         widget: Padding(
-119:   //           padding: const EdgeInsets.all(10.0),
-120:   //           child: Column(
-121:   //             crossAxisAlignment: CrossAxisAlignment.start,
-122:   //             children: [
-123:   //               ListTile(
-124:   //                 leading: const Icon(
-125:   //                   Icons.add_photo_alternate_outlined,
-126:   //                 ),
-127:   //                 title: TextButton(
-128:   //                   child:  Text(
-129:   //                     myLocalizations(context,'gallery'),
-130:   //                     style: TextStyle(
-131:   //                       fontSize: 20,
-132:   //                       color: AppColor.PrimaryColor,
-133:   //                     ),
-134:   //                   ),
-135:   //                   onPressed: () {
-136:   //                     getImageFromGallery();
-137:   //                     Navigator.pop(context);
-138:   //                   },
-139:   //                 ),
-140:   //               ),
-141:   //               ListTile(
-142:   //                 leading:
-143:   //                 const Icon(Icons.add_a_photo_outlined),
-144:   //                 title: TextButton(
-145:   //                   child:  Text(
-146:   //                     myLocalizations(context,'camera'),
-147:   //                     style: TextStyle(
-148:   //                       fontSize: 20,
-149:   //                       color: AppColor.PrimaryColor,
-150:   //                     ),
-151:   //                   ),
-152:   //                   onPressed: () {
-153:   //                     getImageFromCamera();
-154:   //                     Navigator.pop(context);
-155:   //                   },
-156:   //                 ),
-157:   //               ),
-158:   //             ],
-159:   //           ),
-160:   //         ),
-161:   //       );
-162:   //     },
-163:   //   );
-164:   // }
-165: 
-166:   void showNoInternetDialog(BuildContext context){
-167:     WidgetsBinding.instance.addPostFrameCallback((_){
-168:       showAdvancedDialog(context,
-169:           description: context.loc.noInternetConnection,
-170:           textCancel: 'خروج',
-171:           iconPath: AssetsPath.icon_error,
-172:           onTabCancel: (){
-173:             Navigator.of(context).pop();
-174:           });
-175:     });
-176:   }
-177: 
-178:   void showLoginDialog(BuildContext context){
-179:     DialogUtils().showAdvancedDialog(context,description: 'الرجاء تسجيل الدخول',
-180:         iconPath: AssetsPath.login,
-181:         iconColor: AppColor.primaryColor,
-182:         textCancel: 'تسجيل الدخول',
-183:         onTabCancel: (){
-184:           Navigator.of(context).pop();
-185:           navigationPush(context, LoginScreen());
-186:         });
-187:   }
-188: 
-189:   void showErrorDialog(BuildContext context,{String? title , String? description}){
-190:     DialogUtils().showAdvancedDialog(context,title: 'خطاء' ?? '',
-191:         description: description,
-192:         iconPath: AssetsPath.icon_error,
-193:         onTabCancel: (){
-194:           Navigator.of(context).pop();
-195:         });
-196:   }
-197: 
-198:   void showSuccessDialog(BuildContext context,{String? title , String? description}){
-199:     DialogUtils().showAdvancedDialog(context,title: title,
-200:         description: description,
-201:         iconPath: AssetsPath.icon_success,
-202:         onTabCancel: (){
-203:           Navigator.of(context).pop();
-204:         });
-205:   }
-206: 
-207:   void showConfirmDialog(BuildContext context,{required String? message, required final VoidCallback confirm}){
-208:     DialogUtils().showAdvancedDialog(context,
-209:       description: message,
-210:       textCancel: 'إلغاء',
-211:       textOk: 'موافق',
-212:       colorCancelButton: AppColor.primaryColor,
-213:       colorOkButton: Colors.redAccent,
-214:       iconPath: AssetsPath.icon_info,
-215:       onTabCancel: (){
-216:         Navigator.of(context).pop();
-217:       },
-218:       onTabOk: () async {
-219:         Navigator.of(context).pop();
-220:         confirm();
-221:       },
-222:     );
-223:   }
-224: 
-225: // dynamic confirmAddAdsDialog({
-226: //   required BuildContext context,
-227: //   VoidCallback? onSave,
-228: //   TextEditingController? textController,
-229: // }) {
-230: //   return showDialog(
-231: //     context: context,
-232: //     useSafeArea: false,
-233: //     barrierDismissible: false,
-234: //     builder: (context) {
-235: //       return SafeArea(
-236: //         child: StatefulBuilder(
-237: //           builder: (BuildContext context,
-238: //               void Function(void Function()) setState) {
-239: //             return Dialog(
-240: //               insetPadding:
-241: //               const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-242: //               shape: RoundedRectangleBorder(
-243: //                   borderRadius: AppTheme.defaultRadius),
-244: //               backgroundColor: AppTheme.whiteColor,
-245: //               child: Padding(
-246: //                 padding: const EdgeInsets.all(16),
-247: //                 child: Column(
-248: //                   crossAxisAlignment: CrossAxisAlignment.center,
-249: //                   mainAxisSize: MainAxisSize.min,
-250: //                   children: [
-251: //                     const SizedBox(height: 10),
-252: //                     Image.asset(
-253: //                       'assets/images/logo1.png',
-254: //                       fit: BoxFit.cover,
-255: //                       width: 80,
-256: //                     ),
-257: //                     const SizedBox(height: 16),
-258: //                     Text(
-259: //                       "إستعادة كلمة السر",
-260: //                       style: AppTheme.body1.copyWith(
-261: //                         color: AppTheme.primaryColor,
-262: //                       ),
-263: //                     ),
-264: //                     const SizedBox(height: 6),
-265: //                     Row(
-266: //                       mainAxisAlignment: MainAxisAlignment.center,
-267: //                       children: [
-268: //                         // CircleAvatar(
-269: //                         //   backgroundColor: Colors.white,
-270: //                         //   child: SvgPicture.asset(
-271: //                         //     'assets/icons/success.svg',
-272: //                         //   ),
-273: //                         // ),
-274: //                         // const SizedBox(width: 16),
-275: //                         Expanded(
-276: //                           child: Center(
-277: //                             child: Text(
-278: //                               "تم ارسال كلمة سر مؤقتة للبريد الألكتروني الخاص بك. يرجى مراجعة ذلك.",
-279: //                               style: AppTheme.body1,
-280: //                               textAlign: TextAlign.center,
-281: //                             ),
-282: //                           ),
-283: //                         ),
-284: //                       ],
-285: //                     ),
-286: //                     const SizedBox(height: 16),
-287: //                     Row(
-288: //                       children: [
-289: //                         Expanded(
-290: //                             child: AppButton(
-291: //                               text: "حسناً",
-292: //                               onPressed: () {
-293: //                                 Get.back();
-294: //                               },
-295: //                             )),
-296: //                       ],
-297: //                     ),
-298: //                   ],
-299: //                 ),
-300: //               ),
-301: //             );
-302: //           },
-303: //         ),
-304: //       );
-305: //     },
-306: //   );
-307: // }
-308: 
-309: // void showLoginDialog(BuildContext context){
-310: //   Navigator.of(context).push(new MaterialPageRoute<Null>(
-311: //       builder: (BuildContext context) {
-312: //         return LoginScreen();
-313: //       },
-314: //       fullscreenDialog: true,
-315: //   ));
-316: // }
-317: }
 ````
 
 ## File: lib/core/utils/form_validator.dart
@@ -12694,58 +12762,6 @@ test/widget_test.dart
 69:     );
 70:   }
 71: }
-````
-
-## File: lib/features/user/home/widgets/home_app_bar_widget.dart
-````dart
- 1: import 'package:badges/badges.dart' as badges;
- 2: import 'package:car_mediator_mobile/core/styles/styles.dart';
- 3: import 'package:car_mediator_mobile/core/utils/constants/extensions.dart';
- 4: import 'package:car_mediator_mobile/widgets/images/custom_image.dart';
- 5: import 'package:flutter/material.dart';
- 6: 
- 7: import '../../../../core/utils/constants/assets_path.dart';
- 8: import '../../../../core/utils/constants/colors_constants.dart';
- 9: import '../../../../core/utils/size_config.dart';
-10: import '../../../../widgets/components.dart';
-11: import '../../../shared/notifications/screens/notifications_screen.dart';
-12: 
-13: class HomeAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-14:   const HomeAppBarWidget({super.key});
-15: 
-16:   @override
-17:   Widget build(BuildContext context) {
-18: 
-19:     return AppBar(
-20:       backgroundColor: Colors.white,
-21:       title: Row(
-22:         children: [
-23:            const SizedBox(width: 5),
-24:           Column(
-25:             crossAxisAlignment: CrossAxisAlignment.start,
-26:             children: [
-27:               Text('مـرحبـاً', style: txtLightSemiBold035,),
-28:                Text(
-29:                 context.loc.appName,
-30:                 style: txtSemiBold033,
-31:               ),
-32:             ],
-33:           ),
-34:         ],
-35:       ),
-36:       elevation: 0,
-37:       actions: const [],
-38:       leadingWidth: SizeConfig.widthResponsive(0.18),
-39:       titleSpacing: 0,
-40:       leading: const Padding(padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-41:       child: CustomImageWidget(assetImage: AssetsPath.logo, bgColor: AppColor.secondaryColor, color: AppColor.primaryColor,),
-42:     ));
-43:   }
-44: 
-45:   // height of appbar
-46:   @override
-47:   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-48: }
 ````
 
 ## File: lib/features/user/my_requests/screens/details_my_request_screen.dart
@@ -13337,60 +13353,6 @@ test/widget_test.dart
 91: }
 ````
 
-## File: lib/features/vendor/home/widgets/app_bar_home_vendor_page.dart
-````dart
- 1: import 'package:badges/badges.dart' as badges;
- 2: import 'package:car_mediator_mobile/core/styles/styles.dart';
- 3: import 'package:car_mediator_mobile/core/utils/constants/extensions.dart';
- 4: import 'package:car_mediator_mobile/widgets/images/custom_image.dart';
- 5: import 'package:flutter/material.dart';
- 6: import 'package:provider/provider.dart';
- 7: 
- 8: import '../../../../core/providers/auth_provider.dart';
- 9: import '../../../../core/utils/constants/assets_path.dart';
-10: import '../../../../core/utils/constants/colors_constants.dart';
-11: import '../../../../core/utils/size_config.dart';
-12: import '../../../../widgets/components.dart';
-13: import '../../../shared/notifications/screens/notifications_screen.dart';
-14: 
-15: class AppBarHomeVendorPage extends StatelessWidget implements PreferredSizeWidget {
-16:   const AppBarHomeVendorPage({super.key});
-17: 
-18:   @override
-19:   Widget build(BuildContext context) {
-20:     final _provider = context.read<AuthProvider>();
-21:     return AppBar(
-22:         backgroundColor: Colors.white,
-23:         title: Row(
-24:           children: [
-25:             const SizedBox(width: 5),
-26:             Column(
-27:               crossAxisAlignment: CrossAxisAlignment.start,
-28:               children: [
-29:                 Text('مـرحبـاً', style: txtLightSemiBold035,),
-30:                 Text(
-31:                     _provider.currentUseModel?.companyNameAr ?? context.loc.appName,
-32:                   style: txtSemiBold033,
-33:                 ),
-34:               ],
-35:             ),
-36:           ],
-37:         ),
-38:         elevation: 0,
-39:         actions: const [],
-40:         leadingWidth: SizeConfig.widthResponsive(0.18),
-41:         titleSpacing: 0,
-42:         leading:  Padding(padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-43:           child: CustomImageWidget(urlImage: _provider.currentUseModel?.logo),
-44:         ));
-45:   }
-46: 
-47:   // height of appbar
-48:   @override
-49:   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-50: }
-````
-
 ## File: lib/features/vendor/new_requests/screens/details_new_request_screen.dart
 ````dart
   1: import 'package:cached_network_image/cached_network_image.dart';
@@ -13765,6 +13727,246 @@ test/widget_test.dart
 210: }
 ````
 
+## File: lib/features/vendor/register/screens/register_vendor_screen.dart
+````dart
+  1: import 'dart:convert';
+  2: 
+  3: import 'package:car_mediator_mobile/core/helpers/toast_helper.dart';
+  4: import 'package:car_mediator_mobile/core/utils/connection_utils.dart';
+  5: import 'package:car_mediator_mobile/core/utils/dialogUtils.dart';
+  6: import 'package:car_mediator_mobile/widgets/dropdown_search/categories_dropdown_search.dart';
+  7: import 'package:flutter/material.dart';
+  8: import 'package:provider/provider.dart';
+  9: 
+ 10: import '../../../../core/helpers/helpers.dart';
+ 11: import '../../../../core/providers/vendors/register_vendor_provider.dart';
+ 12: import '../../../../core/utils/constants/colors_constants.dart';
+ 13: import '../../../../core/utils/date_parser_utils.dart';
+ 14: import '../../../../core/utils/form_validator.dart';
+ 15: import '../../../../core/utils/image_picker_bottom_sheet_utils.dart';
+ 16: import '../../../../core/utils/permissions_utils.dart';
+ 17: import '../../../../core/utils/size_config.dart';
+ 18: import '../../../../models/category_model.dart';
+ 19: import '../../../../models/city_model.dart';
+ 20: import '../../../../widgets/custom_button.dart';
+ 21: import '../../../../widgets/dropdown_search/cities_dropdown_search.dart';
+ 22: import '../../../../widgets/custom_textfield.dart';
+ 23: import '../../../../widgets/dropdown_search/city_dropdown_search.dart';
+ 24: import '../../../../widgets/icon_comp.dart';
+ 25: import '../../../../widgets/images/add_image_widget.dart';
+ 26: import '../widgets/app_bar_register_widget.dart';
+ 27: 
+ 28: class RegisterVendorScreen extends StatefulWidget {
+ 29:   const RegisterVendorScreen({super.key,});
+ 30: 
+ 31:   @override
+ 32:   State<RegisterVendorScreen> createState() => _RegisterVendorScreenState();
+ 33: }
+ 34: 
+ 35: class _RegisterVendorScreenState extends State<RegisterVendorScreen> {
+ 36:   final _formKey = GlobalKey<FormState>();
+ 37:   final nameCompanyArController = TextEditingController();
+ 38:   final phoneNumberController = TextEditingController();
+ 39:   final commercialRecordController = TextEditingController();
+ 40:   final dateExpireCommercialRecordController = TextEditingController();
+ 41: 
+ 42:   @override
+ 43:   void dispose() {
+ 44:     super.dispose();
+ 45:     nameCompanyArController.dispose();
+ 46:     phoneNumberController.dispose();
+ 47:     commercialRecordController.dispose();
+ 48:     dateExpireCommercialRecordController.dispose();
+ 49:   }
+ 50: 
+ 51:   @override
+ 52:   Widget build(BuildContext context) {
+ 53:     SizeConfig.init(context);
+ 54:     final _provider = Provider.of<RegisterVendorProvider>(context);
+ 55: 
+ 56:     return Scaffold(
+ 57:         backgroundColor: Colors.white,
+ 58:         appBar: const AppBarRegisterWidget(),
+ 59:         body: Form(
+ 60:             key: _formKey,
+ 61:             child: ListView(
+ 62:               shrinkWrap: true,
+ 63:               physics: const ScrollPhysics(),
+ 64:               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+ 65:               children: [
+ 66:                 const SizedBox(height: 10,),
+ 67:                  Row(
+ 68:                   children: [
+ 69:                     const IconComponent(icon: Icon(Icons.business_sharp, color: AppColor.primaryColor,),),
+ 70:                     const SizedBox(width: 10,),
+ 71:                     Expanded(child: CustomTextField(
+ 72:                       label: 'إسم الشركة',
+ 73:                       hint: 'إسم الشركة',
+ 74:                       controller: nameCompanyArController,
+ 75:                       validator: (value) => FormValidatorUtils.textValidator(value, isRequired: true),
+ 76:                       fillColor: AppColor.secondaryColor,
+ 77:                       filled: true,
+ 78:                     ),)
+ 79:                   ],
+ 80:                 ),
+ 81:                
+ 82:                 const SizedBox(height: 15,),
+ 83:                 Row(
+ 84:                   children: [
+ 85:                     const IconComponent(icon: Icon(Icons.phone_android, color: AppColor.primaryColor,),),
+ 86:                     const SizedBox(width: 10,),
+ 87:                     Expanded(child: CustomTextField(
+ 88:                       label: 'رقم الجوال',
+ 89:                       hint: '512345678',
+ 90:                       controller: phoneNumberController,
+ 91:                       validator: (value) => FormValidatorUtils.phoneValidator(value, isRequired: true),
+ 92:                       fillColor: AppColor.secondaryColor,
+ 93:                       filled: true,
+ 94:                     ),)
+ 95:                   ],
+ 96:                 ),
+ 97: 
+ 98:                 const SizedBox(height: 15,),
+ 99:                 Row(
+100:                   children: [
+101:                     const IconComponent(icon: Icon(Icons.assignment, color: AppColor.primaryColor,),),
+102:                     const SizedBox(width: 10,),
+103:                     Expanded(child: CustomTextField(
+104:                       label: 'رقم السجل التجاري',
+105:                       hint: 'رقم السجل التجاري',
+106:                       controller: commercialRecordController,
+107:                       validator: (value) => FormValidatorUtils.textValidator(value, isRequired: true),
+108:                       fillColor: AppColor.secondaryColor,
+109:                       filled: true,
+110:                     ),)
+111:                   ],
+112:                 ),
+113:                 const SizedBox(height: 15,),
+114:                 Row(
+115:                   children: [
+116:                     const IconComponent(icon: Icon(Icons.date_range, color: AppColor.primaryColor,),),
+117:                     const SizedBox(width: 10,),
+118:                     Expanded(child: CustomTextField(
+119:                       label: 'تاريخ إنتهاء السجل التجاري',
+120:                       hint: 'تاريخ إنتهاء السجل التجاري',
+121:                       readOnly: true,
+122:                       controller: dateExpireCommercialRecordController,
+123:                       fillColor: AppColor.secondaryColor,
+124:                       filled: true,
+125:                       validator: (value) => FormValidatorUtils.textValidator(
+126:                         value,
+127:                         isRequired: true,
+128:                       ),
+129:                       onTap: () async {
+130:                         dateExpireCommercialRecordController.text = await DateParserUtils.getDatePicker(context);
+131:                       },
+132:                     ),)
+133:                   ],
+134:                 ),
+135:                 const SizedBox(height: 15,),
+136:                 Row(
+137:                   children: [
+138:                     const IconComponent(icon: Icon(Icons.location_on, color: AppColor.primaryColor,),),
+139:                     const SizedBox(width: 10,),
+140:                     Expanded(child: CityDropdownSearch(
+141:                       filled: true,
+142:                       fillColor: AppColor.secondaryColor,
+143:                       selectedCityModel: _provider.selectedCity,
+144:                       onChanged: (CityModel? selectedItem) {
+145:                         _provider.changeCity(selectedItem);
+146:                       },
+147:                     ),)
+148:                   ],
+149:                 ),
+150:                 const SizedBox(height: 15,),
+151:                 Row(
+152:                   children: [
+153:                     const IconComponent(icon: Icon(Icons.miscellaneous_services, color: AppColor.primaryColor,),),
+154:                     const SizedBox(width: 10,),
+155:                     Expanded(child: CategoriesDropdownSearch(
+156:                       filled: true,
+157:                       fillColor: AppColor.secondaryColor,
+158:                       selectedCategories: _provider.selectedCategoriesList,
+159:                       onChanged: (List<CategoryModel>? selectedItems) {
+160:                         _provider.changeCategories(selectedItems);
+161:                       },
+162:                     ),)
+163:                   ],
+164:                 ),
+165: 
+166:                 const SizedBox(height: 20,),
+167:                 Text('صورة السجل التجاري', style: TextStyle(color: AppColor.primaryColor, fontSize: SizeConfig.widthResponsive(0.04), fontWeight: FontWeight.w500),),
+168:                 const SizedBox(height: 10,),
+169:                 AddImageWidget(
+170:                   height: SizeConfig.heightResponsive(0.20),
+171:                   file: _provider.selectedCommercialRecordImage,
+172:                   onTap: () async {
+173:                     if(await PermissionsUtils.checkCameraAndGalleryPermission(context)){
+174:                       ImagePickerBottomSheet.show(context, (picked) {
+175:                         if (picked != null) {
+176:                           _provider.changeSelectedCommercialRecordImage(picked);
+177:                         }
+178:                       });
+179:                     }
+180:                   },
+181:                     deleteImage : () {
+182:                       _provider.changeSelectedCommercialRecordImage(null);
+183:                     }
+184:                 ),
+185:                 SizedBox(height: SizeConfig.heightResponsive(0.04),),
+186:                 CustomButton(
+187:                   primaryColor:AppColor.primaryColor,
+188:                   txtSize: SizeConfig.widthResponsive(0.05),
+189:                   loading: _provider.isLoading,
+190:                   onTap: () async {
+191:                     await _execute(context, _provider);
+192:                   },
+193:                   label: 'تقديم الطلب',
+194:                 ),
+195:               ],
+196:             )),
+197:         );
+198:   }
+199: 
+200:   Future<void> _execute(BuildContext context, RegisterVendorProvider myProvider)async {
+201:     Helper.dismissKeyBoard();
+202: 
+203:     bool myValid = _formKey.currentState!.validate();
+204:     if (myValid) {
+205: 
+206:       if(myProvider.selectedCategoriesList == null || myProvider.selectedCategoriesList!.isEmpty){
+207:         ToastHelper.showInfo('الرجاء إختيار الخدمات');
+208:         return;
+209:       }
+210: 
+211:       if(myProvider.selectedCommercialRecordImage == null || myProvider.selectedCommercialRecordImage!.path.isEmpty){
+212:         ToastHelper.showInfo('الرجاء إختيار صورة السجل التجاري');
+213:         return;
+214:       }
+215: 
+216:       if(! await ConnectionUtils.hasInternetConnection()){
+217:         DialogUtils().showNoInternetDialog(context);
+218:         return;
+219:       }
+220: 
+221:       String phone = phoneNumberController.text.trim();
+222:       if (!phone.startsWith('0')) {
+223:         phone = '0$phone';
+224:       }
+225: 
+226:       await myProvider.registerVendor(context,{
+227:         'companyNameAr' : nameCompanyArController.text,
+228:         'phoneNumber' : phone,
+229:         'commercialRecord' : commercialRecordController.text,
+230:         'dateExpireCommercialRecord' : dateExpireCommercialRecordController.text,
+231:         'categoriesIds' : jsonEncode(myProvider.selectedCategoriesList?.map((e) => e.id).toList()),
+232:         'cityId' : myProvider.selectedCity?.id.toString() ?? '0',
+233:       });
+234:     }
+235:   }
+236: }
+````
+
 ## File: lib/features/vendor/responses/screens/my_response_request_screen.dart
 ````dart
  1: import 'package:car_mediator_mobile/core/styles/styles.dart';
@@ -13858,6 +14060,211 @@ test/widget_test.dart
 89:     );
 90:   }
 91: }
+````
+
+## File: lib/main.dart
+````dart
+  1: import 'dart:async';
+  2: 
+  3: import 'package:car_mediator_mobile/core/data_sources/remote/api_service.dart';
+  4: import 'package:car_mediator_mobile/core/providers/auth_provider.dart';
+  5: import 'package:car_mediator_mobile/core/services/shared/auth_service.dart';
+  6: import 'package:car_mediator_mobile/core/services/shared/common_service.dart';
+  7: import 'package:car_mediator_mobile/features/shared/chat/screens/chat_screen.dart';
+  8: import 'package:firebase_core/firebase_core.dart';
+  9: import 'package:flutter/material.dart';
+ 10: import 'package:flutter/services.dart';
+ 11: import 'package:flutter_localizations/flutter_localizations.dart';
+ 12: import 'package:intl/date_symbol_data_local.dart';
+ 13: import 'package:provider/provider.dart';
+ 14: import 'package:timeago/timeago.dart' as timeago;
+ 15: 
+ 16: import 'core/data_sources/local/cache_helper.dart';
+ 17: import 'core/data_sources/local/secure_storage.dart';
+ 18: import 'core/data_sources/remote/firebase/fcm_service.dart';
+ 19: import 'core/localization/app_language_provider.dart';
+ 20: import 'core/providers/bottom_navigation_bar_provider.dart';
+ 21: import 'core/providers/cache_provider.dart';
+ 22: import 'core/providers/common_provider.dart';
+ 23: import 'core/providers/conversation_provider.dart';
+ 24: import 'core/providers/dynamic_form_provider.dart';
+ 25: import 'core/providers/home/home_user_provider.dart';
+ 26: import 'core/providers/notification_badge_provider.dart';
+ 27: import 'core/providers/notification_provider.dart';
+ 28: import 'core/providers/orders/create_order_provider.dart';
+ 29: import 'core/providers/shipping_provider.dart';
+ 30: import 'core/providers/users/my_request_user_provider.dart';
+ 31: import 'core/providers/users/profile_user_provider.dart';
+ 32: import 'core/providers/users/responses_my_request_provider.dart';
+ 33: import 'core/providers/vendors/app_commission_provider.dart';
+ 34: import 'core/providers/vendors/new_request_vendor_provider.dart';
+ 35: import 'core/providers/vendors/profile_vendor_provider.dart';
+ 36: import 'core/providers/vendors/register_vendor_provider.dart';
+ 37: import 'core/providers/vendors/response_request_provider.dart';
+ 38: import 'core/providers/vendors/specialty_vendor_provider.dart';
+ 39: import 'core/services/shared/cache_service.dart';
+ 40: import 'core/services/shared/conversation_service.dart';
+ 41: import 'core/services/shared/notification_service.dart';
+ 42: import 'core/providers/vendor_profile_provider.dart';
+ 43: import 'core/services/shared/shipping_service.dart';
+ 44: import 'core/services/user/my_requests/my_request_user_service.dart';
+ 45: import 'core/services/user/profile_user_service.dart';
+ 46: import 'core/services/user/requests/request_service.dart';
+ 47: import 'core/services/vendor/new_request_service.dart';
+ 48: import 'core/services/vendor/profile_vendor_service.dart';
+ 49: import 'core/services/vendor/response_request_service.dart';
+ 50: import 'core/services/vendor/specialty_vendor_service.dart';
+ 51: import 'core/theme/app_theme.dart';
+ 52: import 'core/utils/custom_time_ago.dart';
+ 53: import 'features/shared/cache/init_cache.dart';
+ 54: import 'l10n/app_localizations.dart';
+ 55: import 'package:web_socket_channel/web_socket_channel.dart';
+ 56: 
+ 57: // Use GlobalKey to access BuildContext safely outside the widget tree
+ 58: final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+ 59: 
+ 60: Future<void> main() async {
+ 61:   runZonedGuarded<Future<void>>(() async {
+ 62:     WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+ 63: 
+ 64:     SystemChrome.setPreferredOrientations(
+ 65:         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+ 66: 
+ 67:     // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+ 68: 
+ 69:     await CacheHelper.init();
+ 70:     AppLanguageProvider _appLanguage = AppLanguageProvider();
+ 71: 
+ 72:     await Firebase.initializeApp();
+ 73:     await Future.wait([
+ 74:       _appLanguage.fetchLocale(),
+ 75:       initializeDateFormatting(),
+ 76:     ]);
+ 77: 
+ 78:     // final String? token = await SecureStorage.getToken();
+ 79:     // print(token);
+ 80:     final apiService = ApiService();
+ 81:     await FcmService.initializeFirebase();
+ 82:     timeago.setLocaleMessages('ar', CustomTimeAgo());
+ 83: 
+ 84:     // final channel = WebSocketChannel.connect(
+ 85:     //   Uri.parse('ws://192.168.1.34:8080/app/abc123xyz'),
+ 86:     // );
+ 87:     //
+ 88:     // channel.sink.add(
+ 89:     //     jsonEncode({
+ 90:     //       "event": "pusher:subscribe",
+ 91:     //       "data": {
+ 92:     //         "channel": "chat"
+ 93:     //       }
+ 94:     //     })
+ 95:     // );
+ 96:     //
+ 97:     // channel.stream.listen((data) {
+ 98:     //   final decoded = jsonDecode(data);
+ 99:     //   print("New message channel.stream.listen ----------------");
+100:     //
+101:     //   if (decoded["event"] == "message.sent") {
+102:     //     print("New message: ${decoded['data']}");
+103:     //   }
+104:     // });
+105: 
+106:     // إرسال رسالة عبر API Laravel
+107:     // Future sendMessage(String user, String message) async {
+108:     // await http.post(
+109:     // Uri.parse('http://127.0.0.1:8000/api/message'),
+110:     // body: {
+111:     // 'user': user,
+112:     // 'message': message,
+113:     // },
+114:     // );
+115:     // }
+116: 
+117:     String? userRole = await SecureStorage.getUserRole();
+118:     runApp( MyApp(appLanguage: _appLanguage, apiService: apiService, userRole: userRole,));
+119: 
+120:   }, (error, stack) {
+121:     // FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+122:     print('-------Error  From Inside Framework---runZonedGuarded-----');
+123:     print('---Error----${error}');
+124:     print('---StackTrack----${stack}');
+125:     print('-------------------------------------------');
+126:   }
+127:   );
+128: }
+129: 
+130: class MyApp extends StatelessWidget {
+131:   final AppLanguageProvider appLanguage;
+132:   final ApiService apiService;
+133:   final String? userRole;
+134:   const MyApp({super.key, required this.appLanguage, required this.apiService, this.userRole});
+135: 
+136:   @override
+137:   Widget build(BuildContext context) {
+138:     return ChangeNotifierProvider<AppLanguageProvider>(
+139:       create: (_) => appLanguage,
+140:       child: Consumer<AppLanguageProvider>(builder: (context, model, child) {
+141:         return MultiProvider(providers:[
+142:            ChangeNotifierProvider<BottomNavigationBarProvider>(create: (_) => BottomNavigationBarProvider(),),
+143:            ChangeNotifierProvider<CacheProvider>(create: (_) => CacheProvider(CacheService(apiService)),),
+144:            ChangeNotifierProvider<HomeUserProvider>(create: (_) => HomeUserProvider(),),
+145:            ChangeNotifierProvider<CreateOrderProvider>(create: (_) => CreateOrderProvider(RequestService(apiService)),),
+146:            ChangeNotifierProvider<DynamicFormProvider>(create: (_) => DynamicFormProvider(),),
+147:           ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider(AuthService(apiService)),),
+148:           ChangeNotifierProvider<RegisterVendorProvider>(create: (_) => RegisterVendorProvider(apiService),),
+149:           ChangeNotifierProvider<NewRequestVendorProvider>(create: (_) => NewRequestVendorProvider(NewRequestService(apiService)),),
+150:           ChangeNotifierProvider<ResponseRequestProvider>(create: (_) => ResponseRequestProvider(ResponseRequestService(apiService)),),
+151:           ChangeNotifierProvider<SpecialtyVendorProvider>(create: (_) => SpecialtyVendorProvider(SpecialtyVendorService(apiService)),),
+152:           ChangeNotifierProvider<ProfileVendorProvider>(create: (_) => ProfileVendorProvider(ProfileVendorService(apiService)),),
+153:           ChangeNotifierProvider<MyRequestUserProvider>(create: (_) => MyRequestUserProvider(MyRequestsUserService(apiService)),),
+154:           ChangeNotifierProvider<ResponsesMyRequestProvider>(create: (_) => ResponsesMyRequestProvider(MyRequestsUserService(apiService)),),
+155:           ChangeNotifierProvider<CommonProvider>(create: (_) => CommonProvider(CommonService(apiService)),),
+156:           ChangeNotifierProvider<ConversationProvider>(create: (_) => ConversationProvider(ConversationService(apiService)),),
+157:           ChangeNotifierProvider<NotificationProvider>(create: (_) => NotificationProvider(NotificationService(apiService)),),
+158:           ChangeNotifierProvider<NotificationBadgeProvider>(create: (_) => NotificationBadgeProvider(NotificationService(apiService)),),
+159:           ChangeNotifierProvider<ProfileUserProvider>(create: (_) => ProfileUserProvider(ProfileUserService(apiService)),),
+160:           ChangeNotifierProvider<AppCommissionProvider>(create: (_) => AppCommissionProvider(apiService),),
+161:           ChangeNotifierProvider<ShippingProvider>(create: (_) => ShippingProvider(ShippingService(apiService)),),
+162:           ChangeNotifierProvider<VendorProfileProvider>(create: (_) => VendorProfileProvider(),),
+163:         ] ,
+164:           child:GestureDetector(
+165:             onTap: (){
+166:               // FocusManager.instance.primaryFocus?.unfocus();
+167:               FocusScope.of(context).requestFocus(FocusNode());
+168:             },
+169:             child:MaterialApp(
+170:               navigatorKey: navigatorKey,
+171:               title: 'وسيط سيارات',
+172:               debugShowCheckedModeBanner: false,
+173:               locale: model.appLocal,
+174:               supportedLocales: const [
+175:                 Locale('ar', ''),
+176:                 Locale('en', 'US'),
+177:               ],
+178:               localizationsDelegates: const [
+179:                 AppLocalizations.delegate,
+180:                 GlobalMaterialLocalizations.delegate,
+181:                 GlobalWidgetsLocalizations.delegate,
+182:                 GlobalCupertinoLocalizations.delegate,
+183:               ],
+184:               builder: (context, child) {
+185:                 return Directionality(
+186:                   textDirection: model.textDirection,
+187:                   child: MediaQuery(
+188:                     data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+189:                     child: child!,
+190:                   ),
+191:                 );
+192:               },
+193:               theme: AppTheme.lightTheme,
+194:               home:  InitCache(userRole: userRole,),
+195:               //home:  ChatScreen(conversationId: 1, token: '7|28H5dtm3zAchciFPbjwJNzSTg9ofG8REAuC8Fghl2980be1d', myUserId: 2),
+196:             ) ,
+197:           ) ,);
+198:       }),
+199:     );
+200:   }
+201: }
 ````
 
 ## File: lib/models/conversation_model.dart
@@ -14707,6 +15114,238 @@ test/widget_test.dart
 70: }
 ````
 
+## File: lib/widgets/dropdown_search/categories_dropdown_search.dart
+````dart
+  1: import 'package:car_mediator_mobile/core/providers/vendors/register_vendor_provider.dart';
+  2: import 'package:car_mediator_mobile/models/category_model.dart';
+  3: import 'package:dropdown_search/dropdown_search.dart';
+  4: import 'package:flutter/material.dart';
+  5: import 'package:provider/provider.dart';
+  6: 
+  7: import '../../core/localization/app_language_provider.dart';
+  8: import '../../core/providers/cache_provider.dart';
+  9: import '../../core/providers/vendors/specialty_vendor_provider.dart';
+ 10: import '../../core/utils/constants/colors_constants.dart';
+ 11: import '../../core/utils/form_validator.dart';
+ 12: import '../../core/utils/size_config.dart';
+ 13: import '../components.dart';
+ 14: import 'category_dropdown_builder_multiselection_widget.dart';
+ 15: 
+ 16: class CategoriesDropdownSearch extends StatelessWidget {
+ 17:   const CategoriesDropdownSearch({
+ 18:     super.key,
+ 19:     this.selectedCategories,
+ 20:     this.onChanged,
+ 21:     this.filled,
+ 22:     this.fillColor,
+ 23:   });
+ 24: 
+ 25:   final List<CategoryModel>? selectedCategories;
+ 26:   final ValueChanged<List<CategoryModel>>? onChanged;
+ 27:   final bool? filled;
+ 28:   final Color? fillColor;
+ 29: 
+ 30:   void _showCategoriesBottomSheet(
+ 31:     BuildContext context,
+ 32:     CacheProvider cacheProvider,
+ 33:   ) {
+ 34:     final allCategories = cacheProvider.categoriesList;
+ 35:     final List<CategoryModel> tempSelected =
+ 36:         List<CategoryModel>.from(selectedCategories ?? []);
+ 37:     final _isArabic = context.read<AppLanguageProvider>().isArabic;
+ 38: 
+ 39:     showModalBottomSheet(
+ 40:       context: context,
+ 41:       isScrollControlled: true,
+ 42:       backgroundColor: Colors.transparent,
+ 43:       builder: (context) {
+ 44:         return StatefulBuilder(
+ 45:           builder: (context, setState) {
+ 46:             final bool isAllSelected =
+ 47:                 tempSelected.length == allCategories.length && allCategories.isNotEmpty;
+ 48: 
+ 49:             return Container(
+ 50:               height: MediaQuery.of(context).size.height * 0.70,
+ 51:               decoration: const BoxDecoration(
+ 52:                 color: Colors.white,
+ 53:                 borderRadius: BorderRadius.only(
+ 54:                   topLeft: Radius.circular(30.0),
+ 55:                   topRight: Radius.circular(30.0),
+ 56:                 ),
+ 57:               ),
+ 58:               child: Column(
+ 59:                 children: [
+ 60:                   Container(
+ 61:                     padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 8),
+ 62:                     child: Column(
+ 63:                       children: [
+ 64:                         Container(
+ 65:                           width: SizeConfig.widthResponsive(0.40),
+ 66:                           height: 3,
+ 67:                           decoration: BoxDecoration(
+ 68:                             color: AppColor.primaryColor,
+ 69:                             borderRadius: BorderRadius.circular(8),
+ 70:                           ),
+ 71:                         ),
+ 72:                         const SizedBox(height: 12),
+ 73:                         Row(
+ 74:                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+ 75:                           children: [
+ 76:                             Text(
+ 77:                               'الخدمات',
+ 78:                               style: TextStyle(
+ 79:                                 color: AppColor.primaryColor,
+ 80:                                 fontSize: SizeConfig.widthResponsive(0.05),
+ 81:                                 fontWeight: FontWeight.w600,
+ 82:                               ),
+ 83:                             ),
+ 84:                             InkWell(
+ 85:                               onTap: () {
+ 86:                                 setState(() {
+ 87:                                   if (isAllSelected) {
+ 88:                                     tempSelected.clear();
+ 89:                                   } else {
+ 90:                                     tempSelected.clear();
+ 91:                                     tempSelected.addAll(allCategories);
+ 92:                                   }
+ 93:                                 });
+ 94:                               },
+ 95:                               child: Row(
+ 96:                                 children: [
+ 97:                                   const Text(
+ 98:                                     'تحديد الكل',
+ 99:                                     style: TextStyle(
+100:                                       fontSize: 15,
+101:                                       fontWeight: FontWeight.bold,
+102:                                       color: Colors.black87,
+103:                                     ),
+104:                                   ),
+105:                                   Checkbox(
+106:                                     value: isAllSelected,
+107:                                     activeColor: AppColor.primaryColor,
+108:                                     shape: RoundedRectangleBorder(
+109:                                       borderRadius: BorderRadius.circular(4),
+110:                                     ),
+111:                                     onChanged: (bool? checked) {
+112:                                       setState(() {
+113:                                         if (checked == true) {
+114:                                           tempSelected.clear();
+115:                                           tempSelected.addAll(allCategories);
+116:                                         } else {
+117:                                           tempSelected.clear();
+118:                                         }
+119:                                       });
+120:                                     },
+121:                                   ),
+122:                                 ],
+123:                               ),
+124:                             ),
+125:                           ],
+126:                         ),
+127:                       ],
+128:                     ),
+129:                   ),
+130:                   const Divider(height: 1),
+131:                   Expanded(
+132:                     child: ListView.builder(
+133:                       itemCount: allCategories.length,
+134:                       itemBuilder: (context, index) {
+135:                         final cat = allCategories[index];
+136:                         final bool isSelected = tempSelected.any((e) => e.id == cat.id);
+137:                         final catName = (_isArabic ? cat.catNameAr : cat.catNameEn) ?? '';
+138: 
+139:                         return CheckboxListTile(
+140:                           value: isSelected,
+141:                           activeColor: AppColor.primaryColor,
+142:                           title: Text(
+143:                             catName,
+144:                             style: const TextStyle(
+145:                               fontSize: 16,
+146:                               fontWeight: FontWeight.w500,
+147:                             ),
+148:                           ),
+149:                           onChanged: (bool? checked) {
+150:                             setState(() {
+151:                               if (checked == true) {
+152:                                 if (!tempSelected.any((e) => e.id == cat.id)) {
+153:                                   tempSelected.add(cat);
+154:                                 }
+155:                               } else {
+156:                                 tempSelected.removeWhere((e) => e.id == cat.id);
+157:                               }
+158:                             });
+159:                           },
+160:                         );
+161:                       },
+162:                     ),
+163:                   ),
+164:                   const Divider(height: 1),
+165:                   Padding(
+166:                     padding: EdgeInsets.only(
+167:                       bottom: SizeConfig.heightResponsive(0.04),
+168:                       left: 20,
+169:                       right: 20,
+170:                       top: 10,
+171:                     ),
+172:                     child: SizedBox(
+173:                       width: double.infinity,
+174:                       height: 48,
+175:                       child: ElevatedButton(
+176:                         style: ElevatedButton.styleFrom(
+177:                           backgroundColor: Colors.blue,
+178:                           shape: RoundedRectangleBorder(
+179:                             borderRadius: BorderRadius.circular(10),
+180:                           ),
+181:                         ),
+182:                         onPressed: () {
+183:                           if (onChanged != null) {
+184:                             onChanged!(tempSelected);
+185:                           }
+186:                           Navigator.pop(context);
+187:                         },
+188:                         child: Text(
+189:                           'تحديد',
+190:                           style: TextStyle(
+191:                             color: Colors.white,
+192:                             fontSize: SizeConfig.widthResponsive(0.04),
+193:                             fontWeight: FontWeight.bold,
+194:                           ),
+195:                         ),
+196:                       ),
+197:                     ),
+198:                   ),
+199:                 ],
+200:               ),
+201:             );
+202:           },
+203:         );
+204:       },
+205:     );
+206:   }
+207: 
+208:   @override
+209:   Widget build(BuildContext context) {
+210:     final _cacheProvider = context.read<CacheProvider>();
+211: 
+212:     return InkWell(
+213:       onTap: () => _showCategoriesBottomSheet(context, _cacheProvider),
+214:       child: InputDecorator(
+215:         decoration: customDropdownDecoratorProps(
+216:           label: 'الخدمات',
+217:           hint: 'إختر الخدمات',
+218:           filled: filled,
+219:           fillColor: fillColor,
+220:         ).dropdownSearchDecoration!,
+221:         child: CategoryDropdownBuilderMultiselectionWidget(
+222:           selectedItems: selectedCategories ?? [],
+223:           hint: 'إختر الخدمات',
+224:         ),
+225:       ),
+226:     );
+227:   }
+228: }
+````
+
 ## File: lib/widgets/dropdown_search/cities_dropdown_search.dart
 ````dart
   1: import 'package:car_mediator_mobile/core/utils/size_config.dart';
@@ -15058,128 +15697,6 @@ test/widget_test.dart
 131: }
 ````
 
-## File: README.md
-````markdown
-  1: # 🚗 تطبيق وسيط السيارات - Car Mediator Mobile App
-  2: 
-  3: تطبيق فلاتر (Flutter Mobile App) لمنصة وسيط السيارات، متاح لعملاء ومزودي الخدمة (التجار) للبحث، تقديم الطلبات، التواصل، وتحديد مناطق وقنوات التغطية في المملكة العربية السعودية.
-  4: 
-  5: ---
-  6: 
-  7: ## 🔗 روابط مهمة (Important Links)
-  8: 
-  9: - **رابط الريبو (GitHub Repository)**: [https://github.com/Ahmedsayed732004444/car-mobile.git](https://github.com/Ahmedsayed732004444/car-mobile.git)
- 10: - **السيرفر المباشر (Production Backend API)**: `https://car-production-93a1.up.railway.app/`
- 11: 
- 12: ---
- 13: 
- 14: ## 🛠️ المتطلبات الأساسية (Prerequisites)
- 15: 
- 16: قبل البدء، تأكد من تثبيت الأدوات التالية على جهازك:
- 17: 
- 18: 1. **Flutter SDK** (إصدار 3.0.0 أو أحدث).
- 19: 2. **Dart SDK** (يأتي مدمجاً مع Flutter).
- 20: 3. **محرر أكواد**: [VS Code](https://code.visualstudio.com/) أو [Android Studio](https://developer.android.com/studio).
- 21: 4. **محاكي أو جهاز حقيقي**: Android Emulator أو جهاز محمول متصل عبر الوصلة (USB Debugging).
- 22: 
- 23: ---
- 24: 
- 25: ## 🚀 طريقة التشغيل بالتفصيل (Step-by-Step Running Guide)
- 26: 
- 27: ### 1️⃣ الخطوة الأولى: تحميل المشروع (Clone Repository)
- 28: افتح مجلد المشاريع في الـ Terminal أو PowerShell وقم باستنساخ المشروع:
- 29: 
- 30: ```bash
- 31: git clone https://github.com/Ahmedsayed732004444/car-mobile.git
- 32: cd car-mobile
- 33: ```
- 34: 
- 35: ---
- 36: 
- 37: ### 2️⃣ الخطوة الثانية: تثبيت الحزم والمكتبات (Install Dependencies)
- 38: قم بتنزيل كافة مكتبات فلاتر المعتمدة للمشروع:
- 39: 
- 40: ```bash
- 41: flutter pub get
- 42: ```
- 43: 
- 44: ---
- 45: 
- 46: ### 3️⃣ الخطوة الثالثة: التأكد من تشغيل المحاكي/الجهاز (Check Active Devices)
- 47: لتفقد الأجهزة المتاحة لتشغيل التطبيق عليها:
- 48: 
- 49: ```bash
- 50: flutter devices
- 51: ```
- 52: 
- 53: - **في حال استخدام Android Studio**: قم بفتح الـ Device Manager وتشغيل المحاكي (Virtual Device).
- 54: - **في حال استخدام جهاز حقيقي**: قم بتفعيل وضع التنسيق (USB Debugging).
- 55: 
- 56: ---
- 57: 
- 58: ### 4️⃣ الخطوة الرابعة: تشغيل التطبيق (Run Application)
- 59: 
- 60: #### 🔹 التشغيل العادي (Default Run):
- 61: ```bash
- 62: flutter run
- 63: ```
- 64: 
- 65: #### 🔹 التشغيل على محاكي محدد (Run on Specific Emulator):
- 66: إذا كان لديك أكثر من محاكي يعمل في نفس الوقت:
- 67: ```bash
- 68: flutter run -d emulator-5554
- 69: ```
- 70: 
- 71: #### 🔹 التشغيل بوضع الأداء المتقدم (Release Mode):
- 72: ```bash
- 73: flutter run --release
- 74: ```
- 75: 
- 76: ---
- 77: 
- 78: ## ⚡ اختصارات التحديث الفوري أثناء التشغيل (Hot Reload Shortcuts)
- 79: 
- 80: أثناء تشغيل التطبيق بالـ Terminal، يمكنك استخدام الاختصارات التالية لتسريع التطوير:
- 81: 
- 82: | الاختصار | الوظيفة |
- 83: | :--- | :--- |
- 84: | **`r`** | **Hot Reload**: تحديث وتطبيق الكود فورياً على الشاشات خلال 1 ثانية دون إغلاق التطبيق. |
- 85: | **`R`** | **Hot Restart**: إعادة تشغيل التطبيق وتنظيف الـ State خلال ثانيتين. |
- 86: | **`q`** | **Quit**: إغلاق التطبيق وإنهاء جلسة التشغيل. |
- 87: 
- 88: ---
- 89: 
- 90: ## 📦 استخراج ملف الـ APK النهائي (Build Release APK)
- 91: 
- 92: لإنشاء ملف APK جاهز للتثبيت والتجربة على أجهزة الأندرويد المحمولة:
- 93: 
- 94: ```bash
- 95: flutter build apk --release
- 96: ```
- 97: 
- 98: سيكون الملف الجاهز متوفراً في المسار التالي:
- 99: `build/app/outputs/flutter-apk/app-release.apk`
-100: 
-101: ---
-102: 
-103: ## 📁 هيكلية المشروع الأساسية (Project Architecture)
-104: 
-105: ```text
-106: lib/
-107: ├── core/                  # المكونات الأساسية (الخدمات، الشبكة API، المزودات Providers، الألوان والتصميم)
-108: ├── features/              # الميزات والواجهات المقسمة حسب النوع:
-109: │   ├── shared/            # التسجيل، كود التحقق OTP، الإشعارات، والمحادثات
-110: │   ├── user/              # واجهات العميل (إنشاء الطلب، تحديد المدن، طلباتي)
-111: │   └── vendor/            # واجهات مزود الخدمة (التخصصات، الاستجابة للطلبات، العمولات)
-112: ├── models/                # نماذج البيانات (Models & Data Parsing)
-113: └── widgets/               # المكونات والودجت Reusable Components
-114: ```
-115: 
-116: ---
-117: 
-118: ✨ **تم إعداد دليل التشغيل بنجاح!**
-````
-
 ## File: repomix.config.json
 ````json
  1: {
@@ -15209,6 +15726,190 @@ test/widget_test.dart
 25:     ]
 26:   }
 27: }
+````
+
+## File: lib/core/data_sources/remote/firebase/fcm_service.dart
+````dart
+  1: import 'dart:async';
+  2: import 'dart:developer';
+  3: 
+  4: import 'package:car_mediator_mobile/core/helpers/helpers.dart';
+  5: import 'package:car_mediator_mobile/core/utils/connection_utils.dart';
+  6: import 'package:car_mediator_mobile/core/utils/context_utils.dart';
+  7: import 'package:firebase_messaging/firebase_messaging.dart';
+  8: import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+  9: import 'package:provider/provider.dart';
+ 10: 
+ 11: import '../../../../features/shared/notifications/screens/notifications_screen.dart';
+ 12: import '../../../../widgets/components.dart';
+ 13: import '../../../providers/conversation_provider.dart';
+ 14: import '../../../providers/notification_badge_provider.dart';
+ 15: import '../../local/secure_storage.dart';
+ 16: 
+ 17: 
+ 18: class FcmService {
+ 19:   static FirebaseMessaging? _firebaseMessaging;
+ 20:   static FirebaseMessaging get firebaseMessaging => FcmService._firebaseMessaging ?? FirebaseMessaging.instance;
+ 21: 
+ 22:   static Future<void> initializeFirebase() async {
+ 23: 
+ 24:     try{
+ 25:       FcmService._firebaseMessaging = FirebaseMessaging.instance;
+ 26:       await FcmService.initializeLocalNotifications();
+ 27:       await FcmService.onBackgroundMsg();
+ 28:       FcmService.subscribeToTopic('all');
+ 29:     }catch(e){
+ 30:       print(e);
+ 31:     }
+ 32:   }
+ 33: 
+ 34:   static Future<String?> getDeviceTokenFCM() async {
+ 35:     try {
+ 36:       String? _token = await FcmService.firebaseMessaging.getToken();
+ 37:       Helper.logDebug('FCMServices------token----- $_token ');
+ 38:       return _token;
+ 39:     } catch (e) {
+ 40:       Helper.logDebug("❌ Error getting FCM token: $e");
+ 41:       return null;
+ 42:     }
+ 43:   }
+ 44: 
+ 45: 
+ 46:   static void subscribeToTopic(String topic) async {
+ 47:     if(await ConnectionUtils.hasInternetConnection())
+ 48:       await FcmService.firebaseMessaging.subscribeToTopic(topic);
+ 49:   }
+ 50: 
+ 51:   static FlutterLocalNotificationsPlugin localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+ 52: 
+ 53:   static Future<void> initializeLocalNotifications() async {
+ 54:     final InitializationSettings _initSettings = InitializationSettings(
+ 55:         android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+ 56:         iOS: DarwinInitializationSettings()
+ 57:     );
+ 58:     /// on did receive notification response = for when app is opened via notification while in foreground on android
+ 59:     await FcmService.localNotificationsPlugin.initialize(_initSettings, onDidReceiveNotificationResponse: FcmService.onTapNotification);
+ 60:     /// need this for ios foregournd notification
+ 61:     ///Configure notification permissions
+ 62:     ///IOS
+ 63:     await FcmService.firebaseMessaging.setForegroundNotificationPresentationOptions(
+ 64:       alert: true, // Required to display a heads up notification
+ 65:       badge: true,
+ 66:       sound: true,
+ 67:     );
+ 68:     /// for android
+ 69:     NotificationSettings settings = await FcmService.firebaseMessaging.requestPermission(
+ 70:       alert: true,
+ 71:       announcement: false,
+ 72:       badge: true,
+ 73:       carPlay: false,
+ 74:       criticalAlert: false,
+ 75:       provisional: false,
+ 76:       sound: true,
+ 77:     );
+ 78: 
+ 79:     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+ 80:       print('User granted permission');
+ 81:     } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+ 82:       print('User granted provisional permission');
+ 83:     } else {
+ 84:       print('User declined or has not accepted permission');
+ 85:     }
+ 86:   }
+ 87: 
+ 88:   static NotificationDetails platformChannelSpecifics = NotificationDetails(
+ 89:     android: AndroidNotificationDetails(
+ 90:       "high_importance_channel", "High Importance Notifications", priority: Priority.max, importance: Importance.max,
+ 91:     ),
+ 92: 
+ 93:   );
+ 94: 
+ 95:   static Future<void> backgroundHandler(RemoteMessage message) async {
+ 96:     if (message.notification != null){
+ 97:       log("--------FirebaseMessaging.onBackgroundMessage.listen----------");
+ 98:       log('title---- ${message.notification?.title}');
+ 99:       log('body---- ${message.notification?.body}');
+100:       SecureStorage.addNotificationCount();
+101:     }
+102: 
+103:     // if(message.data != null){
+104:     //   if(message.data['type_notification'] == 'all'){
+105:     //     print('type_notification---- ${message.data['type_notification']}');
+106:     //     print('title---- ${message.notification?.title}');
+107:     //     print('body---- ${message.notification?.body}');
+108:     //     GlobalNavigator.dialogAdvancedGlobal(title: message.notification?.title ?? '',
+109:     //         description: message.notification?.body ?? 'مرحباً',
+110:     //         iconPath: AssetsPath.notification,
+111:     //         onTabCancel: (){
+112:     //         });
+113:     //   }
+114:     //
+115:     // }
+116: 
+117:   }
+118: 
+119:   static Future<void> onTapNotification(NotificationResponse? response) async {
+120:     if (response?.payload == null) return;
+121:     print('---onTapNotification--payload-------${response?.payload }---------');
+122:     final _cxt = ContextUtils.globalContext;
+123:     if(_cxt != null)
+124:       navigationPush(_cxt, NotificationsScreen());
+125:   }
+126: 
+127:   static Future<void> initialMessage() async {
+128:     //When App is Terminated
+129:     // when you click on notification app open from terminated state and
+130:     // you can get notification data in this method
+131:     var message =   await FirebaseMessaging.instance.getInitialMessage() ;
+132:     if (message != null){
+133:       print("----FirebaseMessaging----initalMessage------${message.toString}----");
+134:       final _cxt = ContextUtils.globalContext;
+135:       if(_cxt != null)
+136:         navigationPush(_cxt, NotificationsScreen());
+137:     }
+138:   }
+139: 
+140:   static Future<void> onMessage_OpenedApp() async {
+141:     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+142:       print("--------FirebaseMessaging.onMessageOpenedApp.listen----------");
+143:     });
+144:   }
+145: 
+146:   static Future<void> onBackgroundMsg() async {
+147:     //background message listener
+148:     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+149:   }
+150: 
+151:   // for receiving message when app is in foreground : for android
+152:   static Future<void> onMessage() async {
+153:     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+154:       // if this is available when Platform.isIOS, you'll receive the notification twice
+155:       print("message recieved----onMessage--foreground messages-----");
+156:       final cxt = ContextUtils.globalContext;
+157:       if (cxt != null) {
+158:         try {
+159:           cxt.read<NotificationBadgeProvider>().fetchUnreadCounts();
+160:           cxt.read<ConversationProvider>().onRealtimeMessageReceived(message.data);
+161:         } catch (e) {
+162:           log('Error updating NotificationBadgeProvider on FCM: $e');
+163:         }
+164:       }
+165: 
+166:       if(message.notification != null){
+167:         print('title---- ${message.notification?.title}');
+168:         print('body---- ${message.notification?.body}');
+169: 
+170:         SecureStorage.addNotificationCount();
+171: 
+172:         await FcmService.localNotificationsPlugin.show(
+173:           0, message.notification!.title, message.notification!.body, FcmService.platformChannelSpecifics,
+174:           payload: message.data.toString(),
+175:         );
+176:       }
+177:     });
+178:   }
+179: 
+180: }
 ````
 
 ## File: lib/core/helpers/helpers.dart
@@ -15346,6 +16047,100 @@ test/widget_test.dart
 97:     super.dispose();
 98:   }
 99: }
+````
+
+## File: lib/core/services/shared/customer_shipping_info_storage.dart
+````dart
+ 1: import 'dart:convert';
+ 2: import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+ 3: 
+ 4: class CustomerShippingInfoStorage {
+ 5:   static const _storage = FlutterSecureStorage();
+ 6:   static const _key = 'customer_shipping_info';
+ 7: 
+ 8:   /// حفظ بيانات الزبون
+ 9:   static Future<void> save({
+10:     required String name,
+11:     required String phone,
+12:     required String address,
+13:     String? city,
+14:     double? lat,
+15:     double? lng,
+16:   }) async {
+17:     final data = jsonEncode({
+18:       'name': name,
+19:       'phone': phone,
+20:       'address': address,
+21:       'city': city,
+22:       'lat': lat,
+23:       'lng': lng,
+24:     });
+25:     await _storage.write(key: _key, value: data);
+26:   }
+27: 
+28:   /// استرجاع بيانات الزبون المحفوظة
+29:   static Future<Map<String, dynamic>?> load() async {
+30:     final raw = await _storage.read(key: _key);
+31:     if (raw == null) return null;
+32:     try {
+33:       return jsonDecode(raw) as Map<String, dynamic>;
+34:     } catch (_) {
+35:       return null;
+36:     }
+37:   }
+38: 
+39:   /// حذف البيانات المحفوظة
+40:   static Future<void> clear() async {
+41:     await _storage.delete(key: _key);
+42:   }
+43: }
+````
+
+## File: lib/core/services/shared/vendor_shipping_info_storage.dart
+````dart
+ 1: import 'dart:convert';
+ 2: import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+ 3: 
+ 4: class VendorShippingInfoStorage {
+ 5:   static const _storage = FlutterSecureStorage();
+ 6:   static const _key = 'vendor_shipping_info';
+ 7: 
+ 8:   /// حفظ بيانات التاجر
+ 9:   static Future<void> save({
+10:     required String name,
+11:     required String phone,
+12:     required String address,
+13:     String? city,
+14:     double? lat,
+15:     double? lng,
+16:   }) async {
+17:     final data = jsonEncode({
+18:       'name': name,
+19:       'phone': phone,
+20:       'address': address,
+21:       'city': city,
+22:       'lat': lat,
+23:       'lng': lng,
+24:     });
+25:     await _storage.write(key: _key, value: data);
+26:   }
+27: 
+28:   /// استرجاع بيانات التاجر المحفوظة
+29:   static Future<Map<String, dynamic>?> load() async {
+30:     final raw = await _storage.read(key: _key);
+31:     if (raw == null) return null;
+32:     try {
+33:       return jsonDecode(raw) as Map<String, dynamic>;
+34:     } catch (_) {
+35:       return null;
+36:     }
+37:   }
+38: 
+39:   /// حذف البيانات المحفوظة
+40:   static Future<void> clear() async {
+41:     await _storage.delete(key: _key);
+42:   }
+43: }
 ````
 
 ## File: lib/core/utils/launcher_url_utils.dart
@@ -15803,213 +16598,6 @@ test/widget_test.dart
 234: }
 ````
 
-## File: lib/features/user/shipping_request/screens/confirm_shipping_request_screen.dart
-````dart
-  1: import 'package:car_mediator_mobile/core/helpers/helpers.dart';
-  2: import 'package:car_mediator_mobile/core/utils/connection_utils.dart';
-  3: import 'package:car_mediator_mobile/widgets/arrow_back_widget.dart';
-  4: import 'package:dropdown_search/dropdown_search.dart';
-  5: import 'package:flutter/cupertino.dart';
-  6: import 'package:flutter/material.dart';
-  7: import 'package:provider/provider.dart';
-  8: 
-  9: import '../../../../../core/providers/orders/create_order_provider.dart';
- 10: import '../../../../../core/styles/styles.dart';
- 11: import '../../../../../core/utils/constants/colors_constants.dart';
- 12: import '../../../../../core/utils/constants/constants.dart';
- 13: import '../../../../../core/utils/dialogUtils.dart';
- 14: import '../../../../../core/utils/size_config.dart';
- 15: import '../../../../../widgets/card_container_widget.dart';
- 16: import '../../../../../widgets/custom_button.dart';
- 17: import '../../../../../widgets/custom_loading.dart';
- 18: import '../../../../core/localization/app_language_provider.dart';
- 19: import '../../../../core/providers/cache_provider.dart';
- 20: import '../../../../core/providers/shipping_provider.dart';
- 21: import '../../../../core/utils/form_validator.dart';
- 22: import '../../../../models/city_model.dart';
- 23: import '../../../../widgets/components.dart';
- 24: import '../../../../widgets/custom_container_listtile_widget.dart';
- 25: import '../../../../widgets/custom_textfield.dart';
- 26: import '../../orders/widgets/confirm_pledge_dialog.dart';
- 27: import '../../../../core/services/shared/customer_shipping_info_storage.dart';
- 28: import '../../../../../widgets/map_picker_screen.dart';
- 29: 
- 30: class ConfirmShippingRequestScreen extends StatefulWidget {
- 31:   const ConfirmShippingRequestScreen({super.key, required this.requestId, required this.responseId, required this.vendorId});
- 32:   final int requestId;
- 33:   final int responseId;
- 34:   final int vendorId;
- 35: 
- 36:   @override
- 37:   State<ConfirmShippingRequestScreen> createState() => _ConfirmShippingRequestScreenState();
- 38: }
- 39: 
- 40: class _ConfirmShippingRequestScreenState extends State<ConfirmShippingRequestScreen> {
- 41: 
- 42:   final _formKey = GlobalKey<FormState>();
- 43:   final _nameController = TextEditingController();
- 44:   final _addressController = TextEditingController();
- 45:   final _phoneController = TextEditingController();
- 46:   
- 47:   double? _lat;
- 48:   double? _lng;
- 49: 
- 50:   @override
- 51:   void initState() {
- 52:     super.initState();
- 53:     _loadSavedInfo();
- 54:   }
- 55: 
- 56:   Future<void> _loadSavedInfo() async {
- 57:     final saved = await CustomerShippingInfoStorage.load();
- 58:     if (saved != null) {
- 59:       setState(() {
- 60:         _nameController.text = saved['name'] ?? '';
- 61:         _phoneController.text = saved['phone'] ?? '';
- 62:         _addressController.text = saved['address'] ?? '';
- 63:         _lat = (saved['lat'] as num?)?.toDouble();
- 64:         _lng = (saved['lng'] as num?)?.toDouble();
- 65:       });
- 66:     }
- 67:   }
- 68: 
- 69:   @override
- 70:   void dispose() {
- 71:     super.dispose();
- 72:     _nameController.dispose();
- 73:     _addressController.dispose();
- 74:     _phoneController.dispose();
- 75:   }
- 76: 
- 77:   @override
- 78:   Widget build(BuildContext context) {
- 79:     final _provider = Provider.of<CreateOrderProvider>(context);
- 80:     return Scaffold(
- 81:       appBar: AppBar(
- 82:         backgroundColor: Colors.white,
- 83:         leading: ArrowBackWidget(myContext: context),
- 84:         title: Text('شحن الطلب : ${widget.requestId}', style: txtBold04,),
- 85:       ),
- 86:         body: Form(
- 87:           key: _formKey,
- 88:             child: ListView(
- 89:           shrinkWrap: true,
- 90:           physics: const ScrollPhysics(),
- 91:           padding: const EdgeInsets.all(paddingConst),
- 92:           children: [
- 93:             const SizedBox(height: 20),
- 94:             CardContainerWidget(
- 95:               children: [
- 96:                 const SizedBox(height: 10),
- 97:                 Text(
- 98:                   'بيانات الشحن',
- 99:                   textAlign: TextAlign.center,
-100:                   style: txtBold04,
-101:                 ),
-102:                 const SizedBox(height: 20),
-103:                 CustomTextField(
-104:                   label: 'اسم المستخدم',
-105:                   hint: 'أدخل اسمك',
-106:                   controller: _nameController,
-107:                   validator: (value) => FormValidatorUtils.textValidator(value,
-108:                       isRequired: true),
-109:                 ),
-110:                 const SizedBox(height: 20),
-111:                 GestureDetector(
-112:                   onTap: () async {
-113:                     final result = await Navigator.push(
-114:                       context,
-115:                       MaterialPageRoute(
-116:                         builder: (context) => const MapPickerScreen(),
-117:                       ),
-118:                     );
-119:                     if (result != null) {
-120:                       setState(() {
-121:                         _lat = result['lat'];
-122:                         _lng = result['lng'];
-123:                         _addressController.text = result['address'];
-124:                       });
-125:                     }
-126:                   },
-127:                   child: AbsorbPointer(
-128:                     child: CustomTextField(
-129:                       label: 'الموقع على الخريطة',
-130:                       hint: 'اختر موقعك',
-131:                       controller: _addressController,
-132:                       maxLines: null,
-133:                       validator: (value) => FormValidatorUtils.textValidator(value,
-134:                           isRequired: true, maxLength: 255),
-135:                     ),
-136:                   ),
-137:                 ),
-138:                 const SizedBox(height: 20),
-139:                 CustomTextField(
-140:                   label:'رقم الجوال',
-141:                   controller: _phoneController,
-142:                   keyboardType: TextInputType.phone,
-143:                   validator: (value) => FormValidatorUtils.phoneValidator(value,
-144:                     isRequired: true,),
-145:                 ),
-146:                 const SizedBox(height: 20),
-147:               ],
-148:             )
-149:           ],
-150:         )),
-151:         bottomNavigationBar: BottomAppBar(
-152:           child: Padding(
-153:             padding: const EdgeInsets.symmetric(horizontal: 0),
-154:             child: CustomButton(
-155:               label: 'تأكيد الشحن',
-156:               txtSize: SizeConfig.widthResponsive(0.04),
-157:               loading: _provider.isLoading,
-158:               onTap: ()  {
-159:                 Helper.dismissKeyBoard();
-160:                 if (_formKey.currentState!.validate()){
-161:                   showDialog(
-162:                     context: context,
-163:                     barrierDismissible: false,
-164:                     builder: (dialogContext) => ConfirmPledgeDialog(
-165:                       onConfirm: () async {
-166:                         Helper.dismissKeyBoard();
-167:                         if(!await ConnectionUtils.hasInternetConnection()){
-168:                           DialogUtils().showNoInternetDialog(context);
-169:                           return;
-170:                         }
-171: 
-172:                         // حفظ البيانات
-173:                         CustomerShippingInfoStorage.save(
-174:                           name: _nameController.text.trim(),
-175:                           phone: _phoneController.text.trim(),
-176:                           address: _addressController.text.trim(),
-177:                           lat: _lat,
-178:                           lng: _lng,
-179:                         );
-180:                         
-181:                         String mapUrl = _lat != null && _lng != null 
-182:                             ? ' - https://www.google.com/maps/search/?api=1&query=$_lat,$_lng'
-183:                             : '';
-184: 
-185:                         await _provider.ConfirmShippingRequest(context,body: {
-186:                           'requestId' : widget.requestId,
-187:                           'responseId': widget.responseId,
-188:                           'vendorId' : widget.vendorId,
-189:                           'idNumberUser' : '0000000000', // Dummy 
-190:                           'cityOriginDimensions': _nameController.text.trim(), // Send name here to avoid modifying backend schema
-191:                           'addressOriginDimensions' : _addressController.text.trim() + mapUrl, // Combine address and URL
-192:                           'phoneOriginDimensions' : _phoneController.text.trim(),
-193:                         });
-194:                       },
-195:                     ),
-196:                   );
-197:                 }
-198:               },
-199:             ),
-200:           ),
-201:         ));
-202:   }
-203: }
-````
-
 ## File: lib/features/vendor/new_requests/screens/new_request_screen.dart
 ````dart
   1: import 'package:car_mediator_mobile/core/providers/vendors/new_request_vendor_provider.dart';
@@ -16114,246 +16702,6 @@ test/widget_test.dart
 100: }
 ````
 
-## File: lib/features/vendor/register/screens/register_vendor_screen.dart
-````dart
-  1: import 'dart:convert';
-  2: 
-  3: import 'package:car_mediator_mobile/core/helpers/toast_helper.dart';
-  4: import 'package:car_mediator_mobile/core/utils/connection_utils.dart';
-  5: import 'package:car_mediator_mobile/core/utils/dialogUtils.dart';
-  6: import 'package:car_mediator_mobile/widgets/dropdown_search/categories_dropdown_search.dart';
-  7: import 'package:flutter/material.dart';
-  8: import 'package:provider/provider.dart';
-  9: 
- 10: import '../../../../core/helpers/helpers.dart';
- 11: import '../../../../core/providers/vendors/register_vendor_provider.dart';
- 12: import '../../../../core/utils/constants/colors_constants.dart';
- 13: import '../../../../core/utils/date_parser_utils.dart';
- 14: import '../../../../core/utils/form_validator.dart';
- 15: import '../../../../core/utils/image_picker_bottom_sheet_utils.dart';
- 16: import '../../../../core/utils/permissions_utils.dart';
- 17: import '../../../../core/utils/size_config.dart';
- 18: import '../../../../models/category_model.dart';
- 19: import '../../../../models/city_model.dart';
- 20: import '../../../../widgets/custom_button.dart';
- 21: import '../../../../widgets/dropdown_search/cities_dropdown_search.dart';
- 22: import '../../../../widgets/custom_textfield.dart';
- 23: import '../../../../widgets/dropdown_search/city_dropdown_search.dart';
- 24: import '../../../../widgets/icon_comp.dart';
- 25: import '../../../../widgets/images/add_image_widget.dart';
- 26: import '../widgets/app_bar_register_widget.dart';
- 27: 
- 28: class RegisterVendorScreen extends StatefulWidget {
- 29:   const RegisterVendorScreen({super.key,});
- 30: 
- 31:   @override
- 32:   State<RegisterVendorScreen> createState() => _RegisterVendorScreenState();
- 33: }
- 34: 
- 35: class _RegisterVendorScreenState extends State<RegisterVendorScreen> {
- 36:   final _formKey = GlobalKey<FormState>();
- 37:   final nameCompanyArController = TextEditingController();
- 38:   final phoneNumberController = TextEditingController();
- 39:   final commercialRecordController = TextEditingController();
- 40:   final dateExpireCommercialRecordController = TextEditingController();
- 41: 
- 42:   @override
- 43:   void dispose() {
- 44:     super.dispose();
- 45:     nameCompanyArController.dispose();
- 46:     phoneNumberController.dispose();
- 47:     commercialRecordController.dispose();
- 48:     dateExpireCommercialRecordController.dispose();
- 49:   }
- 50: 
- 51:   @override
- 52:   Widget build(BuildContext context) {
- 53:     SizeConfig.init(context);
- 54:     final _provider = Provider.of<RegisterVendorProvider>(context);
- 55: 
- 56:     return Scaffold(
- 57:         backgroundColor: Colors.white,
- 58:         appBar: const AppBarRegisterWidget(),
- 59:         body: Form(
- 60:             key: _formKey,
- 61:             child: ListView(
- 62:               shrinkWrap: true,
- 63:               physics: const ScrollPhysics(),
- 64:               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
- 65:               children: [
- 66:                 const SizedBox(height: 10,),
- 67:                  Row(
- 68:                   children: [
- 69:                     const IconComponent(icon: Icon(Icons.business_sharp, color: AppColor.primaryColor,),),
- 70:                     const SizedBox(width: 10,),
- 71:                     Expanded(child: CustomTextField(
- 72:                       label: 'إسم الشركة',
- 73:                       hint: 'إسم الشركة',
- 74:                       controller: nameCompanyArController,
- 75:                       validator: (value) => FormValidatorUtils.textValidator(value, isRequired: true),
- 76:                       fillColor: AppColor.secondaryColor,
- 77:                       filled: true,
- 78:                     ),)
- 79:                   ],
- 80:                 ),
- 81:                
- 82:                 const SizedBox(height: 15,),
- 83:                 Row(
- 84:                   children: [
- 85:                     const IconComponent(icon: Icon(Icons.phone_android, color: AppColor.primaryColor,),),
- 86:                     const SizedBox(width: 10,),
- 87:                     Expanded(child: CustomTextField(
- 88:                       label: 'رقم الجوال',
- 89:                       hint: '512345678',
- 90:                       controller: phoneNumberController,
- 91:                       validator: (value) => FormValidatorUtils.phoneValidator(value, isRequired: true),
- 92:                       fillColor: AppColor.secondaryColor,
- 93:                       filled: true,
- 94:                     ),)
- 95:                   ],
- 96:                 ),
- 97: 
- 98:                 const SizedBox(height: 15,),
- 99:                 Row(
-100:                   children: [
-101:                     const IconComponent(icon: Icon(Icons.assignment, color: AppColor.primaryColor,),),
-102:                     const SizedBox(width: 10,),
-103:                     Expanded(child: CustomTextField(
-104:                       label: 'رقم السجل التجاري',
-105:                       hint: 'رقم السجل التجاري',
-106:                       controller: commercialRecordController,
-107:                       validator: (value) => FormValidatorUtils.textValidator(value, isRequired: true),
-108:                       fillColor: AppColor.secondaryColor,
-109:                       filled: true,
-110:                     ),)
-111:                   ],
-112:                 ),
-113:                 const SizedBox(height: 15,),
-114:                 Row(
-115:                   children: [
-116:                     const IconComponent(icon: Icon(Icons.date_range, color: AppColor.primaryColor,),),
-117:                     const SizedBox(width: 10,),
-118:                     Expanded(child: CustomTextField(
-119:                       label: 'تاريخ إنتهاء السجل التجاري',
-120:                       hint: 'تاريخ إنتهاء السجل التجاري',
-121:                       readOnly: true,
-122:                       controller: dateExpireCommercialRecordController,
-123:                       fillColor: AppColor.secondaryColor,
-124:                       filled: true,
-125:                       validator: (value) => FormValidatorUtils.textValidator(
-126:                         value,
-127:                         isRequired: true,
-128:                       ),
-129:                       onTap: () async {
-130:                         dateExpireCommercialRecordController.text = await DateParserUtils.getDatePicker(context);
-131:                       },
-132:                     ),)
-133:                   ],
-134:                 ),
-135:                 const SizedBox(height: 15,),
-136:                 Row(
-137:                   children: [
-138:                     const IconComponent(icon: Icon(Icons.location_on, color: AppColor.primaryColor,),),
-139:                     const SizedBox(width: 10,),
-140:                     Expanded(child: CityDropdownSearch(
-141:                       filled: true,
-142:                       fillColor: AppColor.secondaryColor,
-143:                       selectedCityModel: _provider.selectedCity,
-144:                       onChanged: (CityModel? selectedItem) {
-145:                         _provider.changeCity(selectedItem);
-146:                       },
-147:                     ),)
-148:                   ],
-149:                 ),
-150:                 const SizedBox(height: 15,),
-151:                 Row(
-152:                   children: [
-153:                     const IconComponent(icon: Icon(Icons.miscellaneous_services, color: AppColor.primaryColor,),),
-154:                     const SizedBox(width: 10,),
-155:                     Expanded(child: CategoriesDropdownSearch(
-156:                       filled: true,
-157:                       fillColor: AppColor.secondaryColor,
-158:                       selectedCategories: _provider.selectedCategoriesList,
-159:                       onChanged: (List<CategoryModel>? selectedItems) {
-160:                         _provider.changeCategories(selectedItems);
-161:                       },
-162:                     ),)
-163:                   ],
-164:                 ),
-165: 
-166:                 const SizedBox(height: 20,),
-167:                 Text('صورة السجل التجاري', style: TextStyle(color: AppColor.primaryColor, fontSize: SizeConfig.widthResponsive(0.04), fontWeight: FontWeight.w500),),
-168:                 const SizedBox(height: 10,),
-169:                 AddImageWidget(
-170:                   height: SizeConfig.heightResponsive(0.20),
-171:                   file: _provider.selectedCommercialRecordImage,
-172:                   onTap: () async {
-173:                     if(await PermissionsUtils.checkCameraAndGalleryPermission(context)){
-174:                       ImagePickerBottomSheet.show(context, (picked) {
-175:                         if (picked != null) {
-176:                           _provider.changeSelectedCommercialRecordImage(picked);
-177:                         }
-178:                       });
-179:                     }
-180:                   },
-181:                     deleteImage : () {
-182:                       _provider.changeSelectedCommercialRecordImage(null);
-183:                     }
-184:                 ),
-185:                 SizedBox(height: SizeConfig.heightResponsive(0.04),),
-186:                 CustomButton(
-187:                   primaryColor:AppColor.primaryColor,
-188:                   txtSize: SizeConfig.widthResponsive(0.05),
-189:                   loading: _provider.isLoading,
-190:                   onTap: () async {
-191:                     await _execute(context, _provider);
-192:                   },
-193:                   label: 'تقديم الطلب',
-194:                 ),
-195:               ],
-196:             )),
-197:         );
-198:   }
-199: 
-200:   Future<void> _execute(BuildContext context, RegisterVendorProvider myProvider)async {
-201:     Helper.dismissKeyBoard();
-202: 
-203:     bool myValid = _formKey.currentState!.validate();
-204:     if (myValid) {
-205: 
-206:       if(myProvider.selectedCategoriesList == null || myProvider.selectedCategoriesList!.isEmpty){
-207:         ToastHelper.showInfo('الرجاء إختيار الخدمات');
-208:         return;
-209:       }
-210: 
-211:       if(myProvider.selectedCommercialRecordImage == null || myProvider.selectedCommercialRecordImage!.path.isEmpty){
-212:         ToastHelper.showInfo('الرجاء إختيار صورة السجل التجاري');
-213:         return;
-214:       }
-215: 
-216:       if(! await ConnectionUtils.hasInternetConnection()){
-217:         DialogUtils().showNoInternetDialog(context);
-218:         return;
-219:       }
-220: 
-221:       String phone = phoneNumberController.text.trim();
-222:       if (!phone.startsWith('0')) {
-223:         phone = '0$phone';
-224:       }
-225: 
-226:       await myProvider.registerVendor(context,{
-227:         'companyNameAr' : nameCompanyArController.text,
-228:         'phoneNumber' : phone,
-229:         'commercialRecord' : commercialRecordController.text,
-230:         'dateExpireCommercialRecord' : dateExpireCommercialRecordController.text,
-231:         'categoriesIds' : jsonEncode(myProvider.selectedCategoriesList?.map((e) => e.id).toList()),
-232:         'cityId' : myProvider.selectedCity?.id.toString() ?? '0',
-233:       });
-234:     }
-235:   }
-236: }
-````
-
 ## File: lib/features/vendor/responses/widgets/build_user_details_response_widget.dart
 ````dart
  1: import 'package:car_mediator_mobile/core/styles/styles.dart';
@@ -16434,211 +16782,6 @@ test/widget_test.dart
 76:     ]);
 77:   }
 78: }
-````
-
-## File: lib/main.dart
-````dart
-  1: import 'dart:async';
-  2: 
-  3: import 'package:car_mediator_mobile/core/data_sources/remote/api_service.dart';
-  4: import 'package:car_mediator_mobile/core/providers/auth_provider.dart';
-  5: import 'package:car_mediator_mobile/core/services/shared/auth_service.dart';
-  6: import 'package:car_mediator_mobile/core/services/shared/common_service.dart';
-  7: import 'package:car_mediator_mobile/features/shared/chat/screens/chat_screen.dart';
-  8: import 'package:firebase_core/firebase_core.dart';
-  9: import 'package:flutter/material.dart';
- 10: import 'package:flutter/services.dart';
- 11: import 'package:flutter_localizations/flutter_localizations.dart';
- 12: import 'package:intl/date_symbol_data_local.dart';
- 13: import 'package:provider/provider.dart';
- 14: import 'package:timeago/timeago.dart' as timeago;
- 15: 
- 16: import 'core/data_sources/local/cache_helper.dart';
- 17: import 'core/data_sources/local/secure_storage.dart';
- 18: import 'core/data_sources/remote/firebase/fcm_service.dart';
- 19: import 'core/localization/app_language_provider.dart';
- 20: import 'core/providers/bottom_navigation_bar_provider.dart';
- 21: import 'core/providers/cache_provider.dart';
- 22: import 'core/providers/common_provider.dart';
- 23: import 'core/providers/conversation_provider.dart';
- 24: import 'core/providers/dynamic_form_provider.dart';
- 25: import 'core/providers/home/home_user_provider.dart';
- 26: import 'core/providers/notification_badge_provider.dart';
- 27: import 'core/providers/notification_provider.dart';
- 28: import 'core/providers/orders/create_order_provider.dart';
- 29: import 'core/providers/shipping_provider.dart';
- 30: import 'core/providers/users/my_request_user_provider.dart';
- 31: import 'core/providers/users/profile_user_provider.dart';
- 32: import 'core/providers/users/responses_my_request_provider.dart';
- 33: import 'core/providers/vendors/app_commission_provider.dart';
- 34: import 'core/providers/vendors/new_request_vendor_provider.dart';
- 35: import 'core/providers/vendors/profile_vendor_provider.dart';
- 36: import 'core/providers/vendors/register_vendor_provider.dart';
- 37: import 'core/providers/vendors/response_request_provider.dart';
- 38: import 'core/providers/vendors/specialty_vendor_provider.dart';
- 39: import 'core/services/shared/cache_service.dart';
- 40: import 'core/services/shared/conversation_service.dart';
- 41: import 'core/services/shared/notification_service.dart';
- 42: import 'core/providers/vendor_profile_provider.dart';
- 43: import 'core/services/shared/shipping_service.dart';
- 44: import 'core/services/user/my_requests/my_request_user_service.dart';
- 45: import 'core/services/user/profile_user_service.dart';
- 46: import 'core/services/user/requests/request_service.dart';
- 47: import 'core/services/vendor/new_request_service.dart';
- 48: import 'core/services/vendor/profile_vendor_service.dart';
- 49: import 'core/services/vendor/response_request_service.dart';
- 50: import 'core/services/vendor/specialty_vendor_service.dart';
- 51: import 'core/theme/app_theme.dart';
- 52: import 'core/utils/custom_time_ago.dart';
- 53: import 'features/shared/cache/init_cache.dart';
- 54: import 'l10n/app_localizations.dart';
- 55: import 'package:web_socket_channel/web_socket_channel.dart';
- 56: 
- 57: // Use GlobalKey to access BuildContext safely outside the widget tree
- 58: final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
- 59: 
- 60: Future<void> main() async {
- 61:   runZonedGuarded<Future<void>>(() async {
- 62:     WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
- 63: 
- 64:     SystemChrome.setPreferredOrientations(
- 65:         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
- 66: 
- 67:     // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
- 68: 
- 69:     await CacheHelper.init();
- 70:     AppLanguageProvider _appLanguage = AppLanguageProvider();
- 71: 
- 72:     await Firebase.initializeApp();
- 73:     await Future.wait([
- 74:       _appLanguage.fetchLocale(),
- 75:       initializeDateFormatting(),
- 76:     ]);
- 77: 
- 78:     // final String? token = await SecureStorage.getToken();
- 79:     // print(token);
- 80:     final apiService = ApiService();
- 81:     await FcmService.initializeFirebase();
- 82:     timeago.setLocaleMessages('ar', CustomTimeAgo());
- 83: 
- 84:     // final channel = WebSocketChannel.connect(
- 85:     //   Uri.parse('ws://192.168.1.34:8080/app/abc123xyz'),
- 86:     // );
- 87:     //
- 88:     // channel.sink.add(
- 89:     //     jsonEncode({
- 90:     //       "event": "pusher:subscribe",
- 91:     //       "data": {
- 92:     //         "channel": "chat"
- 93:     //       }
- 94:     //     })
- 95:     // );
- 96:     //
- 97:     // channel.stream.listen((data) {
- 98:     //   final decoded = jsonDecode(data);
- 99:     //   print("New message channel.stream.listen ----------------");
-100:     //
-101:     //   if (decoded["event"] == "message.sent") {
-102:     //     print("New message: ${decoded['data']}");
-103:     //   }
-104:     // });
-105: 
-106:     // إرسال رسالة عبر API Laravel
-107:     // Future sendMessage(String user, String message) async {
-108:     // await http.post(
-109:     // Uri.parse('http://127.0.0.1:8000/api/message'),
-110:     // body: {
-111:     // 'user': user,
-112:     // 'message': message,
-113:     // },
-114:     // );
-115:     // }
-116: 
-117:     String? userRole = await SecureStorage.getUserRole();
-118:     runApp( MyApp(appLanguage: _appLanguage, apiService: apiService, userRole: userRole,));
-119: 
-120:   }, (error, stack) {
-121:     // FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-122:     print('-------Error  From Inside Framework---runZonedGuarded-----');
-123:     print('---Error----${error}');
-124:     print('---StackTrack----${stack}');
-125:     print('-------------------------------------------');
-126:   }
-127:   );
-128: }
-129: 
-130: class MyApp extends StatelessWidget {
-131:   final AppLanguageProvider appLanguage;
-132:   final ApiService apiService;
-133:   final String? userRole;
-134:   const MyApp({super.key, required this.appLanguage, required this.apiService, this.userRole});
-135: 
-136:   @override
-137:   Widget build(BuildContext context) {
-138:     return ChangeNotifierProvider<AppLanguageProvider>(
-139:       create: (_) => appLanguage,
-140:       child: Consumer<AppLanguageProvider>(builder: (context, model, child) {
-141:         return MultiProvider(providers:[
-142:            ChangeNotifierProvider<BottomNavigationBarProvider>(create: (_) => BottomNavigationBarProvider(),),
-143:            ChangeNotifierProvider<CacheProvider>(create: (_) => CacheProvider(CacheService(apiService)),),
-144:            ChangeNotifierProvider<HomeUserProvider>(create: (_) => HomeUserProvider(),),
-145:            ChangeNotifierProvider<CreateOrderProvider>(create: (_) => CreateOrderProvider(RequestService(apiService)),),
-146:            ChangeNotifierProvider<DynamicFormProvider>(create: (_) => DynamicFormProvider(),),
-147:           ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider(AuthService(apiService)),),
-148:           ChangeNotifierProvider<RegisterVendorProvider>(create: (_) => RegisterVendorProvider(apiService),),
-149:           ChangeNotifierProvider<NewRequestVendorProvider>(create: (_) => NewRequestVendorProvider(NewRequestService(apiService)),),
-150:           ChangeNotifierProvider<ResponseRequestProvider>(create: (_) => ResponseRequestProvider(ResponseRequestService(apiService)),),
-151:           ChangeNotifierProvider<SpecialtyVendorProvider>(create: (_) => SpecialtyVendorProvider(SpecialtyVendorService(apiService)),),
-152:           ChangeNotifierProvider<ProfileVendorProvider>(create: (_) => ProfileVendorProvider(ProfileVendorService(apiService)),),
-153:           ChangeNotifierProvider<MyRequestUserProvider>(create: (_) => MyRequestUserProvider(MyRequestsUserService(apiService)),),
-154:           ChangeNotifierProvider<ResponsesMyRequestProvider>(create: (_) => ResponsesMyRequestProvider(MyRequestsUserService(apiService)),),
-155:           ChangeNotifierProvider<CommonProvider>(create: (_) => CommonProvider(CommonService(apiService)),),
-156:           ChangeNotifierProvider<ConversationProvider>(create: (_) => ConversationProvider(ConversationService(apiService)),),
-157:           ChangeNotifierProvider<NotificationProvider>(create: (_) => NotificationProvider(NotificationService(apiService)),),
-158:           ChangeNotifierProvider<NotificationBadgeProvider>(create: (_) => NotificationBadgeProvider(NotificationService(apiService)),),
-159:           ChangeNotifierProvider<ProfileUserProvider>(create: (_) => ProfileUserProvider(ProfileUserService(apiService)),),
-160:           ChangeNotifierProvider<AppCommissionProvider>(create: (_) => AppCommissionProvider(apiService),),
-161:           ChangeNotifierProvider<ShippingProvider>(create: (_) => ShippingProvider(ShippingService(apiService)),),
-162:           ChangeNotifierProvider<VendorProfileProvider>(create: (_) => VendorProfileProvider(),),
-163:         ] ,
-164:           child:GestureDetector(
-165:             onTap: (){
-166:               // FocusManager.instance.primaryFocus?.unfocus();
-167:               FocusScope.of(context).requestFocus(FocusNode());
-168:             },
-169:             child:MaterialApp(
-170:               navigatorKey: navigatorKey,
-171:               title: 'وسيط سيارات',
-172:               debugShowCheckedModeBanner: false,
-173:               locale: model.appLocal,
-174:               supportedLocales: const [
-175:                 Locale('ar', ''),
-176:                 Locale('en', 'US'),
-177:               ],
-178:               localizationsDelegates: const [
-179:                 AppLocalizations.delegate,
-180:                 GlobalMaterialLocalizations.delegate,
-181:                 GlobalWidgetsLocalizations.delegate,
-182:                 GlobalCupertinoLocalizations.delegate,
-183:               ],
-184:               builder: (context, child) {
-185:                 return Directionality(
-186:                   textDirection: model.textDirection,
-187:                   child: MediaQuery(
-188:                     data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-189:                     child: child!,
-190:                   ),
-191:                 );
-192:               },
-193:               theme: AppTheme.lightTheme,
-194:               home:  InitCache(userRole: userRole,),
-195:               //home:  ChatScreen(conversationId: 1, token: '7|28H5dtm3zAchciFPbjwJNzSTg9ofG8REAuC8Fghl2980be1d', myUserId: 2),
-196:             ) ,
-197:           ) ,);
-198:       }),
-199:     );
-200:   }
-201: }
 ````
 
 ## File: lib/models/vendor_profile_model.dart
@@ -17034,6 +17177,92 @@ test/widget_test.dart
 120: }
 ````
 
+## File: lib/widgets/section_badge_widget.dart
+````dart
+ 1: import 'package:flutter/material.dart';
+ 2: import 'package:provider/provider.dart';
+ 3: import '../core/providers/notification_badge_provider.dart';
+ 4: 
+ 5: class SectionBadgeWidget extends StatelessWidget {
+ 6:   final String? categoryKey;
+ 7:   final List<String>? categoryKeys;
+ 8:   final int? entityId;
+ 9:   final Widget child;
+10:   final AlignmentGeometry alignment;
+11:   final Offset? offset;
+12: 
+13:   const SectionBadgeWidget({
+14:     super.key,
+15:     this.categoryKey,
+16:     this.categoryKeys,
+17:     this.entityId,
+18:     required this.child,
+19:     this.alignment = Alignment.topRight,
+20:     this.offset,
+21:   });
+22: 
+23:   @override
+24:   Widget build(BuildContext context) {
+25:     return Consumer<NotificationBadgeProvider>(
+26:       builder: (context, provider, _) {
+27:         int count = 0;
+28:         if (categoryKeys != null) {
+29:           for (var key in categoryKeys!) {
+30:             count += provider.getCount(key, entityId: entityId);
+31:           }
+32:         } else if (categoryKey != null) {
+33:           count = provider.getCount(categoryKey!, entityId: entityId);
+34:         }
+35: 
+36:         if (count <= 0) {
+37:           return child;
+38:         }
+39: 
+40:         return Stack(
+41:           clipBehavior: Clip.none,
+42:           children: [
+43:             child,
+44:             Positioned(
+45:               top: offset?.dy ?? -4,
+46:               right: offset?.dx ?? -4,
+47:               child: Container(
+48:                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+49:                 decoration: BoxDecoration(
+50:                   color: Colors.red,
+51:                   borderRadius: BorderRadius.circular(12),
+52:                   boxShadow: [
+53:                     BoxShadow(
+54:                       color: Colors.red.withOpacity(0.4),
+55:                       blurRadius: 4,
+56:                       offset: const Offset(0, 2),
+57:                     ),
+58:                   ],
+59:                 ),
+60:                 constraints: const BoxConstraints(
+61:                   minWidth: 20,
+62:                   minHeight: 20,
+63:                 ),
+64:                 child: Center(
+65:                   child: Text(
+66:                     '$count',
+67:                     style: const TextStyle(
+68:                       color: Colors.white,
+69:                       fontSize: 11,
+70:                       fontWeight: FontWeight.bold,
+71:                     ),
+72:                     textAlign: TextAlign.center,
+73:                   ),
+74:                 ),
+75:               ),
+76:             ),
+77:           ],
+78:         );
+79:       },
+80:     );
+81:   }
+82: }
+````
+
 ## File: pubspec.yaml
 ````yaml
   1: name: car_mediator_mobile
@@ -17171,303 +17400,216 @@ test/widget_test.dart
 133:   # see https://flutter.dev/custom-fonts/#from-packages
 ````
 
-## File: lib/core/data_sources/remote/firebase/fcm_service.dart
+## File: lib/core/data_sources/remote/reverb_service.dart
 ````dart
   1: import 'dart:async';
-  2: import 'dart:developer';
+  2: import 'dart:convert';
   3: 
-  4: import 'package:car_mediator_mobile/core/helpers/helpers.dart';
-  5: import 'package:car_mediator_mobile/core/utils/connection_utils.dart';
-  6: import 'package:car_mediator_mobile/core/utils/context_utils.dart';
-  7: import 'package:firebase_messaging/firebase_messaging.dart';
-  8: import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-  9: import 'package:provider/provider.dart';
- 10: 
- 11: import '../../../../features/shared/notifications/screens/notifications_screen.dart';
- 12: import '../../../../widgets/components.dart';
- 13: import '../../../providers/conversation_provider.dart';
- 14: import '../../../providers/notification_badge_provider.dart';
- 15: import '../../local/secure_storage.dart';
- 16: 
- 17: 
- 18: class FcmService {
- 19:   static FirebaseMessaging? _firebaseMessaging;
- 20:   static FirebaseMessaging get firebaseMessaging => FcmService._firebaseMessaging ?? FirebaseMessaging.instance;
- 21: 
- 22:   static Future<void> initializeFirebase() async {
- 23: 
- 24:     try{
- 25:       FcmService._firebaseMessaging = FirebaseMessaging.instance;
- 26:       await FcmService.initializeLocalNotifications();
- 27:       await FcmService.onBackgroundMsg();
- 28:       FcmService.subscribeToTopic('all');
- 29:     }catch(e){
- 30:       print(e);
- 31:     }
- 32:   }
+  4: import 'package:flutter/foundation.dart';
+  5: import 'package:http/http.dart' as http;
+  6: import 'package:web_socket_channel/io.dart';
+  7: import 'package:web_socket_channel/web_socket_channel.dart';
+  8: 
+  9: import '../local/secure_storage.dart';
+ 10: import 'api_path.dart';
+ 11: 
+ 12: /// Singleton service that manages a single WebSocket connection to the
+ 13: /// Laravel Reverb server, and exposes per-channel event streams so that
+ 14: /// multiple providers/screens (notifications, chat, ...) can share one
+ 15: /// connection instead of opening a new socket each.
+ 16: class ReverbService {
+ 17:   ReverbService._internal();
+ 18: 
+ 19:   static final ReverbService instance = ReverbService._internal();
+ 20: 
+ 21:   factory ReverbService() => instance;
+ 22: 
+ 23:   // Must match REVERB_APP_KEY in the backend .env
+ 24:   static const String _appKey = '0z58lxjbuvh5gyymgd0n';
+ 25: 
+ 26:   WebSocketChannel? _channel;
+ 27:   String? _socketId;
+ 28:   bool _connected = false;
+ 29: 
+ 30:   final Map<String, StreamController<Map<String, dynamic>>>
+ 31:       _channelControllers = {};
+ 32:   final Set<String> _pendingSubscriptions = {};
  33: 
- 34:   static Future<String?> getDeviceTokenFCM() async {
- 35:     try {
- 36:       String? _token = await FcmService.firebaseMessaging.getToken();
- 37:       Helper.logDebug('FCMServices------token----- $_token ');
- 38:       return _token;
- 39:     } catch (e) {
- 40:       Helper.logDebug("❌ Error getting FCM token: $e");
- 41:       return null;
- 42:     }
- 43:   }
- 44: 
- 45: 
- 46:   static void subscribeToTopic(String topic) async {
- 47:     if(await ConnectionUtils.hasInternetConnection())
- 48:       await FcmService.firebaseMessaging.subscribeToTopic(topic);
- 49:   }
- 50: 
- 51:   static FlutterLocalNotificationsPlugin localNotificationsPlugin = FlutterLocalNotificationsPlugin();
- 52: 
- 53:   static Future<void> initializeLocalNotifications() async {
- 54:     final InitializationSettings _initSettings = InitializationSettings(
- 55:         android: AndroidInitializationSettings("@mipmap/ic_launcher"),
- 56:         iOS: DarwinInitializationSettings()
- 57:     );
- 58:     /// on did receive notification response = for when app is opened via notification while in foreground on android
- 59:     await FcmService.localNotificationsPlugin.initialize(_initSettings, onDidReceiveNotificationResponse: FcmService.onTapNotification);
- 60:     /// need this for ios foregournd notification
- 61:     ///Configure notification permissions
- 62:     ///IOS
- 63:     await FcmService.firebaseMessaging.setForegroundNotificationPresentationOptions(
- 64:       alert: true, // Required to display a heads up notification
- 65:       badge: true,
- 66:       sound: true,
- 67:     );
- 68:     /// for android
- 69:     NotificationSettings settings = await FcmService.firebaseMessaging.requestPermission(
- 70:       alert: true,
- 71:       announcement: false,
- 72:       badge: true,
- 73:       carPlay: false,
- 74:       criticalAlert: false,
- 75:       provisional: false,
- 76:       sound: true,
- 77:     );
- 78: 
- 79:     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
- 80:       print('User granted permission');
- 81:     } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
- 82:       print('User granted provisional permission');
- 83:     } else {
- 84:       print('User declined or has not accepted permission');
- 85:     }
- 86:   }
- 87: 
- 88:   static NotificationDetails platformChannelSpecifics = NotificationDetails(
- 89:     android: AndroidNotificationDetails(
- 90:       "high_importance_channel", "High Importance Notifications", priority: Priority.max, importance: Importance.max,
- 91:     ),
- 92: 
- 93:   );
- 94: 
- 95:   static Future<void> backgroundHandler(RemoteMessage message) async {
- 96:     if (message.notification != null){
- 97:       log("--------FirebaseMessaging.onBackgroundMessage.listen----------");
- 98:       log('title---- ${message.notification?.title}');
- 99:       log('body---- ${message.notification?.body}');
-100:       SecureStorage.addNotificationCount();
-101:     }
-102: 
-103:     // if(message.data != null){
-104:     //   if(message.data['type_notification'] == 'all'){
-105:     //     print('type_notification---- ${message.data['type_notification']}');
-106:     //     print('title---- ${message.notification?.title}');
-107:     //     print('body---- ${message.notification?.body}');
-108:     //     GlobalNavigator.dialogAdvancedGlobal(title: message.notification?.title ?? '',
-109:     //         description: message.notification?.body ?? 'مرحباً',
-110:     //         iconPath: AssetsPath.notification,
-111:     //         onTabCancel: (){
-112:     //         });
-113:     //   }
-114:     //
-115:     // }
-116: 
-117:   }
-118: 
-119:   static Future<void> onTapNotification(NotificationResponse? response) async {
-120:     if (response?.payload == null) return;
-121:     print('---onTapNotification--payload-------${response?.payload }---------');
-122:     final _cxt = ContextUtils.globalContext;
-123:     if(_cxt != null)
-124:       navigationPush(_cxt, NotificationsScreen());
-125:   }
+ 34:   String get _reverbHost => ApiPath.REVERB_HOST;
+ 35: 
+ 36:   bool get isConnected => _connected;
+ 37: 
+ 38:   Future<void> connect() async {
+ 39:     if (_connected) return;
+ 40: 
+ 41:     final isLocal = _reverbHost.contains('10.0.2.2') ||
+ 42:         _reverbHost.contains('127.0.0.1') ||
+ 43:         _reverbHost.contains('192.168.');
+ 44:     final scheme = isLocal ? 'ws' : 'wss';
+ 45:     final portPart = isLocal ? ':8080' : '';
+ 46: 
+ 47:     final wsUrl =
+ 48:         '$scheme://$_reverbHost$portPart/app/$_appKey?protocol=7&client=flutter&version=1.0&flash=false';
+ 49: 
+ 50:     debugPrint('Connecting to Reverb WebSocket: $wsUrl');
+ 51: 
+ 52:     _channel = IOWebSocketChannel.connect(Uri.parse(wsUrl));
+ 53:     _connected = true;
+ 54: 
+ 55:     _channel!.stream.listen(
+ 56:       _handleMessage,
+ 57:       onDone: () {
+ 58:         debugPrint('Reverb WebSocket disconnected');
+ 59:         _connected = false;
+ 60:         _socketId = null;
+ 61:       },
+ 62:       onError: (err) {
+ 63:         debugPrint('Reverb WebSocket error: $err');
+ 64:         _connected = false;
+ 65:         _socketId = null;
+ 66:       },
+ 67:       cancelOnError: false,
+ 68:     );
+ 69:   }
+ 70: 
+ 71:   void _handleMessage(dynamic raw) {
+ 72:     final Map<String, dynamic> decoded =
+ 73:         jsonDecode(raw as String) as Map<String, dynamic>;
+ 74:     final String? event = decoded['event'] as String?;
+ 75: 
+ 76:     if (event == 'pusher:connection_established') {
+ 77:       final data =
+ 78:           jsonDecode(decoded['data'] as String) as Map<String, dynamic>;
+ 79:       _socketId = data['socket_id'] as String?;
+ 80: 
+ 81:       final pending = List<String>.from(_pendingSubscriptions);
+ 82:       _pendingSubscriptions.clear();
+ 83:       for (final channelName in pending) {
+ 84:         _sendSubscribe(channelName);
+ 85:       }
+ 86:       return;
+ 87:     }
+ 88: 
+ 89:     if (event == 'pusher:ping') {
+ 90:       _channel?.sink.add(jsonEncode({'event': 'pusher:pong'}));
+ 91:       return;
+ 92:     }
+ 93: 
+ 94:     if (event == 'pusher:error') {
+ 95:       return;
+ 96:     }
+ 97: 
+ 98:     final String? channelName = decoded['channel'] as String?;
+ 99:     if (channelName != null && _channelControllers.containsKey(channelName)) {
+100:       dynamic payload = decoded['data'];
+101:       if (payload is String) {
+102:         try {
+103:           payload = jsonDecode(payload);
+104:         } catch (_) {
+105:           // leave as raw string if it's not JSON
+106:         }
+107:       }
+108:       _channelControllers[channelName]!.add({
+109:         'event': event,
+110:         'data': payload,
+111:       });
+112:     }
+113:   }
+114: 
+115:   /// Subscribes to a private channel and returns a broadcast stream of
+116:   /// {event, data} maps received on it.
+117:   ///
+118:   /// [channelBaseName] is WITHOUT the "private-" prefix, e.g. "user.5"
+119:   /// or "conversation.12" — the prefix is added automatically.
+120:   Future<Stream<Map<String, dynamic>>> listenToPrivateChannel(
+121:       String channelBaseName) async {
+122:     final fullChannelName = 'private-$channelBaseName';
+123: 
+124:     _channelControllers[fullChannelName] ??=
+125:         StreamController<Map<String, dynamic>>.broadcast();
 126: 
-127:   static Future<void> initialMessage() async {
-128:     //When App is Terminated
-129:     // when you click on notification app open from terminated state and
-130:     // you can get notification data in this method
-131:     var message =   await FirebaseMessaging.instance.getInitialMessage() ;
-132:     if (message != null){
-133:       print("----FirebaseMessaging----initalMessage------${message.toString}----");
-134:       final _cxt = ContextUtils.globalContext;
-135:       if(_cxt != null)
-136:         navigationPush(_cxt, NotificationsScreen());
-137:     }
+127:     if (!_connected) {
+128:       await connect();
+129:     }
+130: 
+131:     if (_socketId == null) {
+132:       _pendingSubscriptions.add(fullChannelName);
+133:     } else {
+134:       await _sendSubscribe(fullChannelName);
+135:     }
+136: 
+137:     return _channelControllers[fullChannelName]!.stream;
 138:   }
 139: 
-140:   static Future<void> onMessage_OpenedApp() async {
-141:     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
-142:       print("--------FirebaseMessaging.onMessageOpenedApp.listen----------");
-143:     });
-144:   }
-145: 
-146:   static Future<void> onBackgroundMsg() async {
-147:     //background message listener
-148:     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-149:   }
-150: 
-151:   // for receiving message when app is in foreground : for android
-152:   static Future<void> onMessage() async {
-153:     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-154:       // if this is available when Platform.isIOS, you'll receive the notification twice
-155:       print("message recieved----onMessage--foreground messages-----");
-156:       final cxt = ContextUtils.globalContext;
-157:       if (cxt != null) {
-158:         try {
-159:           cxt.read<NotificationBadgeProvider>().fetchUnreadCounts();
-160:           cxt.read<ConversationProvider>().onRealtimeMessageReceived(message.data);
-161:         } catch (e) {
-162:           log('Error updating NotificationBadgeProvider on FCM: $e');
-163:         }
-164:       }
-165: 
-166:       if(message.notification != null){
-167:         print('title---- ${message.notification?.title}');
-168:         print('body---- ${message.notification?.body}');
-169: 
-170:         SecureStorage.addNotificationCount();
-171: 
-172:         await FcmService.localNotificationsPlugin.show(
-173:           0, message.notification!.title, message.notification!.body, FcmService.platformChannelSpecifics,
-174:           payload: message.data.toString(),
-175:         );
-176:       }
-177:     });
-178:   }
-179: 
-180: }
-````
-
-## File: lib/core/services/shared/notification_service.dart
-````dart
-  1: import 'package:car_mediator_mobile/core/services/base_service.dart';
-  2: import 'package:flutter/cupertino.dart';
-  3: 
-  4: import '../../../models/notification_model.dart';
-  5: import '../../data_sources/remote/api_service.dart';
-  6: import '../../errors/api_exceptions.dart';
-  7: import '../../helpers/toast_helper.dart';
-  8: 
-  9: class NotificationService extends BaseService  {
- 10:   final ApiService _apiService;
- 11: 
- 12:   NotificationService(this._apiService);
- 13: 
- 14:   Future<NotificationResponseModel?> getNotifications({ required int page}) async {
- 15:     try {
- 16:       final response = await _apiService.getData('notifications', queryParams: {'page': page.toString()});
- 17:       return NotificationResponseModel.fromJson(response);
- 18:     } on ApiException catch (e) {
- 19:       ToastHelper.showError(e.message);
- 20:       debugPrint('API Error: ${e.message}, StatusCode: ${e.statusCode}');
- 21:       return null;
- 22:     } catch (e) {
- 23:       debugPrint('Unexpected Error: $e');
- 24:       ToastHelper.showError('حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى.');
- 25:       return null;
- 26:     }
- 27:   }
- 28: 
- 29:   Future<Map<String, int>?> getUnreadCounts() async {
- 30:     try {
- 31:       final response = await _apiService.getData('notifications/unread-counts');
- 32:       if (response != null && response['success'] == true && response['data'] != null) {
- 33:         final Map<String, dynamic> data = response['data'];
- 34:         final Map<String, int> result = {};
- 35:         data.forEach((key, value) {
- 36:           if (value is num) {
- 37:             result[key] = value.toInt();
- 38:           }
- 39:         });
- 40:         if (data['sections'] is Map) {
- 41:           (data['sections'] as Map).forEach((key, value) {
- 42:             if (value is num) {
- 43:               result[key.toString()] = value.toInt();
- 44:             }
- 45:           });
- 46:         }
- 47:         return result;
- 48:       }
- 49:       return null;
- 50:     } catch (e) {
- 51:       debugPrint('Error fetching unread counts: $e');
- 52:       return null;
- 53:     }
- 54:   }
- 55: 
- 56:   Future<Map<String, dynamic>?> getRawUnreadCountsData() async {
- 57:     try {
- 58:       final response = await _apiService.getData('notifications/unread-counts');
- 59:       if (response != null && response['success'] == true && response['data'] != null) {
- 60:         return response['data'] as Map<String, dynamic>;
- 61:       }
- 62:       return null;
- 63:     } catch (e) {
- 64:       debugPrint('Error fetching raw unread counts: $e');
- 65:       return null;
- 66:     }
- 67:   }
- 68: 
- 69:   Future<Map<String, dynamic>?> markEntityRead({required String section, required int entityId}) async {
- 70:     try {
- 71:       final response = await _apiService.postData(
- 72:         'notifications/mark-entity-read',
- 73:         body: {'section': section, 'entity_id': entityId},
- 74:       );
- 75:       if (response != null && response['success'] == true && response['data'] != null) {
- 76:         return response['data'] as Map<String, dynamic>;
- 77:       }
- 78:       return null;
- 79:     } catch (e) {
- 80:       debugPrint('Error marking entity read: $e');
- 81:       return null;
- 82:     }
- 83:   }
- 84: 
- 85:   Future<Map<String, int>?> markCategoryRead(String category) async {
- 86:     try {
- 87:       final response = await _apiService.postData('notifications/mark-category-read', body: {'category': category});
- 88:       if (response != null && response['success'] == true && response['data'] != null) {
- 89:         final Map<String, dynamic> data = response['data'];
- 90:         final Map<String, int> result = {};
- 91:         data.forEach((key, value) {
- 92:           if (value is num) {
- 93:             result[key] = value.toInt();
- 94:           }
- 95:         });
- 96:         if (data['sections'] is Map) {
- 97:           (data['sections'] as Map).forEach((key, value) {
- 98:             if (value is num) {
- 99:               result[key.toString()] = value.toInt();
-100:             }
-101:           });
-102:         }
-103:         return result;
-104:       }
-105:       return null;
-106:     } catch (e) {
-107:       debugPrint('Error marking category read: $e');
-108:       return null;
-109:     }
-110:   }
-111: }
+140:   Future<void> _sendSubscribe(String fullChannelName) async {
+141:     final authString = await _authorize(fullChannelName);
+142:     if (authString == null) return;
+143: 
+144:     _channel?.sink.add(jsonEncode({
+145:       'event': 'pusher:subscribe',
+146:       'data': {
+147:         'auth': authString,
+148:         'channel': fullChannelName,
+149:       },
+150:     }));
+151:   }
+152: 
+153:   /// Calls POST /broadcasting/auth to get the signed auth string required
+154:   /// by Reverb/Pusher protocol for private channels. This is NOT the same
+155:   /// as the Bearer token — it's an HMAC signature computed server-side
+156:   /// using REVERB_APP_SECRET, socket_id and the channel name.
+157:   Future<String?> _authorize(String fullChannelName) async {
+158:     final token = await SecureStorage.getToken();
+159:     if (token == null || _socketId == null) return null;
+160: 
+161:     final uri = Uri.parse('${ApiPath.BASE_HOST}api/broadcasting/auth');
+162: 
+163:     try {
+164:       final response = await http.post(
+165:         uri,
+166:         headers: {
+167:           'Authorization': 'Bearer $token',
+168:           'Accept': 'application/json',
+169:           'Content-Type': 'application/json',
+170:         },
+171:         body: jsonEncode({
+172:           'socket_id': _socketId,
+173:           'channel_name': fullChannelName,
+174:         }),
+175:       );
+176: 
+177:       if (response.statusCode == 200) {
+178:         final body = jsonDecode(response.body) as Map<String, dynamic>;
+179:         return body['auth'] as String?;
+180:       }
+181:     } catch (_) {
+182:       // network error, auth endpoint unreachable, etc. — caller streams
+183:       // simply won't receive events for this channel.
+184:     }
+185:     return null;
+186:   }
+187: 
+188:   void unsubscribe(String channelBaseName) {
+189:     final fullChannelName = 'private-$channelBaseName';
+190:     _channel?.sink.add(jsonEncode({
+191:       'event': 'pusher:unsubscribe',
+192:       'data': {'channel': fullChannelName},
+193:     }));
+194:     _channelControllers[fullChannelName]?.close();
+195:     _channelControllers.remove(fullChannelName);
+196:   }
+197: 
+198:   void disconnect() {
+199:     _channel?.sink.close();
+200:     _channel = null;
+201:     _connected = false;
+202:     _socketId = null;
+203:     for (final controller in _channelControllers.values) {
+204:       controller.close();
+205:     }
+206:     _channelControllers.clear();
+207:   }
+208: }
 ````
 
 ## File: lib/features/user/my_requests/screens/my_requests_user_screen.dart
@@ -18196,322 +18338,18 @@ test/widget_test.dart
 143: }
 ````
 
-## File: lib/widgets/dropdown_search/categories_dropdown_search.dart
+## File: lib/core/data_sources/remote/api_path.dart
 ````dart
-  1: import 'package:car_mediator_mobile/core/providers/vendors/register_vendor_provider.dart';
-  2: import 'package:car_mediator_mobile/models/category_model.dart';
-  3: import 'package:dropdown_search/dropdown_search.dart';
-  4: import 'package:flutter/material.dart';
-  5: import 'package:provider/provider.dart';
-  6: 
-  7: import '../../core/localization/app_language_provider.dart';
-  8: import '../../core/providers/cache_provider.dart';
-  9: import '../../core/providers/vendors/specialty_vendor_provider.dart';
- 10: import '../../core/utils/constants/colors_constants.dart';
- 11: import '../../core/utils/form_validator.dart';
- 12: import '../../core/utils/size_config.dart';
- 13: import '../components.dart';
- 14: import 'category_dropdown_builder_multiselection_widget.dart';
- 15: 
- 16: class CategoriesDropdownSearch extends StatelessWidget {
- 17:   const CategoriesDropdownSearch({
- 18:     super.key,
- 19:     this.selectedCategories,
- 20:     this.onChanged,
- 21:     this.filled,
- 22:     this.fillColor,
- 23:   });
- 24: 
- 25:   final List<CategoryModel>? selectedCategories;
- 26:   final ValueChanged<List<CategoryModel>>? onChanged;
- 27:   final bool? filled;
- 28:   final Color? fillColor;
- 29: 
- 30:   void _showCategoriesBottomSheet(
- 31:     BuildContext context,
- 32:     CacheProvider cacheProvider,
- 33:   ) {
- 34:     final allCategories = cacheProvider.categoriesList;
- 35:     final List<CategoryModel> tempSelected =
- 36:         List<CategoryModel>.from(selectedCategories ?? []);
- 37:     final _isArabic = context.read<AppLanguageProvider>().isArabic;
- 38: 
- 39:     showModalBottomSheet(
- 40:       context: context,
- 41:       isScrollControlled: true,
- 42:       backgroundColor: Colors.transparent,
- 43:       builder: (context) {
- 44:         return StatefulBuilder(
- 45:           builder: (context, setState) {
- 46:             final bool isAllSelected =
- 47:                 tempSelected.length == allCategories.length && allCategories.isNotEmpty;
- 48: 
- 49:             return Container(
- 50:               height: MediaQuery.of(context).size.height * 0.70,
- 51:               decoration: const BoxDecoration(
- 52:                 color: Colors.white,
- 53:                 borderRadius: BorderRadius.only(
- 54:                   topLeft: Radius.circular(30.0),
- 55:                   topRight: Radius.circular(30.0),
- 56:                 ),
- 57:               ),
- 58:               child: Column(
- 59:                 children: [
- 60:                   Container(
- 61:                     padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 8),
- 62:                     child: Column(
- 63:                       children: [
- 64:                         Container(
- 65:                           width: SizeConfig.widthResponsive(0.40),
- 66:                           height: 3,
- 67:                           decoration: BoxDecoration(
- 68:                             color: AppColor.primaryColor,
- 69:                             borderRadius: BorderRadius.circular(8),
- 70:                           ),
- 71:                         ),
- 72:                         const SizedBox(height: 12),
- 73:                         Row(
- 74:                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
- 75:                           children: [
- 76:                             Text(
- 77:                               'الخدمات',
- 78:                               style: TextStyle(
- 79:                                 color: AppColor.primaryColor,
- 80:                                 fontSize: SizeConfig.widthResponsive(0.05),
- 81:                                 fontWeight: FontWeight.w600,
- 82:                               ),
- 83:                             ),
- 84:                             InkWell(
- 85:                               onTap: () {
- 86:                                 setState(() {
- 87:                                   if (isAllSelected) {
- 88:                                     tempSelected.clear();
- 89:                                   } else {
- 90:                                     tempSelected.clear();
- 91:                                     tempSelected.addAll(allCategories);
- 92:                                   }
- 93:                                 });
- 94:                               },
- 95:                               child: Row(
- 96:                                 children: [
- 97:                                   const Text(
- 98:                                     'تحديد الكل',
- 99:                                     style: TextStyle(
-100:                                       fontSize: 15,
-101:                                       fontWeight: FontWeight.bold,
-102:                                       color: Colors.black87,
-103:                                     ),
-104:                                   ),
-105:                                   Checkbox(
-106:                                     value: isAllSelected,
-107:                                     activeColor: AppColor.primaryColor,
-108:                                     shape: RoundedRectangleBorder(
-109:                                       borderRadius: BorderRadius.circular(4),
-110:                                     ),
-111:                                     onChanged: (bool? checked) {
-112:                                       setState(() {
-113:                                         if (checked == true) {
-114:                                           tempSelected.clear();
-115:                                           tempSelected.addAll(allCategories);
-116:                                         } else {
-117:                                           tempSelected.clear();
-118:                                         }
-119:                                       });
-120:                                     },
-121:                                   ),
-122:                                 ],
-123:                               ),
-124:                             ),
-125:                           ],
-126:                         ),
-127:                       ],
-128:                     ),
-129:                   ),
-130:                   const Divider(height: 1),
-131:                   Expanded(
-132:                     child: ListView.builder(
-133:                       itemCount: allCategories.length,
-134:                       itemBuilder: (context, index) {
-135:                         final cat = allCategories[index];
-136:                         final bool isSelected = tempSelected.any((e) => e.id == cat.id);
-137:                         final catName = (_isArabic ? cat.catNameAr : cat.catNameEn) ?? '';
-138: 
-139:                         return CheckboxListTile(
-140:                           value: isSelected,
-141:                           activeColor: AppColor.primaryColor,
-142:                           title: Text(
-143:                             catName,
-144:                             style: const TextStyle(
-145:                               fontSize: 16,
-146:                               fontWeight: FontWeight.w500,
-147:                             ),
-148:                           ),
-149:                           onChanged: (bool? checked) {
-150:                             setState(() {
-151:                               if (checked == true) {
-152:                                 if (!tempSelected.any((e) => e.id == cat.id)) {
-153:                                   tempSelected.add(cat);
-154:                                 }
-155:                               } else {
-156:                                 tempSelected.removeWhere((e) => e.id == cat.id);
-157:                               }
-158:                             });
-159:                           },
-160:                         );
-161:                       },
-162:                     ),
-163:                   ),
-164:                   const Divider(height: 1),
-165:                   Padding(
-166:                     padding: EdgeInsets.only(
-167:                       bottom: SizeConfig.heightResponsive(0.04),
-168:                       left: 20,
-169:                       right: 20,
-170:                       top: 10,
-171:                     ),
-172:                     child: SizedBox(
-173:                       width: double.infinity,
-174:                       height: 48,
-175:                       child: ElevatedButton(
-176:                         style: ElevatedButton.styleFrom(
-177:                           backgroundColor: Colors.blue,
-178:                           shape: RoundedRectangleBorder(
-179:                             borderRadius: BorderRadius.circular(10),
-180:                           ),
-181:                         ),
-182:                         onPressed: () {
-183:                           if (onChanged != null) {
-184:                             onChanged!(tempSelected);
-185:                           }
-186:                           Navigator.pop(context);
-187:                         },
-188:                         child: Text(
-189:                           'تحديد',
-190:                           style: TextStyle(
-191:                             color: Colors.white,
-192:                             fontSize: SizeConfig.widthResponsive(0.04),
-193:                             fontWeight: FontWeight.bold,
-194:                           ),
-195:                         ),
-196:                       ),
-197:                     ),
-198:                   ),
-199:                 ],
-200:               ),
-201:             );
-202:           },
-203:         );
-204:       },
-205:     );
-206:   }
-207: 
-208:   @override
-209:   Widget build(BuildContext context) {
-210:     final _cacheProvider = context.read<CacheProvider>();
-211: 
-212:     return InkWell(
-213:       onTap: () => _showCategoriesBottomSheet(context, _cacheProvider),
-214:       child: InputDecorator(
-215:         decoration: customDropdownDecoratorProps(
-216:           label: 'الخدمات',
-217:           hint: 'إختر الخدمات',
-218:           filled: filled,
-219:           fillColor: fillColor,
-220:         ).dropdownSearchDecoration!,
-221:         child: CategoryDropdownBuilderMultiselectionWidget(
-222:           selectedItems: selectedCategories ?? [],
-223:           hint: 'إختر الخدمات',
-224:         ),
-225:       ),
-226:     );
-227:   }
-228: }
-````
-
-## File: lib/widgets/section_badge_widget.dart
-````dart
- 1: import 'package:flutter/material.dart';
- 2: import 'package:provider/provider.dart';
- 3: import '../core/providers/notification_badge_provider.dart';
- 4: 
- 5: class SectionBadgeWidget extends StatelessWidget {
- 6:   final String? categoryKey;
- 7:   final List<String>? categoryKeys;
- 8:   final int? entityId;
- 9:   final Widget child;
-10:   final AlignmentGeometry alignment;
-11:   final Offset? offset;
-12: 
-13:   const SectionBadgeWidget({
-14:     super.key,
-15:     this.categoryKey,
-16:     this.categoryKeys,
-17:     this.entityId,
-18:     required this.child,
-19:     this.alignment = Alignment.topRight,
-20:     this.offset,
-21:   });
-22: 
-23:   @override
-24:   Widget build(BuildContext context) {
-25:     return Consumer<NotificationBadgeProvider>(
-26:       builder: (context, provider, _) {
-27:         int count = 0;
-28:         if (categoryKeys != null) {
-29:           for (var key in categoryKeys!) {
-30:             count += provider.getCount(key, entityId: entityId);
-31:           }
-32:         } else if (categoryKey != null) {
-33:           count = provider.getCount(categoryKey!, entityId: entityId);
-34:         }
-35: 
-36:         if (count <= 0) {
-37:           return child;
-38:         }
-39: 
-40:         return Stack(
-41:           clipBehavior: Clip.none,
-42:           children: [
-43:             child,
-44:             Positioned(
-45:               top: offset?.dy ?? -4,
-46:               right: offset?.dx ?? -4,
-47:               child: Container(
-48:                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-49:                 decoration: BoxDecoration(
-50:                   color: Colors.red,
-51:                   borderRadius: BorderRadius.circular(12),
-52:                   boxShadow: [
-53:                     BoxShadow(
-54:                       color: Colors.red.withOpacity(0.4),
-55:                       blurRadius: 4,
-56:                       offset: const Offset(0, 2),
-57:                     ),
-58:                   ],
-59:                 ),
-60:                 constraints: const BoxConstraints(
-61:                   minWidth: 20,
-62:                   minHeight: 20,
-63:                 ),
-64:                 child: Center(
-65:                   child: Text(
-66:                     '$count',
-67:                     style: const TextStyle(
-68:                       color: Colors.white,
-69:                       fontSize: 11,
-70:                       fontWeight: FontWeight.bold,
-71:                     ),
-72:                     textAlign: TextAlign.center,
-73:                   ),
-74:                 ),
-75:               ),
-76:             ),
-77:           ],
-78:         );
-79:       },
-80:     );
-81:   }
-82: }
+ 1: class ApiPath {
+ 2:   static const String BASE_HOST = 'http://10.0.2.2:8000/';
+ 3:   static const String REVERB_HOST = '10.0.2.2:8085';
+ 4:   static const String baseUrl = BASE_HOST + 'api/v1/';
+ 5: 
+ 6:   static const String baseUrlImage = BASE_HOST + 'uploads/';
+ 7:   static const String categoriesIcon = 'categories-icon/';
+ 8:   static const String uploadsPrivate = BASE_HOST + 'api/uploads-private/';
+ 9:   static const String uploads = BASE_HOST + 'api/uploads/';
+10: }
 ````
 
 ## File: lib/core/providers/orders/create_order_provider.dart
@@ -18723,30 +18561,36 @@ test/widget_test.dart
 205:       if(response?.success ?? false){
 206:         DialogUtils().showConfirmDialog(context, message: response?.message ?? '', confirm: () async {
 207:           _toggleLoading();
-208:           final _res = await _requestService.confirmPriceShippingRequest(
-209:               body: {
-210:                 'id': response?.result?.shippingRequestId ?? 0
-211:               });
-212:           if(_res?.success ?? false){
-213:             navigationPushAndRemoveUntil(context, HomeUserPage());
-214:             ToastHelper.showSuccess(response?.message ?? '');
-215:           }else{
-216:             ToastHelper.showError(response?.message ?? '');
-217:             _toggleLoading();
-218:           }
-219:         });
-220:       }else{
-221:         ToastHelper.showError(response?.message ?? '');
-222:       }
-223:     } catch (e) {
-224:       Helper.logDebug('$runtimeType ---> Failed checkEligibleVendors: ${e}');
-225:       ToastHelper.showError(e.toString());
-226:     } finally {
-227:       _toggleLoading();
-228:     }
-229:   }
-230: 
-231: }
+208:           try {
+209:             final _res = await _requestService.confirmPriceShippingRequest(
+210:                 body: {
+211:                   'id': response?.result?.shippingRequestId ?? 0
+212:                 });
+213:             if(_res?.success ?? false){
+214:               navigationPushAndRemoveUntil(context, HomeUserPage());
+215:               ToastHelper.showSuccess(response?.message ?? '');
+216:             }else{
+217:               ToastHelper.showError(_res?.message ?? response?.message ?? '');
+218:             }
+219:           } catch (e) {
+220:             Helper.logDebug('confirmPriceShippingRequest error: $e');
+221:             ToastHelper.showError(e.toString());
+222:           } finally {
+223:             _toggleLoading();
+224:           }
+225:         });
+226:       }else{
+227:         ToastHelper.showError(response?.message ?? '');
+228:       }
+229:     } catch (e) {
+230:       Helper.logDebug('$runtimeType ---> Failed checkEligibleVendors: ${e}');
+231:       ToastHelper.showError(e.toString());
+232:     } finally {
+233:       _toggleLoading();
+234:     }
+235:   }
+236: 
+237: }
 ````
 
 ## File: lib/features/user/my_requests/widgets/build_vendor_details_response_widget.dart
@@ -19515,421 +19359,6 @@ test/widget_test.dart
 415: }
 ````
 
-## File: lib/widgets/map_picker_screen.dart
-````dart
-  1: import 'dart:async';
-  2: import 'package:flutter/material.dart';
-  3: import 'package:google_maps_flutter/google_maps_flutter.dart';
-  4: import 'package:geolocator/geolocator.dart';
-  5: import 'package:geocoding/geocoding.dart';
-  6: import 'package:car_mediator_mobile/core/styles/styles.dart';
-  7: import 'package:car_mediator_mobile/core/utils/constants/colors_constants.dart';
-  8: import 'package:car_mediator_mobile/widgets/custom_button.dart';
-  9: 
- 10: class MapPickerScreen extends StatefulWidget {
- 11:   final LatLng? initialLocation;
- 12: 
- 13:   const MapPickerScreen({Key? key, this.initialLocation}) : super(key: key);
- 14: 
- 15:   @override
- 16:   State<MapPickerScreen> createState() => _MapPickerScreenState();
- 17: }
- 18: 
- 19: class _MapPickerScreenState extends State<MapPickerScreen> {
- 20:   final Completer<GoogleMapController> _controller = Completer();
- 21:   final TextEditingController _searchController = TextEditingController();
- 22: 
- 23:   LatLng _currentPosition = const LatLng(24.7136, 46.6753); // Riyadh default
- 24:   String _currentAddress = "جاري تحديد الموقع...";
- 25:   bool _isLoading = true;
- 26:   bool _isSearching = false;
- 27:   bool _isLocating = false;
- 28:   List<Location> _searchResults = [];
- 29:   List<String> _searchResultNames = [];
- 30:   Timer? _debounce;
- 31: 
- 32:   @override
- 33:   void initState() {
- 34:     super.initState();
- 35:     _determinePosition();
- 36:   }
- 37: 
- 38:   @override
- 39:   void dispose() {
- 40:     _searchController.dispose();
- 41:     _debounce?.cancel();
- 42:     super.dispose();
- 43:   }
- 44: 
- 45:   Future<void> _determinePosition() async {
- 46:     setState(() => _isLocating = true);
- 47: 
- 48:     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
- 49:     if (!serviceEnabled) {
- 50:       _setFallbackPosition();
- 51:       return;
- 52:     }
- 53: 
- 54:     LocationPermission permission = await Geolocator.checkPermission();
- 55:     if (permission == LocationPermission.denied) {
- 56:       permission = await Geolocator.requestPermission();
- 57:       if (permission == LocationPermission.denied) {
- 58:         _setFallbackPosition();
- 59:         return;
- 60:       }
- 61:     }
- 62: 
- 63:     if (permission == LocationPermission.deniedForever) {
- 64:       _setFallbackPosition();
- 65:       return;
- 66:     }
- 67: 
- 68:     try {
- 69:       Position position = await Geolocator.getCurrentPosition(
- 70:           desiredAccuracy: LocationAccuracy.high);
- 71:       final newPos = LatLng(position.latitude, position.longitude);
- 72: 
- 73:       // تحريك الكاميرا للموقع الحالي
- 74:       if (_controller.isCompleted) {
- 75:         final mapController = await _controller.future;
- 76:         await mapController.animateCamera(
- 77:           CameraUpdate.newCameraPosition(CameraPosition(target: newPos, zoom: 16)),
- 78:         );
- 79:       }
- 80: 
- 81:       setState(() {
- 82:         _currentPosition = newPos;
- 83:         _isLocating = false;
- 84:       });
- 85:       _updateAddress(newPos);
- 86:     } catch (e) {
- 87:       _setFallbackPosition();
- 88:     }
- 89:   }
- 90: 
- 91:   void _setFallbackPosition() {
- 92:     setState(() {
- 93:       _currentPosition = widget.initialLocation ?? const LatLng(24.7136, 46.6753);
- 94:       _isLoading = false;
- 95:       _isLocating = false;
- 96:     });
- 97:     _updateAddress(_currentPosition);
- 98:   }
- 99: 
-100:   Future<void> _updateAddress(LatLng position) async {
-101:     setState(() => _isLoading = true);
-102:     try {
-103:       List<Placemark> placemarks = await placemarkFromCoordinates(
-104:           position.latitude, position.longitude);
-105:       if (placemarks.isNotEmpty) {
-106:         Placemark place = placemarks.first;
-107:         setState(() {
-108:           _currentAddress =
-109:               "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}"
-110:                   .replaceAll(RegExp(r',\s*,'), ',')
-111:                   .replaceAll(RegExp(r'^,\s*'), '')
-112:                   .replaceAll(RegExp(r',\s*$'), '');
-113:           _isLoading = false;
-114:         });
-115:       }
-116:     } catch (e) {
-117:       setState(() {
-118:         _currentAddress = "${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}";
-119:         _isLoading = false;
-120:       });
-121:     }
-122:   }
-123: 
-124:   // البحث عن مكان بالاسم
-125:   void _onSearchChanged(String query) {
-126:     if (_debounce?.isActive ?? false) _debounce!.cancel();
-127:     if (query.trim().isEmpty) {
-128:       setState(() {
-129:         _searchResults = [];
-130:         _searchResultNames = [];
-131:         _isSearching = false;
-132:       });
-133:       return;
-134:     }
-135:     _debounce = Timer(const Duration(milliseconds: 700), () async {
-136:       try {
-137:         List<Location> locations = await locationFromAddress(query);
-138:         List<String> resultNames = [];
-139:         for (var loc in locations.take(5)) {
-140:           List<Placemark> pm =
-141:               await placemarkFromCoordinates(loc.latitude, loc.longitude);
-142:           if (pm.isNotEmpty) {
-143:             Placemark p = pm.first;
-144:             resultNames.add(
-145:               "${p.street ?? ''}, ${p.locality ?? ''}, ${p.country ?? ''}"
-146:                   .replaceAll(RegExp(r',\s*,'), ',')
-147:                   .replaceAll(RegExp(r'^,\s*'), '')
-148:                   .replaceAll(RegExp(r',\s*$'), ''),
-149:             );
-150:           } else {
-151:             resultNames.add("${loc.latitude}, ${loc.longitude}");
-152:           }
-153:         }
-154:         setState(() {
-155:           _searchResults = locations.take(5).toList();
-156:           _searchResultNames = resultNames;
-157:           _isSearching = true;
-158:         });
-159:       } catch (e) {
-160:         setState(() {
-161:           _searchResults = [];
-162:           _searchResultNames = [];
-163:           _isSearching = false;
-164:         });
-165:       }
-166:     });
-167:   }
-168: 
-169:   // التنقل للمكان المختار من البحث
-170:   Future<void> _goToLocation(Location loc, String name) async {
-171:     final newPos = LatLng(loc.latitude, loc.longitude);
-172:     final mapController = await _controller.future;
-173:     await mapController.animateCamera(CameraUpdate.newCameraPosition(
-174:       CameraPosition(target: newPos, zoom: 15),
-175:     ));
-176:     setState(() {
-177:       _currentPosition = newPos;
-178:       _currentAddress = name;
-179:       _searchResults = [];
-180:       _searchResultNames = [];
-181:       _isSearching = false;
-182:       _searchController.clear();
-183:     });
-184:   }
-185: 
-186:   // الضغط على الخريطة لتحديد موقع
-187:   Future<void> _onMapTap(LatLng position) async {
-188:     final mapController = await _controller.future;
-189:     await mapController.animateCamera(CameraUpdate.newLatLng(position));
-190:     setState(() {
-191:       _currentPosition = position;
-192:       _searchResults = [];
-193:       _searchResultNames = [];
-194:       _isSearching = false;
-195:     });
-196:     _updateAddress(position);
-197:   }
-198: 
-199:   @override
-200:   Widget build(BuildContext context) {
-201:     return Scaffold(
-202:       resizeToAvoidBottomInset: false,
-203:       appBar: AppBar(
-204:         title: Text('حدد موقع الاستلام', style: txtBold05),
-205:         centerTitle: true,
-206:       ),
-207:       body: Stack(
-208:         alignment: Alignment.center,
-209:         children: [
-210:           // الخريطة
-211:           GoogleMap(
-212:             initialCameraPosition: CameraPosition(
-213:               target: _currentPosition,
-214:               zoom: 15,
-215:             ),
-216:             onMapCreated: (GoogleMapController controller) {
-217:               _controller.complete(controller);
-218:             },
-219:             onCameraMove: (CameraPosition position) {
-220:               _currentPosition = position.target;
-221:             },
-222:             onCameraIdle: () {
-223:               if (!_isSearching) {
-224:                 _updateAddress(_currentPosition);
-225:               }
-226:             },
-227:             onTap: _onMapTap,
-228:             myLocationEnabled: true,
-229:             myLocationButtonEnabled: false, // نعطل الزر الافتراضي ونضع زرنا
-230:           ),
-231: 
-232:           // أيقونة المنتصف
-233:           const Padding(
-234:             padding: EdgeInsets.only(bottom: 35.0),
-235:             child: Icon(Icons.location_on, size: 50, color: AppColor.primaryColor),
-236:           ),
-237: 
-238:           // حقل البحث في الأعلى
-239:           Positioned(
-240:             top: 12,
-241:             left: 12,
-242:             right: 12,
-243:             child: Column(
-244:               children: [
-245:                 Container(
-246:                   decoration: BoxDecoration(
-247:                     color: Colors.white,
-248:                     borderRadius: BorderRadius.circular(12),
-249:                     boxShadow: const [
-250:                       BoxShadow(
-251:                           color: Colors.black26,
-252:                           blurRadius: 8,
-253:                           offset: Offset(0, 3)),
-254:                     ],
-255:                   ),
-256:                   child: TextField(
-257:                     controller: _searchController,
-258:                     onChanged: _onSearchChanged,
-259:                     textAlign: TextAlign.right,
-260:                     decoration: InputDecoration(
-261:                       hintText: 'ابحث عن مكان...',
-262:                       hintStyle: const TextStyle(color: Colors.grey),
-263:                       prefixIcon: _searchController.text.isNotEmpty
-264:                           ? IconButton(
-265:                               icon: const Icon(Icons.clear, color: Colors.grey),
-266:                               onPressed: () {
-267:                                 _searchController.clear();
-268:                                 setState(() {
-269:                                   _searchResults = [];
-270:                                   _searchResultNames = [];
-271:                                   _isSearching = false;
-272:                                 });
-273:                               },
-274:                             )
-275:                           : null,
-276:                       suffixIcon: const Icon(Icons.search,
-277:                           color: AppColor.primaryColor),
-278:                       border: InputBorder.none,
-279:                       contentPadding: const EdgeInsets.symmetric(
-280:                           horizontal: 16, vertical: 14),
-281:                     ),
-282:                   ),
-283:                 ),
-284: 
-285:                 // نتائج البحث
-286:                 if (_searchResults.isNotEmpty)
-287:                   Container(
-288:                     margin: const EdgeInsets.only(top: 4),
-289:                     decoration: BoxDecoration(
-290:                       color: Colors.white,
-291:                       borderRadius: BorderRadius.circular(12),
-292:                       boxShadow: const [
-293:                         BoxShadow(
-294:                             color: Colors.black26,
-295:                             blurRadius: 8,
-296:                             offset: Offset(0, 3)),
-297:                       ],
-298:                     ),
-299:                     child: ListView.separated(
-300:                       shrinkWrap: true,
-301:                       padding: EdgeInsets.zero,
-302:                       itemCount: _searchResults.length,
-303:                       separatorBuilder: (_, __) =>
-304:                           const Divider(height: 1),
-305:                       itemBuilder: (context, index) {
-306:                         return ListTile(
-307:                           leading: const Icon(Icons.location_on_outlined,
-308:                               color: AppColor.primaryColor),
-309:                           title: Text(
-310:                             _searchResultNames[index],
-311:                             textAlign: TextAlign.right,
-312:                             style: const TextStyle(fontSize: 13),
-313:                           ),
-314:                           onTap: () => _goToLocation(
-315:                               _searchResults[index],
-316:                               _searchResultNames[index]),
-317:                         );
-318:                       },
-319:                     ),
-320:                   ),
-321:               ],
-322:             ),
-323:           ),
-324: 
-325:           // زر الموقع الحالي (أسفل اليمين فوق الكارد)
-326:           Positioned(
-327:             bottom: 160,
-328:             right: 16,
-329:             child: FloatingActionButton(
-330:               mini: true,
-331:               backgroundColor: Colors.white,
-332:               elevation: 4,
-333:               onPressed: _isLocating ? null : _determinePosition,
-334:               child: _isLocating
-335:                   ? const SizedBox(
-336:                       width: 20,
-337:                       height: 20,
-338:                       child: CircularProgressIndicator(
-339:                           strokeWidth: 2, color: AppColor.primaryColor),
-340:                     )
-341:                   : const Icon(Icons.my_location, color: AppColor.primaryColor),
-342:             ),
-343:           ),
-344: 
-345:           // كارد العنوان وزر التأكيد في الأسفل
-346:           Positioned(
-347:             bottom: 30,
-348:             left: 20,
-349:             right: 20,
-350:             child: Container(
-351:               padding: const EdgeInsets.all(20),
-352:               decoration: BoxDecoration(
-353:                 color: Colors.white,
-354:                 borderRadius: BorderRadius.circular(15),
-355:                 boxShadow: const [
-356:                   BoxShadow(
-357:                       color: Colors.black26,
-358:                       blurRadius: 10,
-359:                       offset: Offset(0, 5)),
-360:                 ],
-361:               ),
-362:               child: Column(
-363:                 mainAxisSize: MainAxisSize.min,
-364:                 children: [
-365:                   Row(
-366:                     mainAxisAlignment: MainAxisAlignment.center,
-367:                     children: [
-368:                       if (_isLoading)
-369:                         const SizedBox(
-370:                           width: 16,
-371:                           height: 16,
-372:                           child: CircularProgressIndicator(
-373:                               strokeWidth: 2,
-374:                               color: AppColor.primaryColor),
-375:                         ),
-376:                       if (_isLoading) const SizedBox(width: 8),
-377:                       Flexible(
-378:                         child: Text(
-379:                           _isLoading
-380:                               ? "جاري تحديد الموقع..."
-381:                               : _currentAddress,
-382:                           textAlign: TextAlign.center,
-383:                           style: const TextStyle(
-384:                               fontSize: 14, fontWeight: FontWeight.w600),
-385:                         ),
-386:                       ),
-387:                     ],
-388:                   ),
-389:                   const SizedBox(height: 15),
-390:                   CustomButton(
-391:                     txtSize: 16.0,
-392:                     label: 'تأكيد الموقع',
-393:                     onTap: _isLoading
-394:                         ? null
-395:                         : () {
-396:                             Navigator.pop(context, {
-397:                               'lat': _currentPosition.latitude,
-398:                               'lng': _currentPosition.longitude,
-399:                               'address': _currentAddress,
-400:                             });
-401:                           },
-402:                   ),
-403:                 ],
-404:               ),
-405:             ),
-406:           ),
-407:         ],
-408:       ),
-409:     );
-410:   }
-411: }
-````
-
 ## File: lib/core/providers/conversation_provider.dart
 ````dart
   1: import 'dart:io';
@@ -20248,6 +19677,271 @@ test/widget_test.dart
 100:     );
 101:   }
 102: }
+````
+
+## File: lib/features/user/shipping_request/screens/confirm_shipping_request_screen.dart
+````dart
+  1: import 'package:car_mediator_mobile/core/helpers/helpers.dart';
+  2: import 'package:car_mediator_mobile/core/utils/connection_utils.dart';
+  3: import 'package:car_mediator_mobile/widgets/arrow_back_widget.dart';
+  4: import 'package:flutter/material.dart';
+  5: import 'package:provider/provider.dart';
+  6: 
+  7: import '../../../../../core/providers/orders/create_order_provider.dart';
+  8: import '../../../../../core/providers/shipping_provider.dart';
+  9: import '../../../../../core/styles/styles.dart';
+ 10: import '../../../../../core/utils/constants/colors_constants.dart';
+ 11: import '../../../../../core/utils/constants/constants.dart';
+ 12: import '../../../../../core/utils/dialogUtils.dart';
+ 13: import '../../../../../core/utils/size_config.dart';
+ 14: import '../../../../../widgets/card_container_widget.dart';
+ 15: import '../../../../../widgets/custom_button.dart';
+ 16: import '../../../../core/localization/app_language_provider.dart';
+ 17: import '../../../../core/providers/cache_provider.dart';
+ 18: import '../../../../core/utils/form_validator.dart';
+ 19: import '../../../../models/city_model.dart';
+ 20: import '../../../../widgets/components.dart';
+ 21: import '../../../../widgets/custom_textfield.dart';
+ 22: import '../../orders/widgets/confirm_pledge_dialog.dart';
+ 23: import '../../../../core/services/shared/customer_shipping_info_storage.dart';
+ 24: import '../../../../../widgets/map_picker_screen.dart';
+ 25: 
+ 26: class ConfirmShippingRequestScreen extends StatefulWidget {
+ 27:   const ConfirmShippingRequestScreen(
+ 28:       {super.key,
+ 29:       required this.requestId,
+ 30:       required this.responseId,
+ 31:       required this.vendorId});
+ 32:   final int requestId;
+ 33:   final int responseId;
+ 34:   final int vendorId;
+ 35: 
+ 36:   @override
+ 37:   State<ConfirmShippingRequestScreen> createState() =>
+ 38:       _ConfirmShippingRequestScreenState();
+ 39: }
+ 40: 
+ 41: class _ConfirmShippingRequestScreenState
+ 42:     extends State<ConfirmShippingRequestScreen> {
+ 43:   final _formKey = GlobalKey<FormState>();
+ 44:   final _nameController = TextEditingController();
+ 45:   final _addressController = TextEditingController();
+ 46:   final _phoneController = TextEditingController();
+ 47: 
+ 48:   double? _lat;
+ 49:   double? _lng;
+ 50:   CityModel? _selectedCity;
+ 51:   String _savedCityEn = '';
+ 52: 
+ 53:   @override
+ 54:   void initState() {
+ 55:     super.initState();
+ 56:     _loadSavedInfo();
+ 57:     WidgetsBinding.instance.addPostFrameCallback((_) {
+ 58:       Provider.of<ShippingProvider>(context, listen: false).loadCities();
+ 59:     });
+ 60:   }
+ 61: 
+ 62:   Future<void> _loadSavedInfo() async {
+ 63:     final saved = await CustomerShippingInfoStorage.load();
+ 64:     if (saved != null) {
+ 65:       setState(() {
+ 66:         _nameController.text = saved['name'] ?? '';
+ 67:         _phoneController.text = saved['phone'] ?? '';
+ 68:         _addressController.text = saved['address'] ?? '';
+ 69:         _lat = (saved['lat'] as num?)?.toDouble();
+ 70:         _lng = (saved['lng'] as num?)?.toDouble();
+ 71:         _savedCityEn = saved['city_en'] ?? saved['city'] ?? '';
+ 72:       });
+ 73:     }
+ 74:   }
+ 75: 
+ 76:   void _tryRestoreCity(List<CityModel> cities) {
+ 77:     if (_selectedCity == null && _savedCityEn.isNotEmpty) {
+ 78:       final match =
+ 79:           cities.where((c) => c.cityNameEn == _savedCityEn).toList();
+ 80:       if (match.isNotEmpty) {
+ 81:         _selectedCity = match.first;
+ 82:       }
+ 83:     }
+ 84:   }
+ 85: 
+ 86:   @override
+ 87:   void dispose() {
+ 88:     super.dispose();
+ 89:     _nameController.dispose();
+ 90:     _addressController.dispose();
+ 91:     _phoneController.dispose();
+ 92:   }
+ 93: 
+ 94:   @override
+ 95:   Widget build(BuildContext context) {
+ 96:     final _provider = Provider.of<CreateOrderProvider>(context);
+ 97:     return Scaffold(
+ 98:       appBar: AppBar(
+ 99:         backgroundColor: Colors.white,
+100:         leading: ArrowBackWidget(myContext: context),
+101:         title: Text('شحن الطلب : ${widget.requestId}', style: txtBold04),
+102:       ),
+103:       body: Form(
+104:         key: _formKey,
+105:         child: ListView(
+106:           shrinkWrap: true,
+107:           physics: const ScrollPhysics(),
+108:           padding: const EdgeInsets.all(paddingConst),
+109:           children: [
+110:             const SizedBox(height: 20),
+111:             CardContainerWidget(
+112:               children: [
+113:                 const SizedBox(height: 10),
+114:                 Text(
+115:                   'بيانات الشحن',
+116:                   textAlign: TextAlign.center,
+117:                   style: txtBold04,
+118:                 ),
+119:                 const SizedBox(height: 20),
+120:                 CustomTextField(
+121:                   label: 'اسم المستخدم',
+122:                   hint: 'أدخل اسمك',
+123:                   controller: _nameController,
+124:                   validator: (value) => FormValidatorUtils.textValidator(value,
+125:                       isRequired: true),
+126:                 ),
+127:                 const SizedBox(height: 20),
+128:                 // Dropdown اختيار المدينة للزبون
+129:                 Consumer<ShippingProvider>(
+130:                   builder: (context, shippingProvider, _) {
+131:                     _tryRestoreCity(shippingProvider.cities);
+132:                     return DropdownButtonFormField<CityModel>(
+133:                       value: _selectedCity,
+134:                       isExpanded: true,
+135:                       decoration: InputDecoration(
+136:                         labelText: 'مدينة التوصيل',
+137:                         labelStyle: const TextStyle(color: Colors.grey),
+138:                         border: OutlineInputBorder(
+139:                             borderRadius: BorderRadius.circular(10)),
+140:                         contentPadding: const EdgeInsets.symmetric(
+141:                             horizontal: 12, vertical: 14),
+142:                       ),
+143:                       hint: shippingProvider.isLoadingCities
+144:                           ? const Text('جاري تحميل المدن...')
+145:                           : const Text('اختر مدينة التوصيل'),
+146:                       items: shippingProvider.cities.map((city) {
+147:                         return DropdownMenuItem<CityModel>(
+148:                           value: city,
+149:                           child: Text(city.cityNameAr,
+150:                               textAlign: TextAlign.right),
+151:                         );
+152:                       }).toList(),
+153:                       onChanged: (val) =>
+154:                           setState(() => _selectedCity = val),
+155:                       validator: (_) => _selectedCity == null
+156:                           ? 'يرجى اختيار مدينة التوصيل'
+157:                           : null,
+158:                     );
+159:                   },
+160:                 ),
+161:                 const SizedBox(height: 20),
+162:                 GestureDetector(
+163:                   onTap: () async {
+164:                     final result = await Navigator.push(
+165:                       context,
+166:                       MaterialPageRoute(
+167:                         builder: (context) => const MapPickerScreen(),
+168:                       ),
+169:                     );
+170:                     if (result != null) {
+171:                       setState(() {
+172:                         _lat = result['lat'];
+173:                         _lng = result['lng'];
+174:                         _addressController.text = result['address'] ?? '';
+175:                         // لا نأخذ المدينة من الخريطة بعد الآن
+176:                       });
+177:                     }
+178:                   },
+179:                   child: AbsorbPointer(
+180:                     child: CustomTextField(
+181:                       label: 'العنوان التفصيلي (اختياري)',
+182:                       hint: 'اختر موقعك على الخريطة',
+183:                       controller: _addressController,
+184:                       maxLines: null,
+185:                       validator: (value) =>
+186:                           FormValidatorUtils.textValidator(value,
+187:                               isRequired: true, maxLength: 255),
+188:                     ),
+189:                   ),
+190:                 ),
+191:                 const SizedBox(height: 20),
+192:                 CustomTextField(
+193:                   label: 'رقم الجوال',
+194:                   controller: _phoneController,
+195:                   keyboardType: TextInputType.phone,
+196:                   validator: (value) =>
+197:                       FormValidatorUtils.phoneValidator(value,
+198:                           isRequired: true),
+199:                 ),
+200:                 const SizedBox(height: 20),
+201:               ],
+202:             )
+203:           ],
+204:         ),
+205:       ),
+206:       bottomNavigationBar: BottomAppBar(
+207:         child: Padding(
+208:           padding: const EdgeInsets.symmetric(horizontal: 0),
+209:           child: CustomButton(
+210:             label: 'تأكيد الشحن',
+211:             txtSize: SizeConfig.widthResponsive(0.04),
+212:             loading: _provider.isLoading,
+213:             onTap: () {
+214:               Helper.dismissKeyBoard();
+215:               if (_formKey.currentState!.validate()) {
+216:                 showDialog(
+217:                   context: context,
+218:                   barrierDismissible: false,
+219:                   builder: (dialogContext) => ConfirmPledgeDialog(
+220:                     onConfirm: () async {
+221:                       Helper.dismissKeyBoard();
+222:                       if (!await ConnectionUtils.hasInternetConnection()) {
+223:                         DialogUtils().showNoInternetDialog(context);
+224:                         return;
+225:                       }
+226: 
+227:                       // حفظ البيانات محلياً
+228:                       CustomerShippingInfoStorage.save(
+229:                         name: _nameController.text.trim(),
+230:                         phone: _phoneController.text.trim(),
+231:                         address: _addressController.text.trim(),
+232:                         city: _selectedCity?.cityNameEn ?? '',
+233:                         lat: _lat,
+234:                         lng: _lng,
+235:                       );
+236: 
+237:                       String mapUrl = _lat != null && _lng != null
+238:                           ? ' - https://www.google.com/maps/search/?api=1&query=$_lat,$_lng'
+239:                           : '';
+240: 
+241:                       await _provider.ConfirmShippingRequest(context, body: {
+242:                         'requestId': widget.requestId,
+243:                         'responseId': widget.responseId,
+244:                         'vendorId': widget.vendorId,
+245:                         'idNumberUser': '0000000000',
+246:                         'cityOriginDimensions': _selectedCity?.cityNameEn ?? 'Riyadh',
+247:                         'addressOriginDimensions':
+248:                             'الاسم: ${_nameController.text.trim()} - ${_addressController.text.trim()}$mapUrl',
+249:                         'phoneOriginDimensions': _phoneController.text.trim(),
+250:                       });
+251:                     },
+252:                   ),
+253:                 );
+254:               }
+255:             },
+256:           ),
+257:         ),
+258:       ),
+259:     );
+260:   }
+261: }
 ````
 
 ## File: lib/features/user/my_conversations/screens/user_conversations_screen.dart
@@ -21121,6 +20815,482 @@ test/widget_test.dart
 157:     notifyListeners();
 158:   }
 159: }
+````
+
+## File: lib/widgets/map_picker_screen.dart
+````dart
+  1: import 'dart:async';
+  2: import 'dart:convert';
+  3: import 'package:http/http.dart' as http;
+  4: import 'package:flutter/material.dart';
+  5: import 'package:google_maps_flutter/google_maps_flutter.dart';
+  6: import 'package:geolocator/geolocator.dart';
+  7: import 'package:geocoding/geocoding.dart';
+  8: import 'package:car_mediator_mobile/core/styles/styles.dart';
+  9: import 'package:car_mediator_mobile/core/utils/constants/colors_constants.dart';
+ 10: import 'package:car_mediator_mobile/widgets/custom_button.dart';
+ 11: 
+ 12: class MapPickerScreen extends StatefulWidget {
+ 13:   final LatLng? initialLocation;
+ 14: 
+ 15:   const MapPickerScreen({Key? key, this.initialLocation}) : super(key: key);
+ 16: 
+ 17:   @override
+ 18:   State<MapPickerScreen> createState() => _MapPickerScreenState();
+ 19: }
+ 20: 
+ 21: class _MapPickerScreenState extends State<MapPickerScreen> {
+ 22:   final Completer<GoogleMapController> _controller = Completer();
+ 23:   final TextEditingController _searchController = TextEditingController();
+ 24: 
+ 25:   LatLng _currentPosition = const LatLng(24.7136, 46.6753); // Riyadh default
+ 26:   String _currentAddress = "جاري تحديد الموقع...";
+ 27:   String _currentCity = "الرياض";
+ 28:   bool _isLoading = true;
+ 29:   bool _isSearching = false;
+ 30:   bool _isLocating = false;
+ 31:   List<Location> _searchResults = [];
+ 32:   List<String> _searchResultNames = [];
+ 33:   Timer? _debounce;
+ 34: 
+ 35:   @override
+ 36:   void initState() {
+ 37:     super.initState();
+ 38:     _determinePosition();
+ 39:   }
+ 40: 
+ 41:   @override
+ 42:   void dispose() {
+ 43:     _searchController.dispose();
+ 44:     _debounce?.cancel();
+ 45:     super.dispose();
+ 46:   }
+ 47: 
+ 48:   Future<void> _determinePosition() async {
+ 49:     setState(() => _isLocating = true);
+ 50: 
+ 51:     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+ 52:     if (!serviceEnabled) {
+ 53:       _setFallbackPosition();
+ 54:       return;
+ 55:     }
+ 56: 
+ 57:     LocationPermission permission = await Geolocator.checkPermission();
+ 58:     if (permission == LocationPermission.denied) {
+ 59:       permission = await Geolocator.requestPermission();
+ 60:       if (permission == LocationPermission.denied) {
+ 61:         _setFallbackPosition();
+ 62:         return;
+ 63:       }
+ 64:     }
+ 65: 
+ 66:     if (permission == LocationPermission.deniedForever) {
+ 67:       _setFallbackPosition();
+ 68:       return;
+ 69:     }
+ 70: 
+ 71:     try {
+ 72:       Position position = await Geolocator.getCurrentPosition(
+ 73:           desiredAccuracy: LocationAccuracy.high);
+ 74:       final newPos = LatLng(position.latitude, position.longitude);
+ 75: 
+ 76:       // تحريك الكاميرا للموقع الحالي
+ 77:       if (_controller.isCompleted) {
+ 78:         final mapController = await _controller.future;
+ 79:         await mapController.animateCamera(
+ 80:           CameraUpdate.newCameraPosition(CameraPosition(target: newPos, zoom: 16)),
+ 81:         );
+ 82:       }
+ 83: 
+ 84:       setState(() {
+ 85:         _currentPosition = newPos;
+ 86:         _isLocating = false;
+ 87:       });
+ 88:       _updateAddress(newPos);
+ 89:     } catch (e) {
+ 90:       _setFallbackPosition();
+ 91:     }
+ 92:   }
+ 93: 
+ 94:   void _setFallbackPosition() {
+ 95:     setState(() {
+ 96:       _currentPosition = widget.initialLocation ?? const LatLng(24.7136, 46.6753);
+ 97:       _isLoading = false;
+ 98:       _isLocating = false;
+ 99:     });
+100:     _updateAddress(_currentPosition);
+101:   }
+102: 
+103:   Future<void> _updateAddress(LatLng position) async {
+104:     setState(() => _isLoading = true);
+105:     try {
+106:       List<Placemark> placemarks = await placemarkFromCoordinates(
+107:           position.latitude, position.longitude);
+108:       if (placemarks.isNotEmpty) {
+109:         Placemark place = placemarks.first;
+110:         String detectedCity = place.locality ?? '';
+111:         if (detectedCity.isEmpty) {
+112:           detectedCity = place.subAdministrativeArea ?? '';
+113:         }
+114:         if (detectedCity.isEmpty) {
+115:           detectedCity = place.administrativeArea ?? '';
+116:         }
+117:         
+118:         if (detectedCity.isNotEmpty) {
+119:           setState(() {
+120:             _currentCity = detectedCity;
+121:             _currentAddress =
+122:                 "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}"
+123:                     .replaceAll(RegExp(r',\s*,'), ',')
+124:                     .replaceAll(RegExp(r'^,\s*'), '')
+125:                     .replaceAll(RegExp(r',\s*$'), '');
+126:             _isLoading = false;
+127:           });
+128:           return;
+129:         }
+130:       }
+131:     } catch (e) {
+132:       // Ignore geocoding error and fallback to http
+133:     }
+134: 
+135:     try {
+136:       final apiKey = 'AIzaSyB7WvJHIW8rwl2r_ghBdZra5TgqBqw4VS0';
+137:       final url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&language=ar&key=$apiKey';
+138:       
+139:       final response = await http.get(Uri.parse(url));
+140:       if (response.statusCode == 200) {
+141:         final data = json.decode(response.body);
+142:         if (data['status'] == 'OK' && (data['results'] as List).isNotEmpty) {
+143:           final result = data['results'][0];
+144:           String detectedCity = '';
+145:           
+146:           for (var component in result['address_components']) {
+147:             final types = component['types'] as List;
+148:             if (types.contains('locality') || types.contains('administrative_area_level_2')) {
+149:               detectedCity = component['long_name'];
+150:               break;
+151:             }
+152:           }
+153:           
+154:           if (detectedCity.isEmpty) {
+155:             for (var component in result['address_components']) {
+156:               final types = component['types'] as List;
+157:               if (types.contains('administrative_area_level_1')) {
+158:                 detectedCity = component['long_name'];
+159:                 break;
+160:               }
+161:             }
+162:           }
+163:           
+164:           setState(() {
+165:             _currentCity = detectedCity.isNotEmpty ? detectedCity : 'الرياض';
+166:             _currentAddress = result['formatted_address'] ?? "${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}";
+167:             _isLoading = false;
+168:           });
+169:           return;
+170:         }
+171:       }
+172:     } catch (e) {
+173:       // Ignore http error
+174:     }
+175: 
+176:     // Final fallback
+177:     setState(() {
+178:       _currentCity = "الرياض";
+179:       _currentAddress = "${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}";
+180:       _isLoading = false;
+181:     });
+182:   }
+183: 
+184:   // البحث عن مكان بالاسم
+185:   void _onSearchChanged(String query) {
+186:     if (_debounce?.isActive ?? false) _debounce!.cancel();
+187:     if (query.trim().isEmpty) {
+188:       setState(() {
+189:         _searchResults = [];
+190:         _searchResultNames = [];
+191:         _isSearching = false;
+192:       });
+193:       return;
+194:     }
+195:     _debounce = Timer(const Duration(milliseconds: 700), () async {
+196:       try {
+197:         List<Location> locations = await locationFromAddress(query);
+198:         List<String> resultNames = [];
+199:         for (var loc in locations.take(5)) {
+200:           List<Placemark> pm =
+201:               await placemarkFromCoordinates(loc.latitude, loc.longitude);
+202:           if (pm.isNotEmpty) {
+203:             Placemark p = pm.first;
+204:             resultNames.add(
+205:               "${p.street ?? ''}, ${p.locality ?? ''}, ${p.country ?? ''}"
+206:                   .replaceAll(RegExp(r',\s*,'), ',')
+207:                   .replaceAll(RegExp(r'^,\s*'), '')
+208:                   .replaceAll(RegExp(r',\s*$'), ''),
+209:             );
+210:           } else {
+211:             resultNames.add("${loc.latitude}, ${loc.longitude}");
+212:           }
+213:         }
+214:         setState(() {
+215:           _searchResults = locations.take(5).toList();
+216:           _searchResultNames = resultNames;
+217:           _isSearching = true;
+218:         });
+219:       } catch (e) {
+220:         setState(() {
+221:           _searchResults = [];
+222:           _searchResultNames = [];
+223:           _isSearching = false;
+224:         });
+225:       }
+226:     });
+227:   }
+228: 
+229:   // التنقل للمكان المختار من البحث
+230:   Future<void> _goToLocation(Location loc, String name) async {
+231:     final newPos = LatLng(loc.latitude, loc.longitude);
+232:     final mapController = await _controller.future;
+233:     await mapController.animateCamera(CameraUpdate.newCameraPosition(
+234:       CameraPosition(target: newPos, zoom: 15),
+235:     ));
+236:     setState(() {
+237:       _currentPosition = newPos;
+238:       _currentAddress = name;
+239:       _searchResults = [];
+240:       _searchResultNames = [];
+241:       _isSearching = false;
+242:       _searchController.clear();
+243:     });
+244:   }
+245: 
+246:   // الضغط على الخريطة لتحديد موقع
+247:   Future<void> _onMapTap(LatLng position) async {
+248:     final mapController = await _controller.future;
+249:     await mapController.animateCamera(CameraUpdate.newLatLng(position));
+250:     setState(() {
+251:       _currentPosition = position;
+252:       _searchResults = [];
+253:       _searchResultNames = [];
+254:       _isSearching = false;
+255:     });
+256:     _updateAddress(position);
+257:   }
+258: 
+259:   @override
+260:   Widget build(BuildContext context) {
+261:     return Scaffold(
+262:       resizeToAvoidBottomInset: false,
+263:       appBar: AppBar(
+264:         title: Text('حدد موقع الاستلام', style: txtBold05),
+265:         centerTitle: true,
+266:       ),
+267:       body: Stack(
+268:         alignment: Alignment.center,
+269:         children: [
+270:           // الخريطة
+271:           GoogleMap(
+272:             initialCameraPosition: CameraPosition(
+273:               target: _currentPosition,
+274:               zoom: 15,
+275:             ),
+276:             onMapCreated: (GoogleMapController controller) {
+277:               _controller.complete(controller);
+278:             },
+279:             onCameraMove: (CameraPosition position) {
+280:               _currentPosition = position.target;
+281:             },
+282:             onCameraIdle: () {
+283:               if (!_isSearching) {
+284:                 _updateAddress(_currentPosition);
+285:               }
+286:             },
+287:             onTap: _onMapTap,
+288:             myLocationEnabled: true,
+289:             myLocationButtonEnabled: false, // نعطل الزر الافتراضي ونضع زرنا
+290:           ),
+291: 
+292:           // أيقونة المنتصف
+293:           const Padding(
+294:             padding: EdgeInsets.only(bottom: 35.0),
+295:             child: Icon(Icons.location_on, size: 50, color: AppColor.primaryColor),
+296:           ),
+297: 
+298:           // حقل البحث في الأعلى
+299:           Positioned(
+300:             top: 12,
+301:             left: 12,
+302:             right: 12,
+303:             child: Column(
+304:               children: [
+305:                 Container(
+306:                   decoration: BoxDecoration(
+307:                     color: Colors.white,
+308:                     borderRadius: BorderRadius.circular(12),
+309:                     boxShadow: const [
+310:                       BoxShadow(
+311:                           color: Colors.black26,
+312:                           blurRadius: 8,
+313:                           offset: Offset(0, 3)),
+314:                     ],
+315:                   ),
+316:                   child: TextField(
+317:                     controller: _searchController,
+318:                     onChanged: _onSearchChanged,
+319:                     textAlign: TextAlign.right,
+320:                     decoration: InputDecoration(
+321:                       hintText: 'ابحث عن مكان...',
+322:                       hintStyle: const TextStyle(color: Colors.grey),
+323:                       prefixIcon: _searchController.text.isNotEmpty
+324:                           ? IconButton(
+325:                               icon: const Icon(Icons.clear, color: Colors.grey),
+326:                               onPressed: () {
+327:                                 _searchController.clear();
+328:                                 setState(() {
+329:                                   _searchResults = [];
+330:                                   _searchResultNames = [];
+331:                                   _isSearching = false;
+332:                                 });
+333:                               },
+334:                             )
+335:                           : null,
+336:                       suffixIcon: const Icon(Icons.search,
+337:                           color: AppColor.primaryColor),
+338:                       border: InputBorder.none,
+339:                       contentPadding: const EdgeInsets.symmetric(
+340:                           horizontal: 16, vertical: 14),
+341:                     ),
+342:                   ),
+343:                 ),
+344: 
+345:                 // نتائج البحث
+346:                 if (_searchResults.isNotEmpty)
+347:                   Container(
+348:                     margin: const EdgeInsets.only(top: 4),
+349:                     decoration: BoxDecoration(
+350:                       color: Colors.white,
+351:                       borderRadius: BorderRadius.circular(12),
+352:                       boxShadow: const [
+353:                         BoxShadow(
+354:                             color: Colors.black26,
+355:                             blurRadius: 8,
+356:                             offset: Offset(0, 3)),
+357:                       ],
+358:                     ),
+359:                     child: ListView.separated(
+360:                       shrinkWrap: true,
+361:                       padding: EdgeInsets.zero,
+362:                       itemCount: _searchResults.length,
+363:                       separatorBuilder: (_, __) =>
+364:                           const Divider(height: 1),
+365:                       itemBuilder: (context, index) {
+366:                         return ListTile(
+367:                           leading: const Icon(Icons.location_on_outlined,
+368:                               color: AppColor.primaryColor),
+369:                           title: Text(
+370:                             _searchResultNames[index],
+371:                             textAlign: TextAlign.right,
+372:                             style: const TextStyle(fontSize: 13),
+373:                           ),
+374:                           onTap: () => _goToLocation(
+375:                               _searchResults[index],
+376:                               _searchResultNames[index]),
+377:                         );
+378:                       },
+379:                     ),
+380:                   ),
+381:               ],
+382:             ),
+383:           ),
+384: 
+385:           // زر الموقع الحالي (أسفل اليمين فوق الكارد)
+386:           Positioned(
+387:             bottom: 160,
+388:             right: 16,
+389:             child: FloatingActionButton(
+390:               mini: true,
+391:               backgroundColor: Colors.white,
+392:               elevation: 4,
+393:               onPressed: _isLocating ? null : _determinePosition,
+394:               child: _isLocating
+395:                   ? const SizedBox(
+396:                       width: 20,
+397:                       height: 20,
+398:                       child: CircularProgressIndicator(
+399:                           strokeWidth: 2, color: AppColor.primaryColor),
+400:                     )
+401:                   : const Icon(Icons.my_location, color: AppColor.primaryColor),
+402:             ),
+403:           ),
+404: 
+405:           // كارد العنوان وزر التأكيد في الأسفل
+406:           Positioned(
+407:             bottom: 30,
+408:             left: 20,
+409:             right: 20,
+410:             child: Container(
+411:               padding: const EdgeInsets.all(20),
+412:               decoration: BoxDecoration(
+413:                 color: Colors.white,
+414:                 borderRadius: BorderRadius.circular(15),
+415:                 boxShadow: const [
+416:                   BoxShadow(
+417:                       color: Colors.black26,
+418:                       blurRadius: 10,
+419:                       offset: Offset(0, 5)),
+420:                 ],
+421:               ),
+422:               child: Column(
+423:                 mainAxisSize: MainAxisSize.min,
+424:                 children: [
+425:                   Row(
+426:                     mainAxisAlignment: MainAxisAlignment.center,
+427:                     children: [
+428:                       if (_isLoading)
+429:                         const SizedBox(
+430:                           width: 16,
+431:                           height: 16,
+432:                           child: CircularProgressIndicator(
+433:                               strokeWidth: 2,
+434:                               color: AppColor.primaryColor),
+435:                         ),
+436:                       if (_isLoading) const SizedBox(width: 8),
+437:                       Flexible(
+438:                         child: Text(
+439:                           _isLoading
+440:                               ? "جاري تحديد الموقع..."
+441:                               : _currentAddress,
+442:                           textAlign: TextAlign.center,
+443:                           style: const TextStyle(
+444:                               fontSize: 14, fontWeight: FontWeight.w600),
+445:                         ),
+446:                       ),
+447:                     ],
+448:                   ),
+449:                   const SizedBox(height: 15),
+450:                   CustomButton(
+451:                     txtSize: 16.0,
+452:                     label: 'تأكيد الموقع',
+453:                     onTap: _isLoading
+454:                         ? null
+455:                         : () {
+456:                             Navigator.pop(context, {
+457:                               'lat': _currentPosition.latitude,
+458:                               'lng': _currentPosition.longitude,
+459:                               'address': _currentAddress,
+460:                               'city': _currentCity,
+461:                             });
+462:                           },
+463:                   ),
+464:                 ],
+465:               ),
+466:             ),
+467:           ),
+468:         ],
+469:       ),
+470:     );
+471:   }
+472: }
 ````
 
 ## File: lib/features/vendor/home/screens/home_vendor_page.dart
@@ -22193,7 +22363,7 @@ test/widget_test.dart
 350:                                       label: widget.isVendor ? 'تم إرسال طلب الشحن': 'طلب الشحن',
 351:                                       onTap: (){
 352:                                         if(!widget.isVendor)
-353:                                         navigationPush(context, ConfirmShippingRequestScreen(requestId: widget.requestId, responseId: widget.responseId, vendorId: widget.responseId,));
+353:                                         navigationPush(context, ConfirmShippingRequestScreen(requestId: widget.requestId, responseId: widget.responseId, vendorId: widget.vendorId,));
 354:                                       },
 355:                                       textColor: AppColor.accentColor,
 356:                                       primaryColor: Colors.transparent,
@@ -22369,233 +22539,281 @@ test/widget_test.dart
 526:   
 527:   double? _lat;
 528:   double? _lng;
-529: 
-530:   @override
-531:   void initState() {
-532:     super.initState();
-533:     _loadSavedInfo();
-534:   }
-535: 
-536:   Future<void> _loadSavedInfo() async {
-537:     final saved = await VendorShippingInfoStorage.load();
-538:     if (saved != null) {
-539:       setState(() {
-540:         _nameController.text = saved['name'] ?? '';
-541:         _phoneController.text = saved['phone'] ?? '';
-542:         _addressController.text = saved['address'] ?? '';
-543:         _lat = (saved['lat'] as num?)?.toDouble();
-544:         _lng = (saved['lng'] as num?)?.toDouble();
-545:       });
-546:     }
-547:   }
-548: 
-549:   @override
-550:   void dispose() {
-551:     _nameController.dispose();
-552:     _addressController.dispose();
-553:     _phoneController.dispose();
-554:     for (var carton in _cartons) {
-555:       carton.dispose();
-556:     }
-557:     super.dispose();
-558:   }
-559: 
-560:   @override
-561:   Widget build(BuildContext context) {
-562:     return SingleChildScrollView(
-563:       controller: widget.scrollController,
-564:       padding: EdgeInsets.only(
-565:         bottom: MediaQuery.of(context).viewInsets.bottom,
-566:       ),
-567:       child: Container(
-568:         width: SizeConfig.width,
-569:         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-570:         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-571:         decoration: BoxDecoration(
-572:             color: Colors.white,
-573:             borderRadius: BorderRadius.circular(20)
-574:         ),
-575:         child: Form(
-576:           key: _formKey,
-577:           child: Column(
-578:             children: [
-579:               Align(
-580:                 alignment: Alignment.centerLeft,
-581:                 child: IconButton(
-582:                     onPressed: () => Navigator.pop(context),
-583:                     icon: const Icon(
-584:                       Icons.close,
-585:                       color: AppColor.primaryColor,
-586:                     )),
-587:               ),
-588:               Text('تفاصيل الشحنة', style: txtBold05,),
-589:               const SizedBox(height: 10),
-590:               ContainerFieldsWidget(
-591:                 title: 'عنوانك',
-592:                 children: [
-593:                   CustomTextField(
-594:                     label: 'اسم المرسل',
-595:                     controller: _nameController,
-596:                     validator: (value) => FormValidatorUtils.textValidator(value,
-597:                       isRequired: true,
-598:                       maxLength: 255,),
-599:                   ),
-600:                   const SizedBox(height: 16,),
-601:                   GestureDetector(
-602:                     onTap: () async {
-603:                       final result = await Navigator.push(
-604:                         context,
-605:                         MaterialPageRoute(
-606:                           builder: (context) => const MapPickerScreen(),
-607:                         ),
-608:                       );
-609:                       if (result != null) {
-610:                         setState(() {
-611:                           _lat = result['lat'];
-612:                           _lng = result['lng'];
-613:                           _addressController.text = result['address'];
-614:                         });
-615:                       }
-616:                     },
-617:                     child: AbsorbPointer(
-618:                       child: CustomTextField(
-619:                         label: 'العنوان',
-620:                         controller: _addressController,
-621:                         maxLines: null,
-622:                         validator: (value) => FormValidatorUtils.textValidator(value,
-623:                           isRequired: true,
-624:                           maxLength: 255,),
-625:                       ),
-626:                     ),
-627:                   ),
-628:                   const SizedBox(height: 16,),
-629:                   CustomTextField(
-630:                     label:'رقم الجوال',
-631:                     controller: _phoneController,
-632:                     keyboardType: TextInputType.phone,
-633:                     validator: (value) => FormValidatorUtils.phoneValidator(value,
-634:                       isRequired: true,),
-635:                   ),
-636:                 ],
-637:               ),
-638:               const SizedBox(height: 16),
-639:               ..._cartons.asMap().entries.map((entry) {
-640:                 int index = entry.key;
-641:                 CartonControllers carton = entry.value;
-642:                 return Padding(
-643:                   padding: const EdgeInsets.only(bottom: 16.0),
-644:                   child: ContainerFieldsWidget(
-645:                     title: 'تفاصيل شحنة ${index + 1}',
-646:                     children: [
-647:                       if (_cartons.length > 1)
-648:                         Align(
-649:                           alignment: Alignment.centerLeft,
-650:                           child: InkWell(
-651:                             onTap: () {
-652:                               setState(() {
-653:                                 _cartons.removeAt(index);
-654:                               });
-655:                             },
-656:                             child: const Icon(Icons.delete, color: Colors.red),
-657:                           ),
-658:                         ),
-659:                       Row(
-660:                         children: [
-661:                           Expanded(flex:1, child: CustomTextField(
-662:                             label: 'الطول ( سم )',
-663:                             controller: carton.lengthController,
-664:                             keyboardType: TextInputType.number,
-665:                             validator: (value) => FormValidatorUtils.textValidator(value,
-666:                               isRequired: true,),
-667:                           )),
-668:                           const SizedBox(width: 10,),
-669:                           Expanded(flex:1, child: CustomTextField(
-670:                             label: 'العرض ( سم )',
-671:                             controller: carton.widthController,
-672:                             keyboardType: TextInputType.number,
-673:                             validator: (value) => FormValidatorUtils.textValidator(value,
-674:                               isRequired: true,),
-675:                           )),
-676:                         ],
-677:                       ),
-678:                       const SizedBox(height: 10),
-679:                       Row(
-680:                         children: [
-681:                           Expanded(flex:1, child: CustomTextField(
-682:                             label: 'الإرتفاع ( سم )',
-683:                             controller: carton.heightController,
-684:                             keyboardType: TextInputType.number,
-685:                             validator: (value) => FormValidatorUtils.textValidator(value,
-686:                               isRequired: true,),
-687:                           )),
-688:                           const SizedBox(width: 10,),
-689:                           Expanded(flex:1, child: CustomTextField(
-690:                             label: 'الوزن ( كغم )',
-691:                             controller: carton.weightController,
-692:                             keyboardType: TextInputType.number,
-693:                             validator: (value) => FormValidatorUtils.textValidator(value,
-694:                               isRequired: true,),
-695:                           )),
-696:                         ],
-697:                       ),
-698:                     ]
-699:                   ),
-700:                 );
-701:               }).toList(),
-702:               
-703:               TextButton.icon(
-704:                 onPressed: () {
-705:                   setState(() {
-706:                     _cartons.add(CartonControllers());
-707:                   });
-708:                 }, 
-709:                 icon: const Icon(Icons.add, color: AppColor.primaryColor), 
-710:                 label: const Text('إضافة شحنة أخرى', style: TextStyle(color: AppColor.primaryColor))
-711:               ),
-712:               const SizedBox(height: 10),
-713:               // button
-714:               CustomButton(
-715:                 label: 'إرسال',
-716:                 onTap: (){
-717:                   if(_formKey.currentState?.validate() ?? false){
-718:                     showDialog(
-719:                       context: context,
-720:                       barrierDismissible: false,
-721:                       builder: (dialogContext) => VendorConfirmPledgeDialog(
-722:                         onConfirm: () {
-723:                           // حفظ بيانات التاجر محلياً للاستخدام المستقبلي
-724:                           VendorShippingInfoStorage.save(
-725:                             name: _nameController.text.trim(),
-726:                             phone: _phoneController.text.trim(),
-727:                             address: _addressController.text.trim(),
-728:                             lat: _lat,
-729:                             lng: _lng,
-730:                           );
-731:                           widget.onSend(jsonEncode({
-732:                             'name': _nameController.text.toString(),
-733:                             'city': '', // Removed from UI
-734:                             'address' : _addressController.text.toString(),
-735:                             'lat' : _lat,
-736:                             'lng' : _lng,
-737:                             'phone' : _phoneController.text.toString(),
-738:                             'length' : _cartons.isNotEmpty ? _cartons.first.lengthController.text.toString() : '',
-739:                             'width' : _cartons.isNotEmpty ? _cartons.first.widthController.text.toString() : '',
-740:                             'height' : _cartons.isNotEmpty ? _cartons.first.heightController.text.toString() : '',
-741:                             'weight' : _cartons.isNotEmpty ? _cartons.first.weightController.text.toString() : '',
-742:                             'packages': _cartons.map((c) => c.toJson()).toList(),
-743:                           }));
-744:                         },
-745:                       ),
-746:                     );
-747:                   }
-748:                 },
-749:                 txtSize: SizeConfig.widthResponsive(0.04),
-750:               )
-751:             ],
-752:           ),
-753:         ),
-754:       ),
-755:     );
-756:   }
-757: }
+529:   CityModel? _selectedCity;
+530: 
+531:   @override
+532:   void initState() {
+533:     super.initState();
+534:     _loadSavedInfo();
+535:     WidgetsBinding.instance.addPostFrameCallback((_) {
+536:       Provider.of<ShippingProvider>(context, listen: false).loadCities();
+537:     });
+538:   }
+539: 
+540:   Future<void> _loadSavedInfo() async {
+541:     final saved = await VendorShippingInfoStorage.load();
+542:     if (saved != null) {
+543:       setState(() {
+544:         _nameController.text = saved['name'] ?? '';
+545:         _phoneController.text = saved['phone'] ?? '';
+546:         _addressController.text = saved['address'] ?? '';
+547:         _lat = (saved['lat'] as num?)?.toDouble();
+548:         _lng = (saved['lng'] as num?)?.toDouble();
+549:         // city will be restored after cities load via _tryRestoreCity
+550:         _savedCityEn = saved['city_en'] ?? saved['city'] ?? '';
+551:       });
+552:     }
+553:   }
+554: 
+555:   String _savedCityEn = '';
+556: 
+557:   void _tryRestoreCity(List<CityModel> cities) {
+558:     if (_selectedCity == null && _savedCityEn.isNotEmpty) {
+559:       final match = cities.where((c) => c.cityNameEn == _savedCityEn).toList();
+560:       if (match.isNotEmpty) {
+561:         _selectedCity = match.first;
+562:       }
+563:     }
+564:   }
+565: 
+566:   @override
+567:   void dispose() {
+568:     _nameController.dispose();
+569:     _addressController.dispose();
+570:     _phoneController.dispose();
+571:     for (var carton in _cartons) {
+572:       carton.dispose();
+573:     }
+574:     super.dispose();
+575:   }
+576: 
+577:   @override
+578:   Widget build(BuildContext context) {
+579:     return SingleChildScrollView(
+580:       controller: widget.scrollController,
+581:       padding: EdgeInsets.only(
+582:         bottom: MediaQuery.of(context).viewInsets.bottom,
+583:       ),
+584:       child: Container(
+585:         width: SizeConfig.width,
+586:         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+587:         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+588:         decoration: BoxDecoration(
+589:             color: Colors.white,
+590:             borderRadius: BorderRadius.circular(20)
+591:         ),
+592:         child: Form(
+593:           key: _formKey,
+594:           child: Column(
+595:             children: [
+596:               Align(
+597:                 alignment: Alignment.centerLeft,
+598:                 child: IconButton(
+599:                     onPressed: () => Navigator.pop(context),
+600:                     icon: const Icon(
+601:                       Icons.close,
+602:                       color: AppColor.primaryColor,
+603:                     )),
+604:               ),
+605:               Text('تفاصيل الشحنة', style: txtBold05,),
+606:               const SizedBox(height: 10),
+607:               ContainerFieldsWidget(
+608:                 title: 'عنوانك',
+609:                 children: [
+610:                   CustomTextField(
+611:                     label: 'اسم المرسل',
+612:                     controller: _nameController,
+613:                     validator: (value) => FormValidatorUtils.textValidator(value,
+614:                       isRequired: true,
+615:                       maxLength: 255,),
+616:                   ),
+617:                   const SizedBox(height: 16,),
+618:                   // Dropdown اختيار المدينة
+619:                   Consumer<ShippingProvider>(
+620:                     builder: (context, shippingProvider, _) {
+621:                       _tryRestoreCity(shippingProvider.cities);
+622:                       return DropdownButtonFormField<CityModel>(
+623:                         value: _selectedCity,
+624:                         isExpanded: true,
+625:                         decoration: InputDecoration(
+626:                           labelText: 'مدينة الإرسال',
+627:                           labelStyle: const TextStyle(color: Colors.grey),
+628:                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+629:                           contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+630:                         ),
+631:                         hint: shippingProvider.isLoadingCities
+632:                             ? const Text('جاري تحميل المدن...')
+633:                             : const Text('اختر مدينة الإرسال'),
+634:                         items: shippingProvider.cities.map((city) {
+635:                           return DropdownMenuItem<CityModel>(
+636:                             value: city,
+637:                             child: Text(city.cityNameAr, textAlign: TextAlign.right),
+638:                           );
+639:                         }).toList(),
+640:                         onChanged: (val) => setState(() => _selectedCity = val),
+641:                         validator: (_) => _selectedCity == null ? 'يرجى اختيار مدينة الإرسال' : null,
+642:                       );
+643:                     },
+644:                   ),
+645:                   const SizedBox(height: 16,),
+646:                   GestureDetector(
+647:                     onTap: () async {
+648:                       final result = await Navigator.push(
+649:                         context,
+650:                         MaterialPageRoute(
+651:                           builder: (context) => const MapPickerScreen(),
+652:                         ),
+653:                       );
+654:                       if (result != null) {
+655:                         setState(() {
+656:                           _lat = result['lat'];
+657:                           _lng = result['lng'];
+658:                           _addressController.text = result['address'] ?? '';
+659:                           // لا نأخذ المدينة من الخريطة بعد الآن
+660:                         });
+661:                       }
+662:                     },
+663:                     child: AbsorbPointer(
+664:                       child: CustomTextField(
+665:                         label: 'العنوان التفصيلي (اختياري)',
+666:                         controller: _addressController,
+667:                         maxLines: null,
+668:                         validator: (value) => FormValidatorUtils.textValidator(value,
+669:                           isRequired: true,
+670:                           maxLength: 255,),
+671:                       ),
+672:                     ),
+673:                   ),
+674:                   const SizedBox(height: 16,),
+675:                   CustomTextField(
+676:                     label:'رقم الجوال',
+677:                     controller: _phoneController,
+678:                     keyboardType: TextInputType.phone,
+679:                     validator: (value) => FormValidatorUtils.phoneValidator(value,
+680:                       isRequired: true,),
+681:                   ),
+682:                 ],
+683:               ),
+684:               const SizedBox(height: 16),
+685:               ..._cartons.asMap().entries.map((entry) {
+686:                 int index = entry.key;
+687:                 CartonControllers carton = entry.value;
+688:                 return Padding(
+689:                   padding: const EdgeInsets.only(bottom: 16.0),
+690:                   child: ContainerFieldsWidget(
+691:                     title: 'تفاصيل شحنة ${index + 1}',
+692:                     children: [
+693:                       if (_cartons.length > 1)
+694:                         Align(
+695:                           alignment: Alignment.centerLeft,
+696:                           child: InkWell(
+697:                             onTap: () {
+698:                               setState(() {
+699:                                 _cartons.removeAt(index);
+700:                               });
+701:                             },
+702:                             child: const Icon(Icons.delete, color: Colors.red),
+703:                           ),
+704:                         ),
+705:                       Row(
+706:                         children: [
+707:                           Expanded(flex:1, child: CustomTextField(
+708:                             label: 'الطول ( سم )',
+709:                             controller: carton.lengthController,
+710:                             keyboardType: TextInputType.number,
+711:                             validator: (value) => FormValidatorUtils.textValidator(value,
+712:                               isRequired: true,),
+713:                           )),
+714:                           const SizedBox(width: 10,),
+715:                           Expanded(flex:1, child: CustomTextField(
+716:                             label: 'العرض ( سم )',
+717:                             controller: carton.widthController,
+718:                             keyboardType: TextInputType.number,
+719:                             validator: (value) => FormValidatorUtils.textValidator(value,
+720:                               isRequired: true,),
+721:                           )),
+722:                         ],
+723:                       ),
+724:                       const SizedBox(height: 10),
+725:                       Row(
+726:                         children: [
+727:                           Expanded(flex:1, child: CustomTextField(
+728:                             label: 'الإرتفاع ( سم )',
+729:                             controller: carton.heightController,
+730:                             keyboardType: TextInputType.number,
+731:                             validator: (value) => FormValidatorUtils.textValidator(value,
+732:                               isRequired: true,),
+733:                           )),
+734:                           const SizedBox(width: 10,),
+735:                           Expanded(flex:1, child: CustomTextField(
+736:                             label: 'الوزن ( كغم )',
+737:                             controller: carton.weightController,
+738:                             keyboardType: TextInputType.number,
+739:                             validator: (value) => FormValidatorUtils.textValidator(value,
+740:                               isRequired: true,),
+741:                           )),
+742:                         ],
+743:                       ),
+744:                     ]
+745:                   ),
+746:                 );
+747:               }).toList(),
+748:               
+749:               TextButton.icon(
+750:                 onPressed: () {
+751:                   setState(() {
+752:                     _cartons.add(CartonControllers());
+753:                   });
+754:                 }, 
+755:                 icon: const Icon(Icons.add, color: AppColor.primaryColor), 
+756:                 label: const Text('إضافة شحنة أخرى', style: TextStyle(color: AppColor.primaryColor))
+757:               ),
+758:               const SizedBox(height: 10),
+759:               // button
+760:               CustomButton(
+761:                 label: 'إرسال',
+762:                 onTap: (){
+763:                   if(_formKey.currentState?.validate() ?? false){
+764:                     showDialog(
+765:                       context: context,
+766:                       barrierDismissible: false,
+767:                       builder: (dialogContext) => VendorConfirmPledgeDialog(
+768:                         onConfirm: () {
+769:                           // حفظ بيانات التاجر محلياً للاستخدام المستقبلي
+770:                           VendorShippingInfoStorage.save(
+771:                             name: _nameController.text.trim(),
+772:                             phone: _phoneController.text.trim(),
+773:                             address: _addressController.text.trim(),
+774:                             city: _selectedCity?.cityNameEn ?? '',
+775:                             lat: _lat,
+776:                             lng: _lng,
+777:                           );
+778:                           widget.onSend(jsonEncode({
+779:                             'name': _nameController.text.toString(),
+780:                             'city': _selectedCity?.cityNameEn ?? 'Riyadh',
+781:                             'city_ar': _selectedCity?.cityNameAr ?? 'الرياض',
+782:                             'address' : _addressController.text.toString(),
+783:                             'lat' : _lat,
+784:                             'lng' : _lng,
+785:                             'phone' : _phoneController.text.toString(),
+786:                             'length' : _cartons.isNotEmpty ? _cartons.first.lengthController.text.toString() : '',
+787:                             'width' : _cartons.isNotEmpty ? _cartons.first.widthController.text.toString() : '',
+788:                             'height' : _cartons.isNotEmpty ? _cartons.first.heightController.text.toString() : '',
+789:                             'weight' : _cartons.isNotEmpty ? _cartons.first.weightController.text.toString() : '',
+790:                             'packages': _cartons.map((c) => c.toJson()).toList(),
+791:                           }));
+792:                         },
+793:                       ),
+794:                     );
+795:                   }
+796:                 },
+797:                 txtSize: SizeConfig.widthResponsive(0.04),
+798:               )
+799:             ],
+800:           ),
+801:         ),
+802:       ),
+803:     );
+804:   }
+805: }
 ````
