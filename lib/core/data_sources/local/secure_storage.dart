@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
@@ -13,6 +15,9 @@ class SecureStorage {
   static const String _companyNameAr = 'company_name_ar_key';
   static const String _companyNameEn = 'company_name_en_key';
   static const String _notificationsCounterKey = 'notification_counter_key';
+  static const String _currentUserIdKey = 'current_user_id_key';
+  static const String _deviceIdKey = 'device_id_key';
+  static const String _registeredFcmTokenKey = 'registered_fcm_token_key';
 
 
   static Future<void> saveToken(String token) async {
@@ -43,6 +48,55 @@ class SecureStorage {
 
   static Future<void> deleteToken() async {
     await _storage.delete(key: _tokenKey);
+  }
+
+  static Future<void> deleteUserRole() async {
+    await _storage.delete(key: _useRoleKey);
+  }
+
+  /// Cached separately from the full user JSON (which lives in Hive) because
+  /// the FCM background isolate has no Flutter widget tree / Provider access
+  /// — this is the only signal it has for "does this payload belong to me".
+  static Future<void> setCurrentUserId(int? userId) async {
+    if (userId == null) {
+      await _storage.delete(key: _currentUserIdKey);
+    } else {
+      await _storage.write(key: _currentUserIdKey, value: userId.toString());
+    }
+  }
+
+  static Future<int?> getCurrentUserId() async {
+    final value = await _storage.read(key: _currentUserIdKey);
+    return value == null ? null : int.tryParse(value);
+  }
+
+  /// A stable per-install identifier, generated once, used to let the server
+  /// revoke a device's previous token when its FCM token rotates.
+  static Future<String> getOrCreateDeviceId() async {
+    final existing = await _storage.read(key: _deviceIdKey);
+    if (existing != null && existing.isNotEmpty) return existing;
+
+    final random = Random.secure();
+    final bytes = List<int>.generate(16, (_) => random.nextInt(256));
+    final id = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+
+    await _storage.write(key: _deviceIdKey, value: id);
+    return id;
+  }
+
+  /// The last FCM token this device successfully registered with the
+  /// backend — lets us skip a redundant register call when the token hasn't
+  /// actually changed.
+  static Future<void> setRegisteredFcmToken(String? token) async {
+    if (token == null) {
+      await _storage.delete(key: _registeredFcmTokenKey);
+    } else {
+      await _storage.write(key: _registeredFcmTokenKey, value: token);
+    }
+  }
+
+  static Future<String?> getRegisteredFcmToken() async {
+    return await _storage.read(key: _registeredFcmTokenKey);
   }
 
   static Future<void> saveUserData({required String name, required String phone, required String logo, String? companyNameAr, String? companyNameEn}) async {

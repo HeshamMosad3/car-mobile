@@ -34,11 +34,11 @@ class AuthService extends BaseService {
     }
   }
 
-  Future<UserResponseModel?> logout() async {
+  Future<UserResponseModel?> logout({String? fcmToken}) async {
     try {
       final response = await _apiService.postData(
           ApiEndpoints.logout,
-          body: {},);
+          body: fcmToken == null ? {} : {'fcmToken': fcmToken},);
 
       return UserResponseModel.fromJson(response);
 

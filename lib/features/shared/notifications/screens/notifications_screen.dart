@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/models/notification_payload.dart';
+import '../../../../core/providers/notification_badge_provider.dart';
 import '../../../../core/providers/notification_provider.dart';
+import '../../../../core/routing/notification_router.dart';
 import '../../../../core/styles/styles.dart';
 import '../../../../core/utils/constants/colors_constants.dart';
 import '../../../../core/utils/size_config.dart';
+import '../../../../models/notification_model.dart';
 import '../../../../widgets/arrow_back_widget.dart';
 import '../../../../widgets/custom_empty_widget.dart';
 import '../../../../widgets/custom_loading.dart';
+
+const _knownBadgeBuckets = {'conversations', 'customer_requests', 'company_responses'};
 
 
 class NotificationsScreen extends StatefulWidget {
@@ -86,38 +92,41 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       child: Card(
                         elevation: 3,
                         shadowColor: Colors.black26,
-                        color: Colors.white,
+                        color: notif.isRead ? Colors.white : AppColor.primaryColor.withOpacity(0.04),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            ListTile(
-                              contentPadding: EdgeInsets.all(16),
-                              leading: Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: AppColor.primaryColor.withOpacity(0.1),
-                                  shape: BoxShape.circle,
+                            InkWell(
+                              borderRadius: BorderRadius.circular(16),
+                              onTap: () => _onNotificationTap(context, notif),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.all(16),
+                                leading: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.primaryColor.withOpacity(0.1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(Icons.notifications, color: AppColor.primaryColor, size: 28),
                                 ),
-                                child: Icon(Icons.notifications, color: AppColor.primaryColor, size: 28),
-                              ),
-                              title: Text(
-                                notif.title,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                title: Text(
+                                  notif.title,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: notif.isRead ? FontWeight.w500 : FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.only(top: 6),
+                                  child: Text(
+                                    notif.body,
+                                    style: TextStyle(fontSize: 14),
+                                  ),
                                 ),
                               ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 6),
-                                child: Text(
-                                  notif.body,
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              ),
-
                             ),
                             const SizedBox(height: 10,),
                            Divider(color: Colors.grey.withOpacity(0.3),),
@@ -145,6 +154,25 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         },
       ),
     );
+  }
+
+  void _onNotificationTap(BuildContext context, NotificationModel notif) {
+    final targetId = notif.targetId;
+    final category = notif.category;
+
+    if (category != null && _knownBadgeBuckets.contains(category) && targetId != null) {
+      final entityId = int.tryParse(targetId);
+      if (entityId != null) {
+        context.read<NotificationBadgeProvider>().markEntityRead(section: category, entityId: entityId);
+      }
+    }
+
+    NotificationRouter.handle(NotificationPayload.fromApiRow(
+      category: category,
+      targetId: targetId,
+      title: notif.title,
+      body: notif.body,
+    ));
   }
 }
 

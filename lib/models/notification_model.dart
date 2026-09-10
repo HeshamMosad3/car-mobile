@@ -45,21 +45,35 @@ class Result {
 
 class NotificationModel{
 
+  final String id;
   final String title;
   final String body;
   final String createdAt;
+  final String? category;
+  final String? targetId;
+  final String? readAt;
 
   const NotificationModel({
+    this.id = '',
     this.title = '',
     this.body = '',
     this.createdAt = '',
+    this.category,
+    this.targetId,
+    this.readAt,
   });
+
+  bool get isRead => readAt != null && readAt!.isNotEmpty;
 
   factory NotificationModel.fromJson(Map<String, dynamic>? json) {
     return NotificationModel(
+      id: json?['id']?.toString() ?? '',
       title: json?['title'] ?? '',
       body: json?['body'] ?? '',
       createdAt: json?['created_at'] ?? '',
+      category: json?['category'],
+      targetId: json?['target_id']?.toString(),
+      readAt: json?['read_at'],
     );
   }
 }

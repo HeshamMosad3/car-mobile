@@ -162,17 +162,27 @@ class ConversationProvider extends ChangeNotifier {
     }
   }
 
+  bool _isFetchingNewMessages = false;
+
+  /// Called both from the FCM foreground handler and from the Reverb
+  /// `message.sent` subscription — the re-entrancy guard stops the two from
+  /// racing each other into fetching (and appending) the same message twice
+  /// when both fire for the same event.
   Future<void> fetchNewMessages({required int conversationId}) async {
+    if (_isFetchingNewMessages) return;
+    _isFetchingNewMessages = true;
     try {
       final newMsgs = await _conversationService.fetchMessages(conversationId: conversationId, lastMessageId: lastMessageId);
       if (newMsgs.isNotEmpty) {
-        messagesList.addAll(newMsgs);
+        final existingIds = messagesList.map((m) => m.id).toSet();
+        messagesList.addAll(newMsgs.where((m) => !existingIds.contains(m.id)));
         lastMessageId =  messagesList.last.id;
       }
     } catch (e) {
       Helper.logDebug('$runtimeType ---> Failed : ${e}');
       // ToastHelper.showError(e.toString());
     } finally {
+      _isFetchingNewMessages = false;
       notifyListeners();
     }
   }

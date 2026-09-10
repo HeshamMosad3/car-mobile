@@ -6,8 +6,11 @@ import '../core/localization/app_language_provider.dart';
 import '../core/utils/constants/colors_constants.dart';
 import '../core/utils/size_config.dart';
 
-Future<dynamic> navigationPush(context, Widget widget) {
-  return Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
+Future<dynamic> navigationPush(context, Widget widget, {String? routeName}) {
+  return Navigator.push(context, MaterialPageRoute(
+    settings: routeName != null ? RouteSettings(name: routeName) : null,
+    builder: (context) => widget,
+  ));
 }
 
 void navigationPushAndRemoveUntil(context, Widget widget) {

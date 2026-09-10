@@ -6,7 +6,6 @@ import 'package:car_mediator_mobile/widgets/components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/data_sources/remote/firebase/fcm_service.dart';
 import '../../../../core/providers/auth_provider.dart';
 import '../../../../core/providers/notification_badge_provider.dart';
 import '../../../../core/utils/dialogUtils.dart';
@@ -33,7 +32,6 @@ class _HomeVendorPageState extends State<HomeVendorPage> {
   @override
   void initState() {
     super.initState();
-    FcmService.onMessage();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userId = context.read<AuthProvider>().currentUseModel?.id;
         if (userId != null) {

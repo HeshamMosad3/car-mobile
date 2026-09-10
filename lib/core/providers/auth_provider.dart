@@ -1,7 +1,8 @@
-import 'dart:ffi';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:car_mediator_mobile/core/data_sources/remote/api_endpoints.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -12,9 +13,13 @@ import '../../models/user_model.dart';
 import '../../widgets/components.dart';
 import '../data_sources/local/cache_helper.dart';
 import '../data_sources/local/secure_storage.dart';
+import '../data_sources/remote/firebase/fcm_service.dart';
+import '../data_sources/remote/reverb_service.dart';
 import '../helpers/helpers.dart';
 import '../helpers/toast_helper.dart';
+import '../routing/notification_router.dart';
 import '../services/shared/auth_service.dart';
+import '../services/shared/device_registration_service.dart';
 import 'bottom_navigation_bar_provider.dart';
 import 'notification_badge_provider.dart';
 
@@ -44,6 +49,10 @@ class AuthProvider extends ChangeNotifier{
     isLoggedIn = await SecureStorage.isLoggedIn();
     final _json = CacheHelper.getCachedCurrentUserData();
     currentUseModel = (_json == null) ? null : UserModel.fromJson(_json);
+    // Mirrored into SecureStorage (separate from the Hive cache above)
+    // because the FCM background isolate has no Hive/Provider access — this
+    // is the only way it can check "does this payload belong to me".
+    await SecureStorage.setCurrentUserId(currentUseModel?.id);
     notifyListeners();
   }
 
@@ -84,7 +93,17 @@ class AuthProvider extends ChangeNotifier{
             SecureStorage.saveToken(loginUserModel?.result?.token ?? ''),
             SecureStorage.setIsLoggedIn(true),
             SecureStorage.setUserRole(loginUserModel?.result?.user?.role ?? ''),
+            SecureStorage.setCurrentUserId(currentUseModel?.id),
           ]);
+
+          // Bind this device's token to the freshly-signed-in account, then
+          // ask for notification permission now that there's a reason to —
+          // not at cold start, where Android 13+ only gives one shot at it.
+          unawaited(DeviceRegistrationService.instance.registerCurrentDevice(force: true));
+          unawaited(FcmService.requestPermissions());
+          if (currentUseModel?.id != null) {
+            NotificationRouter.replayAfterLogin(currentUseModel!.id!);
+          }
 
           navigationPushAndRemoveUntil(context, InitCache(userRole: loginUserModel?.result?.user?.role ?? '',));
         }else{
@@ -102,7 +121,12 @@ class AuthProvider extends ChangeNotifier{
   Future<void> logout(BuildContext context) async {
     _toggleLoading();
     try {
-      await _authService.logout();
+      // Revoke this device's push token server-side WHILE the Sanctum token
+      // is still valid, in the same request — this is what stops a
+      // reused/shared phone from continuing to receive the previous
+      // account's notifications after logout.
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      await _authService.logout(fcmToken: fcmToken);
     } catch (e) {
       Helper.logDebug('$runtimeType ---> Failed logout: ${e}');
     } finally {
@@ -111,7 +135,28 @@ class AuthProvider extends ChangeNotifier{
         CacheHelper.deleteCurrentUserData(),
         SecureStorage.deleteToken(),
         SecureStorage.setIsLoggedIn(false),
+        SecureStorage.deleteUserRole(),
+        SecureStorage.setCurrentUserId(null),
+        SecureStorage.setRegisteredFcmToken(null),
       ]);
+
+      // Deleting the token guarantees the NEXT signed-in account (on a
+      // reused/shared device) gets a fresh token rather than inheriting
+      // this one — combined with the server-side revoke above, this closes
+      // the cross-account leakage path from both ends.
+      try {
+        await FirebaseMessaging.instance.deleteToken();
+      } catch (_) {}
+      FcmService.unsubscribeFromTopic('all');
+      // NOT FcmService.disposeListeners() — those subscriptions are meant to
+      // live for the whole app process (see initializeFirebase()'s doc
+      // comment). Nothing re-initializes them if a different account signs
+      // in later without an app restart, and every handler downstream
+      // already no-ops correctly with nobody signed in.
+      try {
+        await FcmService.localNotificationsPlugin.cancelAll();
+      } catch (_) {}
+      ReverbService.instance.disconnect();
 
       if (context.mounted) {
         context.read<NotificationBadgeProvider>().clearAll();

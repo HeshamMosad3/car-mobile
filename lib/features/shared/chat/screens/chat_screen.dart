@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/data_sources/local/secure_storage.dart';
 import '../../../../core/data_sources/remote/api_path.dart';
+import '../../../../core/data_sources/remote/reverb_service.dart';
 import '../../../../core/localization/app_language_provider.dart';
 import '../../../../core/providers/cache_provider.dart';
 import '../../../../core/providers/conversation_provider.dart';
@@ -69,6 +70,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController controller = TextEditingController();
   Timer? timer;
+  StreamSubscription<Map<String, dynamic>>? _conversationSub;
 
   @override
   void initState() {
@@ -82,11 +84,29 @@ class _ChatScreenState extends State<ChatScreen> {
       prov.initProvider();
       prov.setActiveConversation(widget.conversationId);
       await prov.loadInitialMessages(conversationId: widget.conversationId);
+      await _listenForRealtimeMessages();
+    });
+  }
+
+  /// Live updates while this screen is open. Previously the NewMessage
+  /// broadcast reached nobody — chat "realtime" silently rode on FCM
+  /// foreground pushes only, which meant it stopped working the moment
+  /// notification permission was denied.
+  Future<void> _listenForRealtimeMessages() async {
+    final stream = await ReverbService.instance.listenToPrivateChannel('conversation.${widget.conversationId}');
+    _conversationSub = stream.listen((message) {
+      if (message['event'] != 'message.sent') return;
+      final data = message['data'];
+      if (data is Map<String, dynamic> && mounted) {
+        context.read<ConversationProvider>().onRealtimeMessageReceived(data);
+      }
     });
   }
 
   @override
   void dispose() {
+    _conversationSub?.cancel();
+    ReverbService.instance.unsubscribe('conversation.${widget.conversationId}');
     try {
       context.read<ConversationProvider>().setActiveConversation(null);
     } catch (_) {}

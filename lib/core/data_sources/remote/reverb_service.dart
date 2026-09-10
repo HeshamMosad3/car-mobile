@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -26,17 +27,32 @@ class ReverbService {
   WebSocketChannel? _channel;
   String? _socketId;
   bool _connected = false;
+  bool _connecting = false;
+  bool _explicitlyDisconnected = false;
+  int _reconnectAttempt = 0;
+  Timer? _reconnectTimer;
 
   final Map<String, StreamController<Map<String, dynamic>>>
       _channelControllers = {};
   final Set<String> _pendingSubscriptions = {};
+  /// Base channel names (without "private-") currently subscribed, so a
+  /// reconnect can resubscribe them all without callers noticing anything
+  /// happened — their existing stream subscriptions keep working.
+  final Set<String> _activeChannels = {};
 
   String get _reverbHost => ApiPath.REVERB_HOST;
 
   bool get isConnected => _connected;
 
+  /// Needed so `broadcast(new NewMessage(...))->toOthers()` on the backend
+  /// can actually exclude the sender — Laravel reads this from the
+  /// X-Socket-ID request header (see ApiService).
+  String? get socketId => _socketId;
+
   Future<void> connect() async {
-    if (_connected) return;
+    if (_connected || _connecting) return;
+    _connecting = true;
+    _explicitlyDisconnected = false;
 
     final isLocal = _reverbHost.contains('10.0.2.2') ||
         _reverbHost.contains('127.0.0.1') ||
@@ -49,23 +65,61 @@ class ReverbService {
 
     debugPrint('Connecting to Reverb WebSocket: $wsUrl');
 
-    _channel = IOWebSocketChannel.connect(Uri.parse(wsUrl));
-    _connected = true;
+    try {
+      _channel = IOWebSocketChannel.connect(Uri.parse(wsUrl));
+      _connected = true;
+      _connecting = false;
 
-    _channel!.stream.listen(
-      _handleMessage,
-      onDone: () {
-        debugPrint('Reverb WebSocket disconnected');
-        _connected = false;
-        _socketId = null;
-      },
-      onError: (err) {
-        debugPrint('Reverb WebSocket error: $err');
-        _connected = false;
-        _socketId = null;
-      },
-      cancelOnError: false,
-    );
+      _channel!.stream.listen(
+        _handleMessage,
+        onDone: () {
+          debugPrint('Reverb WebSocket disconnected');
+          _connected = false;
+          _connecting = false;
+          _socketId = null;
+          _scheduleReconnect();
+        },
+        onError: (err) {
+          debugPrint('Reverb WebSocket error: $err');
+          _connected = false;
+          _connecting = false;
+          _socketId = null;
+          _scheduleReconnect();
+        },
+        cancelOnError: false,
+      );
+    } catch (e) {
+      debugPrint('Reverb WebSocket connect failed: $e');
+      _connected = false;
+      _connecting = false;
+      _scheduleReconnect();
+    }
+  }
+
+  /// Exponential backoff (1s → 30s cap, ±20% jitter) so a Reverb outage
+  /// doesn't permanently kill badges/chat for the rest of the session —
+  /// previously onDone/onError just gave up.
+  void _scheduleReconnect() {
+    if (_explicitlyDisconnected) return;
+    _reconnectTimer?.cancel();
+
+    final baseSeconds = [1, 2, 4, 8, 16, 30][_reconnectAttempt.clamp(0, 5)];
+    final jitter = (baseSeconds * 0.2 * (Random().nextDouble() * 2 - 1));
+    final delay = Duration(milliseconds: ((baseSeconds + jitter) * 1000).round());
+    _reconnectAttempt++;
+
+    _reconnectTimer = Timer(delay, () {
+      if (!_connected && !_explicitlyDisconnected) connect();
+    });
+  }
+
+  /// Resubscribes every channel that was active before a drop. The
+  /// StreamControllers in [_channelControllers] survive a reconnect, so
+  /// existing `.listen()` callers never know it happened.
+  void _resubscribeActiveChannels() {
+    for (final base in _activeChannels) {
+      _pendingSubscriptions.add('private-$base');
+    }
   }
 
   void _handleMessage(dynamic raw) {
@@ -77,6 +131,9 @@ class ReverbService {
       final data =
           jsonDecode(decoded['data'] as String) as Map<String, dynamic>;
       _socketId = data['socket_id'] as String?;
+      _reconnectAttempt = 0;
+
+      _resubscribeActiveChannels();
 
       final pending = List<String>.from(_pendingSubscriptions);
       _pendingSubscriptions.clear();
@@ -120,6 +177,7 @@ class ReverbService {
   Future<Stream<Map<String, dynamic>>> listenToPrivateChannel(
       String channelBaseName) async {
     final fullChannelName = 'private-$channelBaseName';
+    _activeChannels.add(channelBaseName);
 
     _channelControllers[fullChannelName] ??=
         StreamController<Map<String, dynamic>>.broadcast();
@@ -187,6 +245,7 @@ class ReverbService {
 
   void unsubscribe(String channelBaseName) {
     final fullChannelName = 'private-$channelBaseName';
+    _activeChannels.remove(channelBaseName);
     _channel?.sink.add(jsonEncode({
       'event': 'pusher:unsubscribe',
       'data': {'channel': fullChannelName},
@@ -195,10 +254,19 @@ class ReverbService {
     _channelControllers.remove(fullChannelName);
   }
 
+  /// Explicit disconnect (e.g. logout) — unlike a dropped connection, this
+  /// must NOT trigger the automatic reconnect.
   void disconnect() {
+    _explicitlyDisconnected = true;
+    _reconnectTimer?.cancel();
+    _reconnectAttempt = 0;
+    _activeChannels.clear();
+    _pendingSubscriptions.clear();
+
     _channel?.sink.close();
     _channel = null;
     _connected = false;
+    _connecting = false;
     _socketId = null;
     for (final controller in _channelControllers.values) {
       controller.close();

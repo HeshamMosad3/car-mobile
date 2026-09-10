@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- Android 13+ requires this to be declared AND granted at runtime for any
+         notification (local or FCM) to display. See FcmService's permission request. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!--  configuration url_launcher -->
     <queries>
         <!-- To open phone's dialer app -->
@@ -58,15 +61,11 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- FCM -->
-            <meta-data
-                android:name="com.google.firebase.messaging.default_notification_channel_id"
-                android:value="high_importance_channel" />
             <intent-filter>
                 <action android:name="FLUTTER_NOTIFICATION_CLICK" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            
+
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
@@ -76,6 +75,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB7WvJHIW8rwl2r_ghBdZra5TgqBqw4VS0" />
+        <!-- FCM reads this only from <application> scope — it was previously
+             nested inside <activity>, where it has no effect. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="high_importance_channel" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

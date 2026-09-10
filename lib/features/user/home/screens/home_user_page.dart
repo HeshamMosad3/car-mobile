@@ -1,5 +1,4 @@
 
-import 'package:car_mediator_mobile/core/data_sources/remote/firebase/fcm_service.dart';
 import 'package:car_mediator_mobile/core/ui_models/nav_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +43,6 @@ class _HomeUserPageState extends State<HomeUserPage> {
   @override
   void initState() {
     super.initState();
-    FcmService.onMessage();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userId = context.read<AuthProvider>().currentUseModel?.id;
         if (userId != null) {

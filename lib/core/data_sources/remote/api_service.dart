@@ -6,6 +6,7 @@ import '../../utils/context_utils.dart';
 import '../local/secure_storage.dart';
 import 'api_client.dart';
 import 'api_path.dart';
+import 'reverb_service.dart';
 
 // to manage dependencies
 class AppDependencies {
@@ -52,6 +53,15 @@ class ApiService {
 
       headers['Authorization'] = await _dependencies.getToken();
     }
+
+    // Lets the backend's ->toOthers() exclude this device's own echo of a
+    // broadcast it just triggered (e.g. sending a chat message) — see
+    // NewMessage::class and ReverbService.socketId.
+    final socketId = ReverbService.instance.socketId;
+    if (socketId != null) {
+      headers['X-Socket-ID'] = socketId;
+    }
+
     return headers;
   }
   /// Closes the underlying HTTP client and cleans up resources

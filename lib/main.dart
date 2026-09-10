@@ -5,7 +5,6 @@ import 'package:car_mediator_mobile/core/data_sources/remote/api_service.dart';
 import 'package:car_mediator_mobile/core/providers/auth_provider.dart';
 import 'package:car_mediator_mobile/core/services/shared/auth_service.dart';
 import 'package:car_mediator_mobile/core/services/shared/common_service.dart';
-import 'package:car_mediator_mobile/features/shared/chat/screens/chat_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +17,8 @@ import 'core/data_sources/local/cache_helper.dart';
 import 'core/data_sources/local/secure_storage.dart';
 import 'core/data_sources/remote/firebase/fcm_service.dart';
 import 'core/localization/app_language_provider.dart';
+import 'core/routing/app_route_observer.dart';
+import 'core/routing/notification_router.dart';
 import 'core/providers/bottom_navigation_bar_provider.dart';
 import 'core/providers/cache_provider.dart';
 import 'core/providers/common_provider.dart';
@@ -53,7 +54,6 @@ import 'core/theme/app_theme.dart';
 import 'core/utils/custom_time_ago.dart';
 import 'features/shared/cache/init_cache.dart';
 import 'l10n/app_localizations.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 // Use GlobalKey to access BuildContext safely outside the widget tree
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -76,44 +76,14 @@ Future<void> main() async {
       initializeDateFormatting(),
     ]);
 
-    // final String? token = await SecureStorage.getToken();
-    // print(token);
     final apiService = ApiService();
     await FcmService.initializeFirebase();
     timeago.setLocaleMessages('ar', CustomTimeAgo());
 
-    // final channel = WebSocketChannel.connect(
-    //   Uri.parse('ws://192.168.1.34:8080/app/abc123xyz'),
-    // );
-    //
-    // channel.sink.add(
-    //     jsonEncode({
-    //       "event": "pusher:subscribe",
-    //       "data": {
-    //         "channel": "chat"
-    //       }
-    //     })
-    // );
-    //
-    // channel.stream.listen((data) {
-    //   final decoded = jsonDecode(data);
-    //   print("New message channel.stream.listen ----------------");
-    //
-    //   if (decoded["event"] == "message.sent") {
-    //     print("New message: ${decoded['data']}");
-    //   }
-    // });
-
-    // إرسال رسالة عبر API Laravel
-    // Future sendMessage(String user, String message) async {
-    // await http.post(
-    // Uri.parse('http://127.0.0.1:8000/api/message'),
-    // body: {
-    // 'user': user,
-    // 'message': message,
-    // },
-    // );
-    // }
+    // Cold-start deep link: read it now (before the navigator exists) but
+    // only hand it to the router — NotificationRouter.setAppReady() decides
+    // when it's actually safe to navigate, so this can never race InitCache.
+    NotificationRouter.setPending(await FcmService.readInitialMessage());
 
     String? userRole = await SecureStorage.getUserRole();
     runApp( MyApp(appLanguage: _appLanguage, apiService: apiService, userRole: userRole,));
@@ -169,6 +139,7 @@ class MyApp extends StatelessWidget {
             },
             child:MaterialApp(
               navigatorKey: navigatorKey,
+              navigatorObservers: [AppRouteObserver.instance],
               title: 'وسيط سيارات',
               debugShowCheckedModeBanner: false,
               locale: model.appLocal,

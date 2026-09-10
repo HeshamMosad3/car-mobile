@@ -31,10 +31,17 @@ class NotificationBadgeProvider extends ChangeNotifier {
 
     final stream = await ReverbService.instance.listenToPrivateChannel('user.$userId');
     _realtimeSubscription = stream.listen((message) {
-      // The event just tells us "something changed" — we re-fetch the
-      // authoritative counts from the API rather than trusting the event
-      // payload shape, since it's simpler and avoids format mismatches.
-      if (message['event'] == 'notification.badge.updated') {
+      if (message['event'] != 'notification.badge.updated') return;
+
+      // The event now carries the real counts (see NotificationBadgeBroadcaster
+      // server-side), so apply them directly — falling back to a re-fetch
+      // only if they're absent, e.g. against an older backend.
+      final data = message['data'];
+      final unreadCounts = data is Map ? data['unread_counts'] : null;
+      if (unreadCounts is Map && unreadCounts.isNotEmpty) {
+        _parseRawData(Map<String, dynamic>.from(unreadCounts));
+        notifyListeners();
+      } else {
         fetchUnreadCounts();
       }
     });

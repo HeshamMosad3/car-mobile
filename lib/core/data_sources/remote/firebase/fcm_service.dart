@@ -1,39 +1,97 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:car_mediator_mobile/core/helpers/helpers.dart';
 import 'package:car_mediator_mobile/core/utils/connection_utils.dart';
 import 'package:car_mediator_mobile/core/utils/context_utils.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../features/shared/notifications/screens/notifications_screen.dart';
-import '../../../../features/shared/chat/screens/chat_screen.dart';
-import '../../../../features/user/my_requests/screens/responses_my_request_screen.dart';
-import '../../../../features/vendor/new_requests/screens/details_new_request_screen.dart';
-import '../../../../widgets/components.dart';
-import '../../../providers/auth_provider.dart';
+import '../../../models/notification_payload.dart';
 import '../../../providers/conversation_provider.dart';
 import '../../../providers/notification_badge_provider.dart';
+import '../../../routing/notification_router.dart';
+import '../../../services/shared/device_registration_service.dart';
 import '../../local/secure_storage.dart';
 
+/// Top-level, NOT a class method: Android runs this in a separate isolate
+/// with no access to any state from the main isolate, and only a genuine
+/// top-level `@pragma('vm:entry-point')` function survives release-mode AOT
+/// tree-shaking as a valid entry point — a static class method silently
+/// never runs there.
+@pragma('vm:entry-point')
+Future<void> fcmBackgroundMessageHandler(RemoteMessage message) async {
+  // Required: this isolate has no Firebase state of its own.
+  await Firebase.initializeApp();
+
+  final payload = NotificationPayload.fromRemoteMessage(message);
+
+  // Correct-user guard inside the isolate too: suppress rendering a push
+  // addressed to a different account than the one signed in on this device.
+  final myId = await SecureStorage.getCurrentUserId();
+  if (payload.recipientId != null && myId != null && payload.recipientId != myId) {
+    return;
+  }
+
+  if (message.notification != null) {
+    SecureStorage.addNotificationCount();
+  }
+
+  // Only render locally when the server did NOT send a `notification` block
+  // — otherwise the FCM SDK already displayed it, and rendering again would
+  // double the tray entry.
+  if (message.notification == null && payload.title.isNotEmpty) {
+    await FcmService._showLocalNotification(payload);
+  }
+}
 
 class FcmService {
   static FirebaseMessaging? _firebaseMessaging;
   static FirebaseMessaging get firebaseMessaging => FcmService._firebaseMessaging ?? FirebaseMessaging.instance;
 
-  static Future<void> initializeFirebase() async {
+  static StreamSubscription<RemoteMessage>? _onMessageSub;
+  static StreamSubscription<RemoteMessage>? _onOpenedSub;
+  static StreamSubscription<String>? _onTokenRefreshSub;
 
-    try{
+  static bool _initialized = false;
+
+  /// Call ONCE from main(), before runApp. Registering listeners more than
+  /// once (e.g. from a screen's initState) used to create duplicate
+  /// FirebaseMessaging.onMessage subscriptions — this guard makes that
+  /// impossible regardless of how many times initialize() is called.
+  static Future<void> initializeFirebase() async {
+    if (_initialized) return;
+    _initialized = true;
+
+    try {
       FcmService._firebaseMessaging = FirebaseMessaging.instance;
+
       await FcmService.initializeLocalNotifications();
-      await FcmService.onBackgroundMsg();
-      FcmService.subscribeToTopic('all');
-    }catch(e){
-      print(e);
+
+      FirebaseMessaging.onBackgroundMessage(fcmBackgroundMessageHandler);
+
+      _onMessageSub = FirebaseMessaging.onMessage.listen(_onForegroundMessage);
+      _onOpenedSub = FirebaseMessaging.onMessageOpenedApp.listen(_onOpenedFromBackground);
+      _onTokenRefreshSub = FirebaseMessaging.instance.onTokenRefresh.listen(_onTokenRefresh);
+    } catch (e) {
+      log('[FcmService] initializeFirebase error: $e');
     }
+  }
+
+  /// Cancels every listener this service registered — call on logout so a
+  /// subsequent login doesn't end up with stacked subscriptions and so a
+  /// signed-out device stops reacting to messages entirely.
+  static Future<void> disposeListeners() async {
+    await _onMessageSub?.cancel();
+    await _onOpenedSub?.cancel();
+    await _onTokenRefreshSub?.cancel();
+    _onMessageSub = null;
+    _onOpenedSub = null;
+    _onTokenRefreshSub = null;
+    _initialized = false;
   }
 
   static Future<String?> getDeviceTokenFCM() async {
@@ -47,31 +105,62 @@ class FcmService {
     }
   }
 
-
   static void subscribeToTopic(String topic) async {
-    if(await ConnectionUtils.hasInternetConnection())
+    if (await ConnectionUtils.hasInternetConnection())
       await FcmService.firebaseMessaging.subscribeToTopic(topic);
   }
 
+  static void unsubscribeFromTopic(String topic) async {
+    try {
+      await FcmService.firebaseMessaging.unsubscribeFromTopic(topic);
+    } catch (_) {}
+  }
+
   static FlutterLocalNotificationsPlugin localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  static const AndroidNotificationChannel _highImportanceChannel = AndroidNotificationChannel(
+    'high_importance_channel',
+    'إشعارات هامة',
+    description: 'الإشعارات الأساسية للتطبيق',
+    importance: Importance.max,
+  );
 
   static Future<void> initializeLocalNotifications() async {
     final InitializationSettings _initSettings = InitializationSettings(
         android: AndroidInitializationSettings("@mipmap/ic_launcher"),
         iOS: DarwinInitializationSettings()
     );
-    /// on did receive notification response = for when app is opened via notification while in foreground on android
     await FcmService.localNotificationsPlugin.initialize(_initSettings, onDidReceiveNotificationResponse: FcmService.onTapNotification);
-    /// need this for ios foregournd notification
-    ///Configure notification permissions
-    ///IOS
+
+    // The channel FCM's manifest meta-data points at must actually exist —
+    // it used to only come into being implicitly the first time a local
+    // notification was shown, which is too late for background/terminated
+    // FCM-SDK-rendered pushes.
+    await FcmService.localNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(_highImportanceChannel);
+
     await FcmService.firebaseMessaging.setForegroundNotificationPresentationOptions(
-      alert: true, // Required to display a heads up notification
+      alert: true,
       badge: true,
       sound: true,
     );
-    /// for android
-    NotificationSettings settings = await FcmService.firebaseMessaging.requestPermission(
+  }
+
+  /// Requests notification permission. Call this AFTER login, not at cold
+  /// start — Android 13+ gives one shot at the POST_NOTIFICATIONS prompt, so
+  /// asking before the user has any reason to care just burns it.
+  static Future<void> requestPermissions() async {
+    if (Platform.isAndroid) {
+      await FcmService.localNotificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestNotificationsPermission();
+    }
+
+    // iOS (and web) authorization — FirebaseMessaging.requestPermission()
+    // does NOT raise Android's runtime POST_NOTIFICATIONS prompt, so it's
+    // additive here, not a replacement for the call above.
+    final settings = await FcmService.firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -82,155 +171,92 @@ class FcmService {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      log('User granted permission');
     } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      log('User granted provisional permission');
     } else {
-      print('User declined or has not accepted permission');
+      log('User declined or has not accepted permission');
     }
   }
 
-  static NotificationDetails platformChannelSpecifics = NotificationDetails(
-    android: AndroidNotificationDetails(
-      "high_importance_channel", "High Importance Notifications", priority: Priority.max, importance: Importance.max,
-    ),
+  static NotificationDetails get _platformChannelSpecifics => NotificationDetails(
+        android: AndroidNotificationDetails(
+          _highImportanceChannel.id,
+          _highImportanceChannel.name,
+          channelDescription: _highImportanceChannel.description,
+          priority: Priority.max,
+          importance: Importance.max,
+        ),
+      );
 
-  );
+  static Future<void> _showLocalNotification(NotificationPayload payload) async {
+    // Deterministic per-thread id: different destinations (e.g. two
+    // conversations) get separate tray entries, while repeat notifications
+    // for the SAME destination collapse into one instead of stacking —
+    // fixes the previous hardcoded id 0, which made every notification
+    // overwrite the last regardless of what it was about.
+    final id = payload.routeKey.hashCode & 0x7fffffff;
 
-  static Future<void> backgroundHandler(RemoteMessage message) async {
-    if (message.notification != null){
-      log("--------FirebaseMessaging.onBackgroundMessage.listen----------");
-      log('title---- ${message.notification?.title}');
-      log('body---- ${message.notification?.body}');
-      SecureStorage.addNotificationCount();
-    }
-
-    // if(message.data != null){
-    //   if(message.data['type_notification'] == 'all'){
-    //     print('type_notification---- ${message.data['type_notification']}');
-    //     print('title---- ${message.notification?.title}');
-    //     print('body---- ${message.notification?.body}');
-    //     GlobalNavigator.dialogAdvancedGlobal(title: message.notification?.title ?? '',
-    //         description: message.notification?.body ?? 'مرحباً',
-    //         iconPath: AssetsPath.notification,
-    //         onTabCancel: (){
-    //         });
-    //   }
-    //
-    // }
-
+    await FcmService.localNotificationsPlugin.show(
+      id,
+      payload.title.isEmpty ? null : payload.title,
+      payload.body.isEmpty ? null : payload.body,
+      FcmService._platformChannelSpecifics,
+      payload: payload.toJsonString(),
+    );
   }
 
-  static void _handleNotificationNavigation(Map<String, dynamic>? data) {
-    if (data == null) return;
-    print("---_handleNotificationNavigation--- payload: $data");
-    final _cxt = ContextUtils.globalContext;
-    if (_cxt == null) return;
+  static Future<void> _onTokenRefresh(String token) async {
+    log('[FcmService] token refreshed');
+    // Only meaningful if someone is signed in; DeviceRegistrationService
+    // itself also no-ops harmlessly if the register call 401s.
+    await DeviceRegistrationService.instance.registerCurrentDevice(force: true);
+  }
 
-    try {
-      final category = data['category'];
-
-      if (category == 'conversations') {
-        final conversationId = data['conversation_id'];
-        if (conversationId != null) {
-          navigationPush(_cxt, ChatScreen(
-            conversationId: int.tryParse(conversationId.toString()) ?? 0,
-            requestId: int.tryParse(data['request_id']?.toString() ?? '0') ?? 0,
-            responseId: int.tryParse(data['response_id']?.toString() ?? '0') ?? 0,
-            vendorId: int.tryParse(data['vendor_id']?.toString() ?? '0') ?? 0,
-            receiverName: data['receiver_name']?.toString() ?? 'المحادثة',
-            receiverLogo: '',
-            myUserId: _cxt.read<AuthProvider>().currentUseModel?.id ?? 0,
-          ));
-          return;
-        }
-      } else if (category == 'company_responses') {
-        final targetId = data['target_id'];
-        if (targetId != null) {
-          navigationPush(_cxt, ResponsesMyRequestScreen(
-            requestId: int.tryParse(targetId.toString()) ?? 0,
-          ));
-          return;
-        }
-      } else if (category == 'customer_requests') {
-        final targetId = data['target_id'];
-        if (targetId != null) {
-          navigationPush(_cxt, DetailsNewRequestScreen(
-            requestId: int.tryParse(targetId.toString()) ?? 0,
-          ));
-          return;
-        }
-      }
-
-      // Default fallback
-      navigationPush(_cxt, NotificationsScreen());
-    } catch (e) {
-      log("Error navigating from notification: $e");
-      navigationPush(_cxt, NotificationsScreen());
-    }
+  static void _onOpenedFromBackground(RemoteMessage message) {
+    log('[FcmService] onMessageOpenedApp');
+    NotificationRouter.handle(NotificationPayload.fromRemoteMessage(message));
   }
 
   static Future<void> onTapNotification(NotificationResponse? response) async {
-    if (response?.payload == null) return;
-    print('---onTapNotification--payload-------${response?.payload}---------');
-    try {
-      final Map<String, dynamic> data = jsonDecode(response!.payload!);
-      _handleNotificationNavigation(data);
-    } catch (e) {
-      final _cxt = ContextUtils.globalContext;
-      if (_cxt != null) navigationPush(_cxt, NotificationsScreen());
+    final payload = NotificationPayload.fromJsonString(response?.payload);
+    if (payload == null) return;
+    await NotificationRouter.handle(payload);
+  }
+
+  /// Reads getInitialMessage() — must be called once from main(), before
+  /// runApp, and its result handed to NotificationRouter.setPending(). Kept
+  /// here only as the read; NotificationRouter owns the "when is it safe to
+  /// navigate" decision so cold start doesn't race InitCache.
+  static Future<NotificationPayload?> readInitialMessage() async {
+    final message = await FirebaseMessaging.instance.getInitialMessage();
+    if (message == null) return null;
+    return NotificationPayload.fromRemoteMessage(message);
+  }
+
+  static Future<void> _onForegroundMessage(RemoteMessage message) async {
+    final payload = NotificationPayload.fromRemoteMessage(message);
+
+    final ctx = ContextUtils.globalContext;
+    if (ctx != null) {
+      try {
+        ctx.read<NotificationBadgeProvider>().fetchUnreadCounts();
+        ctx.read<ConversationProvider>().onRealtimeMessageReceived(message.data);
+      } catch (e) {
+        log('Error updating providers on foreground FCM message: $e');
+      }
+    }
+
+    if (message.notification != null) {
+      SecureStorage.addNotificationCount();
+    }
+
+    // iOS already displays the `notification` block via
+    // setForegroundNotificationPresentationOptions(alert: true) above —
+    // calling show() as well would double-display it there. Android has no
+    // such SDK-level foreground display, so it still needs the explicit show().
+    if (Platform.isAndroid && payload.title.isNotEmpty) {
+      await FcmService._showLocalNotification(payload);
     }
   }
-
-  static Future<void> initialMessage() async {
-    //When App is Terminated
-    var message = await FirebaseMessaging.instance.getInitialMessage();
-    if (message != null) {
-      print("----FirebaseMessaging----initalMessage------${message.toString()}----");
-      _handleNotificationNavigation(message.data);
-    }
-  }
-
-  static Future<void> onMessage_OpenedApp() async {
-    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
-      print("--------FirebaseMessaging.onMessageOpenedApp.listen----------");
-      _handleNotificationNavigation(message.data);
-    });
-  }
-
-  static Future<void> onBackgroundMsg() async {
-    //background message listener
-    FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  }
-
-  // for receiving message when app is in foreground : for android
-  static Future<void> onMessage() async {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      // if this is available when Platform.isIOS, you'll receive the notification twice
-      print("message recieved----onMessage--foreground messages-----");
-      final cxt = ContextUtils.globalContext;
-      if (cxt != null) {
-        try {
-          cxt.read<NotificationBadgeProvider>().fetchUnreadCounts();
-          cxt.read<ConversationProvider>().onRealtimeMessageReceived(message.data);
-        } catch (e) {
-          log('Error updating NotificationBadgeProvider on FCM: $e');
-        }
-      }
-
-      if(message.notification != null){
-        print('title---- ${message.notification?.title}');
-        print('body---- ${message.notification?.body}');
-
-        SecureStorage.addNotificationCount();
-
-        await FcmService.localNotificationsPlugin.show(
-          0, message.notification!.title, message.notification!.body, FcmService.platformChannelSpecifics,
-          payload: jsonEncode(message.data),
-        );
-      }
-    });
-  }
-
 }
-

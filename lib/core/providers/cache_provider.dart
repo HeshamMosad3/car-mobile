@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:car_mediator_mobile/core/errors/api_exceptions.dart';
 import 'package:car_mediator_mobile/core/helpers/toast_helper.dart';
 import 'package:car_mediator_mobile/core/providers/auth_provider.dart';
@@ -15,7 +17,9 @@ import '../../models/brand_car_model.dart';
 import '../../models/category_has_brand_field_model.dart';
 import '../../models/category_model.dart';
 import '../../models/custom_field_model.dart';
+import '../routing/notification_router.dart';
 import '../services/shared/cache_service.dart';
+import '../services/shared/device_registration_service.dart';
 import '../helpers/helpers.dart';
 import '../utils/connection_utils.dart';
 
@@ -49,7 +53,14 @@ class CacheProvider extends ChangeNotifier {
     _toggleLoading();
 
     try {
-      await ContextUtils.globalContext?.read<AuthProvider>().getCurrentUser();
+      final authProvider = ContextUtils.globalContext?.read<AuthProvider>();
+      await authProvider?.getCurrentUser();
+      // App-start repair path: if a device was signed in and its FCM token
+      // rotated while the app was closed, this is what re-syncs it — the
+      // only other registration point is right after login.
+      if (authProvider?.currentUseModel?.id != null) {
+        unawaited(DeviceRegistrationService.instance.registerCurrentDevice());
+      }
       if(! await ConnectionUtils.hasInternetConnection()){
         ToastHelper.showError('الرجاء التحقق من اتصالك بالإنترنت.');
         await _loadDataFromCache();
@@ -76,6 +87,11 @@ class CacheProvider extends ChangeNotifier {
     } else{
       navigationPush(ContextUtils.globalContext, const HomeUserPage());
     }
+    // Auth + providers are ready and home is on the stack now — the exact
+    // point where a cold-start deep link (captured in main() before the
+    // navigator even existed) can safely be replayed without racing this
+    // splash screen.
+    NotificationRouter.setAppReady();
   }
 
 
