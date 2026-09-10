@@ -48,7 +48,15 @@ Future<void> fcmBackgroundMessageHandler(RemoteMessage message) async {
   }
 }
 
+@pragma('vm:entry-point')
 class FcmService {
+  /// Backwards-compatibility entry point for Android isolates that cached the
+  /// old callback handle before the top-level handler migration.
+  @pragma('vm:entry-point')
+  static Future<void> backgroundHandler(RemoteMessage message) async {
+    await fcmBackgroundMessageHandler(message);
+  }
+
   static FirebaseMessaging? _firebaseMessaging;
   static FirebaseMessaging get firebaseMessaging => FcmService._firebaseMessaging ?? FirebaseMessaging.instance;
 
@@ -218,6 +226,7 @@ class FcmService {
     NotificationRouter.handle(NotificationPayload.fromRemoteMessage(message));
   }
 
+  @pragma('vm:entry-point')
   static Future<void> onTapNotification(NotificationResponse? response) async {
     final payload = NotificationPayload.fromJsonString(response?.payload);
     if (payload == null) return;
