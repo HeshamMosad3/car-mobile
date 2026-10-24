@@ -7,6 +7,7 @@ class ApiEndpoints {
 
    static const String createConversation = 'chat/conversations/create-conversation';
    static const String sendMessageChat = 'chat/messages/send';
+   static String conversationStatus(int conversationId) => 'chat/conversations/$conversationId/status';
    static const String userConversations = 'chat/conversations/user-conversations';
    static const String vendorConversations = 'chat/conversations/vendor-conversations';
 

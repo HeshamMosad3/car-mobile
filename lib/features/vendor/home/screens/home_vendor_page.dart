@@ -120,11 +120,11 @@ class _HomeVendorPageState extends State<HomeVendorPage> {
                 Expanded(
                   flex: 1,
                   child: DashboardItemHome(
-                    title: 'إعدادات الحساب',
-                    icon: const Icon(Icons.business, color: AppColor.primaryColor, size: 32),
-                    subTitle: 'حسابي',
+                    title: 'سداد العمولة',
+                    icon: const Icon(Icons.monetization_on, color: AppColor.primaryColor, size: 32),
+                    subTitle: 'عمولة التطبيق',
                     onTap: (){
-                      navigationPush(context, const ProfileVendorScreen());
+                      navigationPush(context, const AppCommissionScreen());
                     },
                   ),
                 ),
@@ -138,11 +138,11 @@ class _HomeVendorPageState extends State<HomeVendorPage> {
                 Expanded(
                   flex: 1,
                   child: DashboardItemHome(
-                    title: 'سداد العمولة',
-                    subTitle: 'عمولة التطبيق',
-                    icon: const Icon(Icons.monetization_on, color: AppColor.primaryColor, size: 32),
+                    title: 'إعدادات الحساب',
+                    subTitle: 'حسابي',
+                    icon: const Icon(Icons.business, color: AppColor.primaryColor, size: 32),
                     onTap: (){
-                      navigationPush(context, const AppCommissionScreen());
+                      navigationPush(context, const ProfileVendorScreen());
                     },
                   ),
                 ),

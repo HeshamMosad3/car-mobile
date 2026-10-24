@@ -47,6 +47,18 @@ class ConversationService extends BaseService {
     }
   }
 
+  /// Whether the customer canceled the request this conversation belongs to.
+  /// Fails open (false) so a status hiccup never locks a vendor out of a live chat.
+  Future<bool> isRequestCanceled({required int conversationId}) async {
+    try {
+      final response = await _apiService.getData(ApiEndpoints.conversationStatus(conversationId));
+      return response?['result']?['is_request_canceled'] == true;
+    } catch (e) {
+      debugPrint('Failed to load conversation status: $e');
+      return false;
+    }
+  }
+
   Future<List<Message>> fetchMessages({required int conversationId, required int lastMessageId}) async {
     try {
       final response =  await _apiService.getData("chat/messages/$conversationId?last_message_id=$lastMessageId");

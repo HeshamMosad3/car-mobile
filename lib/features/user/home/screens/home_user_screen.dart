@@ -1,6 +1,11 @@
 
 import 'package:flutter/material.dart';
+import '../../../../core/utils/constants/colors_constants.dart';
+import '../../../../core/utils/constants/constants.dart';
+import '../../../../core/utils/size_config.dart';
 import '../../../../models/faq_item_model.dart';
+import '../../../../widgets/components.dart';
+import '../../app_commission/screens/user_commission_screen.dart';
 import '../../../../widgets/banners/banner_widget.dart';
 import '../../../../widgets/faq_item_widget.dart';
 import '../../../../widgets/section_label_widget.dart';
@@ -58,7 +63,26 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
         children: [
           const SizedBox(height: 2,),
           BannerWidget(),
-          const SectionLabelWidget(label: 'الأقسام',),
+          Row(
+            children: [
+              const Expanded(child: SectionLabelWidget(label: 'الأقسام',)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: paddingHorizontalConst),
+                child: Material(
+                  color: AppColor.primaryColor,
+                  borderRadius: BorderRadius.circular(8),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () => navigationPush(context, const UserCommissionScreen()),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      child: Text('سداد العمولة', style: TextStyle(color: Colors.white, fontSize: SizeConfig.widthResponsive(0.035), fontWeight: FontWeight.w600,),),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 8,),
           CategoriesGridviewWidget(),
           const SizedBox(height: 8,),

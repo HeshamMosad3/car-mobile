@@ -83,6 +83,7 @@ class _ChatScreenState extends State<ChatScreen> {
       final prov = Provider.of<ConversationProvider>(context, listen: false);
       prov.initProvider();
       prov.setActiveConversation(widget.conversationId);
+      prov.loadConversationStatus(conversationId: widget.conversationId);
       await prov.loadInitialMessages(conversationId: widget.conversationId);
       await _listenForRealtimeMessages();
     });
@@ -210,7 +211,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
               },
             ),
-            if(widget.isVendor)
+            if(widget.isVendor && !context.watch<ConversationProvider>().isRequestCanceled)
             IconButton(onPressed: (){
               showModalBottomSheet(
                 context: context,
@@ -397,6 +398,18 @@ class _ChatScreenState extends State<ChatScreen> {
                   },
                 ),
               ),
+              if (widget.isVendor && provider.isRequestCanceled)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  color: Colors.white,
+                  child: Text(
+                    'لا يمكن إرسال رسالة لأن العميل ألغى الطلب',
+                    textAlign: TextAlign.center,
+                    style: txtLightSemiBold035,
+                  ),
+                )
+              else
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Row(

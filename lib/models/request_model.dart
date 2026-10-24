@@ -119,7 +119,7 @@ class RequestModel {
       userName: json?['user_name'] ?? '',
       userPhone: json?['user_phone'] ?? '',
       userLogo: json?['user_logo'] ?? '',
-      priceResponse: double.parse(json?['price_response'] ?? '0.0'),
+      priceResponse: double.tryParse(json?['price_response']?.toString() ?? '') ?? 0.0,
       noteResponse: json?['note_response'] ?? '',
       warrantyResponse: json?['warranty_response'] ?? '',
       countResponse: json?['count_response'] ?? 0,

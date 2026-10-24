@@ -213,9 +213,17 @@ class ConversationProvider extends ChangeNotifier {
     }
   }
 
+  bool isRequestCanceled = false;
+
+  Future<void> loadConversationStatus({required int conversationId}) async {
+    isRequestCanceled = await _conversationService.isRequestCanceled(conversationId: conversationId);
+    notifyListeners();
+  }
+
   void initProvider(){
     messagesList = [];
     lastMessageId = 0;
+    isRequestCanceled = false;
   }
 
 }

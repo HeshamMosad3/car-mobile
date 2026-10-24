@@ -139,7 +139,7 @@ class ResponseRequestModel {
       unreadMessagesCount: json?['unread_messages_count'] ?? 0,
       userLogo: json?['user_logo'] ?? '',
       vendorLogo: json?['vendor_logo'] ?? '',
-      priceResponse: double.parse(json?['price_response'] ?? '0.0'),
+      priceResponse: double.tryParse(json?['price_response']?.toString() ?? '') ?? 0.0,
       noteResponse: json?['note_response'] ?? '',
       warrantyResponse: json?['warranty_response'] ?? '',
       phoneContact: json?['phone_contact'] ?? '',
