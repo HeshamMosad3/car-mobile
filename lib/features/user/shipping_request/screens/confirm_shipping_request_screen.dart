@@ -55,8 +55,19 @@ class _ConfirmShippingRequestScreenState
     super.initState();
     _loadSavedInfo();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ShippingProvider>(context, listen: false).loadCities();
+      final shippingProvider = Provider.of<ShippingProvider>(context, listen: false);
+      shippingProvider.loadCities();
+      _markApproved(shippingProvider);
     });
+  }
+
+  /// Opening this form is the customer's approval of the shipment: record it so the status moves
+  /// from "waiting for approval" to "waiting for data". Best effort — submitting works either way.
+  Future<void> _markApproved(ShippingProvider shippingProvider) async {
+    await shippingProvider.loadStatus(requestId: widget.requestId, responseId: widget.responseId);
+    if (shippingProvider.current?.status == 'AwaitingCustomerApproval') {
+      await shippingProvider.approve(silent: true);
+    }
   }
 
   Future<void> _loadSavedInfo() async {
@@ -247,6 +258,11 @@ class _ConfirmShippingRequestScreenState
                         'addressOriginDimensions':
                             'الاسم: ${_nameController.text.trim()} - ${_addressController.text.trim()}$mapUrl',
                         'phoneOriginDimensions': _phoneController.text.trim(),
+                        'nameDestination': _nameController.text.trim(),
+                        if (_lat != null && _lng != null) ...{
+                          'latDestination': _lat,
+                          'lngDestination': _lng,
+                        },
                       });
                     },
                   ),

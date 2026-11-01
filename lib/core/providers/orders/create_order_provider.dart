@@ -202,7 +202,12 @@ class CreateOrderProvider extends ChangeNotifier {
     try {
       final response = await _requestService.confirmShippingRequest(
           body: body);
-      if(response?.success ?? false){
+      if((response?.success ?? false) && response?.result?.flow == 'manual_quote'){
+        // The admin quotes the shipment by hand, so there's no price to confirm: the data is already
+        // with the admin and the customer is notified once a cost is set.
+        navigationPushAndRemoveUntil(context, HomeUserPage());
+        ToastHelper.showSuccess(response?.message ?? '');
+      }else if(response?.success ?? false){
         DialogUtils().showConfirmDialog(context, message: response?.message ?? '', confirm: () async {
           _toggleLoading();
           try {

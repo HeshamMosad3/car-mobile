@@ -38,6 +38,7 @@ import '../../../../widgets/custom_container_listtile_widget.dart';
 import '../../../../widgets/custom_textfield.dart';
 import '../../../../widgets/images/custom_image.dart';
 import '../../../user/shipping_request/screens/confirm_shipping_request_screen.dart';
+import '../../shipping/screens/shipping_status_screen.dart';
 import '../../../user/vendor_profile/screens/vendor_profile_screen.dart';
 import '../../../user/vendor_profile/widgets/rate_vendor_bottom_sheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -368,11 +369,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                     Text('الموافقة على طلب الشحن', style: TextStyle(color: AppColor.accentColor, fontSize: 16),),
                                     const SizedBox(height: 10,),
                                     CustomButton(
-                                      label: widget.isVendor ? 'تم إرسال طلب الشحن': 'طلب الشحن',
-                                      onTap: (){
-                                        if(!widget.isVendor)
-                                        navigationPush(context, ConfirmShippingRequestScreen(requestId: widget.requestId, responseId: widget.responseId, vendorId: widget.vendorId,));
-                                      },
+                                      label: widget.isVendor ? 'تم إرسال طلب الشحن': 'الموافقة على عملية الشحن',
+                                      onTap: _openShipping,
                                       textColor: AppColor.accentColor,
                                       primaryColor: Colors.transparent,
                                       borderColor: AppColor.accentColor ,
@@ -451,6 +449,20 @@ class _ChatScreenState extends State<ChatScreen> {
         }
       ),
     );
+  }
+
+  /// The shipping card in the chat. The customer lands on the approval form while the shipment still
+  /// needs their data; everyone else (and the customer afterwards) sees the shipment's progress.
+  Future<void> _openShipping() async {
+    final provider = context.read<ShippingProvider>();
+    await provider.loadStatus(requestId: widget.requestId, responseId: widget.responseId);
+    if (!mounted) return;
+
+    if (!widget.isVendor && (provider.current?.needsData ?? false)) {
+      navigationPush(context, ConfirmShippingRequestScreen(requestId: widget.requestId, responseId: widget.responseId, vendorId: widget.vendorId,));
+    } else {
+      navigationPush(context, ShippingStatusScreen(requestId: widget.requestId, responseId: widget.responseId, vendorId: widget.vendorId, isVendor: widget.isVendor,));
+    }
   }
 
   Future<void> onSendMessage(ConversationProvider provider, {bool isSendShippingRequest = false, String? shippingInfo}) async {
@@ -582,14 +594,30 @@ class _SendShippingInfoBottomSheetState extends State<_SendShippingInfoBottomShe
         // city will be restored after cities load via _tryRestoreCity
         _savedCityEn = saved['city_en'] ?? saved['city'] ?? '';
       });
+      return;
+    }
+
+    // Nothing saved on this device (new phone, reinstall): use the store address kept in the system.
+    final store = await Provider.of<ShippingProvider>(context, listen: false).loadStoreAddress();
+    if (store != null && mounted) {
+      setState(() {
+        _nameController.text = store.name;
+        _phoneController.text = store.phone;
+        _addressController.text = store.address;
+        _lat = store.lat;
+        _lng = store.lng;
+        _savedCityAr = store.city;
+      });
     }
   }
 
   String _savedCityEn = '';
+  // The system stores the city by its Arabic name, the device by its English one.
+  String _savedCityAr = '';
 
   void _tryRestoreCity(List<CityModel> cities) {
-    if (_selectedCity == null && _savedCityEn.isNotEmpty) {
-      final match = cities.where((c) => c.cityNameEn == _savedCityEn).toList();
+    if (_selectedCity == null && (_savedCityEn.isNotEmpty || _savedCityAr.isNotEmpty)) {
+      final match = cities.where((c) => (_savedCityEn.isNotEmpty && c.cityNameEn == _savedCityEn) || (_savedCityAr.isNotEmpty && c.cityNameAr == _savedCityAr)).toList();
       if (match.isNotEmpty) {
         _selectedCity = match.first;
       }

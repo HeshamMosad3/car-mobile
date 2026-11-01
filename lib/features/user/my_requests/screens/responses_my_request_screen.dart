@@ -14,11 +14,13 @@ import '../../../../core/utils/date_parser_utils.dart';
 import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../models/response_request_model.dart';
+import '../../../../models/shipping_status_model.dart';
 import '../../../../widgets/arrow_back_widget.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_empty_widget.dart';
 import '../../../../widgets/custom_loading.dart';
 import '../../../../widgets/images/custom_image.dart';
+import '../../../shared/shipping/screens/shipping_status_screen.dart';
 import 'details_response_my_request_screen.dart';
 
 class ResponsesMyRequestScreen extends StatefulWidget {
@@ -219,13 +221,26 @@ class _ResponseMyRequestCard extends StatelessWidget {
             ),),
             if(model.shippingRequestId != null && model.shippingRequestId != 0)
             Padding(padding: EdgeInsets.only(top: 12),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('طلب الشحن : ', style: TextStyle(fontSize: SizeConfig.widthResponsive(0.04), color: AppColor.greyColor, fontWeight: FontWeight.w500),),
-                  const SizedBox(width: 5,),
-                  Expanded(child: Text('${model.shippingRequestStatus == StatusShippingRequestEnum.Pending.name ? 'قيد المعالجة' : 'تم الشحن'}', style: txtMedium04,),)
-                ],
+              child: InkWell(
+                onTap: () => navigationPush(context, ShippingStatusScreen(
+                  requestId: model.requestId,
+                  responseId: model.responseId,
+                  vendorId: model.vendorId,
+                )),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('طلب الشحن : ', style: TextStyle(fontSize: SizeConfig.widthResponsive(0.04), color: AppColor.greyColor, fontWeight: FontWeight.w500),),
+                    const SizedBox(width: 5,),
+                    // Builds that predate the new statuses only get the legacy field.
+                    Expanded(child: Text(
+                      model.shippingStatus.isNotEmpty
+                          ? shippingStatusLabel(model.shippingStatus)
+                          : (model.shippingRequestStatus == StatusShippingRequestEnum.Pending.name ? 'قيد المعالجة' : 'تم الشحن'),
+                      style: txtMedium04,),),
+                    const Icon(Icons.arrow_forward_ios, size: 14, color: AppColor.primaryColor),
+                  ],
+                ),
               ),),
             const SizedBox(height: 10,),
             CustomButton(

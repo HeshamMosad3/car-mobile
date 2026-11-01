@@ -23,12 +23,15 @@ class Result {
   final int currentPage ;
   final int lastPage ;
   final int shippingRequestId ;
+  /// 'manual_quote' when the server priced nothing and the admin will quote the shipment by hand.
+  final String flow;
 
   Result({
     this.requestModelList = const [],
     this.currentPage = 1,
     this.lastPage = 1,
     this.shippingRequestId = 0,
+    this.flow = '',
   });
 
   factory Result.fromJson(Map<String, dynamic>? json) {
@@ -36,6 +39,7 @@ class Result {
       currentPage: json?['current_page'] ?? 1,
       lastPage: json?['last_page'] ?? 1,
       shippingRequestId: json?['shippingRequestId'] ?? 0,
+      flow: json?['flow'] ?? '',
       requestModelList: _parseRequestResult(json?['data']),
     );
   }

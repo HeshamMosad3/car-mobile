@@ -75,6 +75,8 @@ class ResponseRequestModel {
   final bool isHidePhoneContact;
   final int shippingRequestId;
   final String shippingRequestStatus;
+  /// The real shipment status; `shippingRequestStatus` is folded to the legacy three values for old builds.
+  final String shippingStatus;
 
   const ResponseRequestModel({
     this.requestId = 0,
@@ -105,6 +107,7 @@ class ResponseRequestModel {
     this.vendorMemberSince = '',
     this.shippingRequestId = 0,
     this.shippingRequestStatus = '',
+    this.shippingStatus = '',
   });
 
   factory ResponseRequestModel.fromJson(Map<String, dynamic>? json) {
@@ -146,6 +149,7 @@ class ResponseRequestModel {
       isHidePhoneContact: Helper.isBoolean(json?['is_hide_phone_contact']),
       shippingRequestId: json?['shipping_request_id'] ?? 0,
       shippingRequestStatus: json?['shipping_request_status'] ?? '',
+      shippingStatus: json?['shipping_status'] ?? '',
     );
   }
 }
