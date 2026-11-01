@@ -34,7 +34,7 @@ class _AvailabilityRequestCardSelectorWidgetState extends State<AvailabilityRequ
       child: GestureDetector(
         onTap: () => _select(value),
         child: AnimatedContainer(
-          height: SizeConfig.heightResponsive(0.14),
+          constraints: BoxConstraints(minHeight: SizeConfig.heightResponsive(0.14)),
           duration: const Duration(milliseconds: 200),
           margin: const EdgeInsets.symmetric(horizontal: 6.0),
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
@@ -69,12 +69,15 @@ class _AvailabilityRequestCardSelectorWidgetState extends State<AvailabilityRequ
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        _buildOption(ResponseRequestAvailabilityEnum.available, Icons.check, 'متوفر', Colors.green),
-        _buildOption(ResponseRequestAvailabilityEnum.available_with_difference, Icons.edit, 'متوفر مع اختلاف', Colors.orange),
-        // _buildOption(ResponseRequestAvailabilityEnum.unavailable, Icons.close, 'غير متوفر', Colors.red),
-      ],
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildOption(ResponseRequestAvailabilityEnum.available, Icons.check, 'متوفر', Colors.green),
+          _buildOption(ResponseRequestAvailabilityEnum.available_with_difference, Icons.edit, 'متوفر مع اختلاف', Colors.orange),
+          // _buildOption(ResponseRequestAvailabilityEnum.unavailable, Icons.close, 'غير متوفر', Colors.red),
+        ],
+      ),
     );
   }
 }

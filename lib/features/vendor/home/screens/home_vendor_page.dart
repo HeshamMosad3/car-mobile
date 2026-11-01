@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/providers/auth_provider.dart';
 import '../../../../core/providers/notification_badge_provider.dart';
+import '../../../../core/utils/constants/constants.dart';
 import '../../../../core/utils/dialogUtils.dart';
 import '../../../../core/utils/size_config.dart';
 import '../../../../widgets/banners/banner_widget.dart';
@@ -59,6 +60,25 @@ class _HomeVendorPageState extends State<HomeVendorPage> {
            SizedBox(
             height: SizeConfig.heightResponsive(0.08),
           ),
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: paddingHorizontalConst),
+              child: Material(
+                color: AppColor.primaryColor,
+                borderRadius: BorderRadius.circular(8),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () => navigationPush(context, const AppCommissionScreen()),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    child: Text('سداد العمولة', style: TextStyle(color: Colors.white, fontSize: SizeConfig.widthResponsive(0.035), fontWeight: FontWeight.w600,),),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10,),
            Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -120,24 +140,6 @@ class _HomeVendorPageState extends State<HomeVendorPage> {
                 Expanded(
                   flex: 1,
                   child: DashboardItemHome(
-                    title: 'سداد العمولة',
-                    icon: const Icon(Icons.monetization_on, color: AppColor.primaryColor, size: 32),
-                    subTitle: 'عمولة التطبيق',
-                    onTap: (){
-                      navigationPush(context, const AppCommissionScreen());
-                    },
-                  ),
-                ),
-              ],
-            ),),
-          const SizedBox(height: 10,),
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: DashboardItemHome(
                     title: 'إعدادات الحساب',
                     subTitle: 'حسابي',
                     icon: const Icon(Icons.business, color: AppColor.primaryColor, size: 32),
@@ -146,21 +148,17 @@ class _HomeVendorPageState extends State<HomeVendorPage> {
                     },
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: DashboardItemHome(
-                    title: 'تسجيل الخروج',
-                    subTitle: 'تسجيل الخروج من الحساب',
-                    icon: const Icon(Icons.logout, color: AppColor.primaryColor, size: 32),
-                    onTap: (){
-                      DialogUtils().showConfirmDialog(context, message: 'هل تريد تسجيل الخروج من الحساب؟', confirm: () async => await context.read<AuthProvider>().logout(context));
-                    },
-                  ),
-                ),
               ],
+            ),),
+          const SizedBox(height: 10,),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: DashboardItemHome(
+              title: 'تسجيل الخروج',
+              subTitle: 'تسجيل الخروج من الحساب',
+              icon: const Icon(Icons.logout, color: AppColor.primaryColor, size: 32),
+              onTap: (){
+                DialogUtils().showConfirmDialog(context, message: 'هل تريد تسجيل الخروج من الحساب؟', confirm: () async => await context.read<AuthProvider>().logout(context));
+              },
             ),),
           const SizedBox(height: 10,),
 

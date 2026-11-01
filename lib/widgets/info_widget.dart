@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../core/utils/constants/colors_constants.dart';
-
 class InfoWidget extends StatelessWidget {
   const InfoWidget({super.key, required this.text});
   final String text;
@@ -12,14 +10,39 @@ class InfoWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFEED6), // لون البيج
+        color: const Color(0xFFD32F2F), // أحمر تنبيه
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFD32F2F).withValues(alpha: 0.35),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // أيقونة التنبيه
-          const Icon(Icons.info, color: AppColor.primaryColor,),
+          // أيقونة التنبيه: محاذاة لسطر النص الأول (ارتفاع السطر 15 × 1.6 = 24)
+          // والقرص الأسود خلف الأيقونة يظهر من خلال حرف الـ i الشفاف فيصبح أسود
+          SizedBox(
+            height: 24,
+            width: 30,
+            child: OverflowBox(
+              maxHeight: 30,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 14,
+                    height: 14,
+                    decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+                  ),
+                  const Icon(Icons.info, color: Color(0xFFFFD600), size: 30,),
+                ],
+              ),
+            ),
+          ),
 
           const SizedBox(width: 12),
 
@@ -28,10 +51,10 @@ class InfoWidget extends StatelessWidget {
             child: Text(text,
               textAlign: TextAlign.right,
               style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
                 height: 1.6,
-                color: Color(0xFF7A7A7A),
+                color: Colors.white,
               ),
             ),
           ),
