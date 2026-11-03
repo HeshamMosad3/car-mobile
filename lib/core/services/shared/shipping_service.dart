@@ -40,6 +40,14 @@ class ShippingService extends BaseService {
     );
   }
 
+  Future<ShippingResultModel?> getPendingActions() {
+    return getService(
+      apiService: _apiService,
+      endpoint: ApiEndpoints.shippingPendingActions,
+      fromJson: (json) => ShippingResultModel.fromJson(json),
+    );
+  }
+
   Future<ShippingResultModel?> _post(String endpoint) {
     return postService(
       apiService: _apiService,

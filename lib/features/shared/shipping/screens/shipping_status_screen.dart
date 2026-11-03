@@ -100,7 +100,9 @@ class _ShippingStatusScreenState extends State<ShippingStatusScreen> {
                         _buildCarrierCard(shipping),
                         const SizedBox(height: 12),
                       ],
-                      if (!shipping.isClosed) ...[
+                      // A delivered shipment keeps its steps, all marked done. Only a canceled or unavailable
+                      // one hides them: there is no record of how far it got.
+                      if (shipping.status != 'Canceled' && shipping.status != 'Unavailable') ...[
                         _buildStepsCard(shipping),
                         const SizedBox(height: 12),
                       ],
@@ -220,6 +222,9 @@ class _ShippingStatusScreenState extends State<ShippingStatusScreen> {
     // Waiting for the customer's data is still the first step.
     final key = shipping.status == 'AwaitingCustomerData' ? 'AwaitingCustomerApproval' : shipping.status;
     final current = _steps.indexWhere((s) => s.key == key);
+    // Delivered is the last step and nothing comes after it, so every step, itself included, is done.
+    final delivered = shipping.status == 'Delivered';
+    const doneColor = Color(0xFF2E7D32);
 
     return CardContainerWidget(children: [
       Text('مراحل الشحن', style: txtBold04),
@@ -230,16 +235,20 @@ class _ShippingStatusScreenState extends State<ShippingStatusScreen> {
           child: Row(
             children: [
               Icon(
-                i < current
+                (i < current || delivered)
                     ? Icons.check_circle
                     : (i == current ? Icons.radio_button_checked : Icons.radio_button_unchecked),
                 size: 20,
-                color: i <= current ? AppColor.primaryColor : AppColor.greyColor,
+                color: (i < current || delivered)
+                    ? doneColor
+                    : (i == current ? AppColor.primaryColor : AppColor.greyColor),
               ),
               const SizedBox(width: 10),
               Text(
                 _steps[i].value,
-                style: i == current ? txtBold04 : txtMedium04.copyWith(color: AppColor.greyColor),
+                style: delivered
+                    ? txtMedium04.copyWith(color: doneColor)
+                    : (i == current ? txtBold04 : txtMedium04.copyWith(color: i < current ? doneColor : AppColor.greyColor)),
               ),
             ],
           ),

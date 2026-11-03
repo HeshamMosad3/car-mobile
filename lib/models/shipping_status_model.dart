@@ -115,3 +115,48 @@ class ShippingStatusModel {
   /// A closed shipment: nothing more will happen to it.
   bool get isClosed => status == 'Delivered' || status == 'Canceled' || status == 'Unavailable';
 }
+
+
+/// A shipment that is waiting for the customer to do something (approve, complete the data, pay).
+/// Only these steps are listed: waiting on the admin or the carrier gives the user nothing to do.
+class PendingShippingAction {
+  final int shippingId;
+  final String status;
+  final String action;
+  final String actionText;
+  final int conversationId;
+  final int requestId;
+  final int responseId;
+  final int vendorId;
+  final String receiverName;
+  final String receiverLogo;
+
+  const PendingShippingAction({
+    required this.shippingId,
+    required this.status,
+    required this.action,
+    required this.actionText,
+    required this.conversationId,
+    required this.requestId,
+    required this.responseId,
+    required this.vendorId,
+    this.receiverName = '',
+    this.receiverLogo = '',
+  });
+
+  factory PendingShippingAction.fromJson(Map<String, dynamic> json) {
+    int asInt(dynamic v) => int.tryParse(v?.toString() ?? '') ?? 0;
+    return PendingShippingAction(
+      shippingId: asInt(json['shipping_id']),
+      status: json['status']?.toString() ?? '',
+      action: json['action']?.toString() ?? '',
+      actionText: json['action_text']?.toString() ?? '',
+      conversationId: asInt(json['conversation_id']),
+      requestId: asInt(json['request_id']),
+      responseId: asInt(json['response_id']),
+      vendorId: asInt(json['vendor_id']),
+      receiverName: json['receiver_name']?.toString() ?? '',
+      receiverLogo: json['receiver_logo']?.toString() ?? '',
+    );
+  }
+}

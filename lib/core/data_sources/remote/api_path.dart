@@ -1,6 +1,9 @@
 class ApiPath {
-  static const String BASE_HOST = 'https://carbackend-production-38ac.up.railway.app/';
-  static const String REVERB_HOST = 'reverb-production-e9e8.up.railway.app';
+  // Temporary local-dev value for testing local backend
+  static const String BASE_HOST = 'http://10.0.2.2:8000/';
+  // static const String BASE_HOST = 'https://carbackend-production-38ac.up.railway.app/';
+  // Temporary local-dev value; production: 'reverb-production-e9e8.up.railway.app'
+  static const String REVERB_HOST = '10.0.2.2';
   // static const String BASE_HOST = 'http://10.0.2.2:8000/';
   // static const String REVERB_HOST = '10.0.2.2:8085';
   static const String baseUrl = BASE_HOST + 'api/v1/';

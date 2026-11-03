@@ -39,6 +39,7 @@ import '../../../../widgets/custom_textfield.dart';
 import '../../../../widgets/images/custom_image.dart';
 import '../../../user/shipping_request/screens/confirm_shipping_request_screen.dart';
 import '../../shipping/screens/shipping_status_screen.dart';
+import '../widgets/shipping_card_widget.dart';
 import '../../../user/vendor_profile/screens/vendor_profile_screen.dart';
 import '../../../user/vendor_profile/widgets/rate_vendor_bottom_sheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -80,6 +81,8 @@ class _ChatScreenState extends State<ChatScreen> {
       if (!widget.isVendor) {
         context.read<VendorProfileProvider>().fetchVendorProfile(context, widget.vendorId, refresh: true);
       }
+      // Both sides read the shipment, so the card in the chat shows where it stands.
+      context.read<ShippingProvider>().loadStatus(requestId: widget.requestId, responseId: widget.responseId, silent: true);
       context.read<NotificationBadgeProvider>().markEntityRead(section: 'conversations', entityId: widget.conversationId);
       final prov = Provider.of<ConversationProvider>(context, listen: false);
       prov.initProvider();
@@ -361,21 +364,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
                             if(msg.isShippingRequest)
                               SizedBox(
-                                width: SizeConfig.widthResponsive(0.60),
+                                width: SizeConfig.widthResponsive(0.66),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const SizedBox(height: 10,),
-                                    Text('الموافقة على طلب الشحن', style: TextStyle(color: AppColor.accentColor, fontSize: 16),),
-                                    const SizedBox(height: 10,),
-                                    CustomButton(
-                                      label: widget.isVendor ? 'تم إرسال طلب الشحن': 'الموافقة على عملية الشحن',
-                                      onTap: _openShipping,
-                                      textColor: AppColor.accentColor,
-                                      primaryColor: Colors.transparent,
-                                      borderColor: AppColor.accentColor ,
-                                      txtSize: 16,),
-                                    const SizedBox(height: 10,),
+                                    const SizedBox(height: 6,),
+                                    _shippingCard(),
+                                    const SizedBox(height: 4,),
                                   ],
                                 ),
                               ),
@@ -448,6 +443,39 @@ class _ChatScreenState extends State<ChatScreen> {
           );
         }
       ),
+    );
+  }
+
+  /// The shipping card inside the chat bubble. It reads the shipment from [ShippingProvider], which the
+  /// server keeps fresh through live updates, so it changes by itself as the shipment moves.
+  Widget _shippingCard() {
+    return Consumer<ShippingProvider>(
+      builder: (context, shipping, _) {
+        // Re-read the shipment quietly after coming back from a form or the status page.
+        Future<void> andRefresh(Future<void> Function() action) async {
+          await action();
+          if (mounted) {
+            shipping.loadStatus(requestId: widget.requestId, responseId: widget.responseId, silent: true);
+          }
+        }
+
+        return ShippingCardWidget(
+          shipping: shipping.current,
+          isVendor: widget.isVendor,
+          isPaying: shipping.isActing,
+          onFillForm: () => andRefresh(_openShipping),
+          onPay: () => andRefresh(() => shipping.pay()),
+          onTrack: () => andRefresh(_openShippingStatus),
+        );
+      },
+    );
+  }
+
+  /// "تابع عملية الشحن": always the status page with the shipping details.
+  Future<void> _openShippingStatus() async {
+    await navigationPush(
+      context,
+      ShippingStatusScreen(requestId: widget.requestId, responseId: widget.responseId, vendorId: widget.vendorId, isVendor: widget.isVendor,),
     );
   }
 
