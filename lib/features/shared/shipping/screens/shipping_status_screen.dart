@@ -1,6 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/data_sources/local/secure_storage.dart';
+import '../../../../core/data_sources/remote/api_endpoints.dart';
+import '../../../../core/data_sources/remote/api_path.dart';
 import '../../../../core/providers/shipping_provider.dart';
 import '../../../../core/styles/styles.dart';
 import '../../../../core/utils/constants/assets_path.dart';
@@ -98,6 +102,10 @@ class _ShippingStatusScreenState extends State<ShippingStatusScreen> {
                       ],
                       if (_hasCarrierInfo(shipping)) ...[
                         _buildCarrierCard(shipping),
+                        const SizedBox(height: 12),
+                      ],
+                      if (shipping.hasWaybill) ...[
+                        _buildWaybillCard(shipping, provider),
                         const SizedBox(height: 12),
                       ],
                       // A delivered shipment keeps its steps, all marked done. Only a canceled or unavailable
@@ -216,6 +224,67 @@ class _ShippingStatusScreenState extends State<ShippingStatusScreen> {
     ]);
   }
 
+  /// The carrier's waybill: a picture shown right here (tap to zoom) or a PDF tile, plus a button
+  /// that downloads it and opens the share sheet so it can be saved or sent.
+  Widget _buildWaybillCard(ShippingStatusModel shipping, ShippingProvider provider) {
+    final url = '${ApiPath.baseUrl}${ApiEndpoints.shippingWaybill(shipping.id)}?v=${shipping.waybillVersion}';
+
+    return CardContainerWidget(children: [
+      Text('بوليصة الشحن', style: txtBold04),
+      const SizedBox(height: 10),
+      if (shipping.waybillType == 'pdf')
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 22),
+          decoration: BoxDecoration(
+            color: AppColor.primaryColor.withValues(alpha: 0.06),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            children: [
+              const Icon(Icons.picture_as_pdf, size: 44, color: Colors.redAccent),
+              const SizedBox(height: 6),
+              Text('ملف PDF', style: txtMedium04),
+            ],
+          ),
+        )
+      else
+        FutureBuilder<String?>(
+          future: SecureStorage.getToken(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return const SizedBox(height: 180, child: CustomLoading(radius: 18));
+            final headers = {'Authorization': 'Bearer ${snapshot.data ?? ''}'};
+
+            return InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => _WaybillViewer(url: url, headers: headers)),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: url,
+                  httpHeaders: headers,
+                  width: double.infinity,
+                  height: SizeConfig.heightResponsive(0.30),
+                  fit: BoxFit.contain,
+                  placeholder: (context, _) => const CustomLoading(radius: 18),
+                  errorWidget: (context, _, __) => const SizedBox(height: 120, child: Icon(Icons.broken_image, size: 40)),
+                ),
+              ),
+            );
+          },
+        ),
+      const SizedBox(height: 12),
+      CustomButton(
+        label: 'تحميل / مشاركة البوليصة',
+        txtSize: SizeConfig.widthResponsive(0.04),
+        loading: provider.isSharingWaybill,
+        onTap: () => provider.shareWaybill(),
+      ),
+    ]);
+  }
+
   Widget _buildInfoCard(String text) => CardContainerWidget(children: [Text(text, style: txtMedium04)]);
 
   Widget _buildStepsCard(ShippingStatusModel shipping) {
@@ -273,6 +342,34 @@ class _ShippingStatusScreenState extends State<ShippingStatusScreen> {
           },
         );
       },
+    );
+  }
+}
+
+/// Full-screen, zoomable view of the waybill picture.
+class _WaybillViewer extends StatelessWidget {
+  const _WaybillViewer({required this.url, required this.headers});
+
+  final String url;
+  final Map<String, String> headers;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(backgroundColor: Colors.black, foregroundColor: Colors.white),
+      body: Center(
+        child: InteractiveViewer(
+          minScale: 1,
+          maxScale: 5,
+          child: CachedNetworkImage(
+            imageUrl: url,
+            httpHeaders: headers,
+            fit: BoxFit.contain,
+            placeholder: (context, _) => const CustomLoading(radius: 18),
+          ),
+        ),
+      ),
     );
   }
 }

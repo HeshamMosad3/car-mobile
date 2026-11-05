@@ -74,6 +74,10 @@ class ShippingStatusModel {
   final bool needsData;
   final bool canPay;
   final bool canCancel;
+  /// The carrier's waybill, once the admin uploaded it: 'image' or 'pdf'. Changes when it is replaced.
+  final bool hasWaybill;
+  final String waybillType;
+  final String waybillVersion;
 
   const ShippingStatusModel({
     this.id = 0,
@@ -90,6 +94,9 @@ class ShippingStatusModel {
     this.needsData = false,
     this.canPay = false,
     this.canCancel = false,
+    this.hasWaybill = false,
+    this.waybillType = '',
+    this.waybillVersion = '',
   });
 
   factory ShippingStatusModel.fromJson(Map<String, dynamic>? json) {
@@ -109,6 +116,9 @@ class ShippingStatusModel {
       needsData: json?['needs_data'] == true,
       canPay: json?['can_pay'] == true,
       canCancel: json?['can_cancel'] == true,
+      hasWaybill: json?['has_waybill'] == true,
+      waybillType: json?['waybill_type']?.toString() ?? '',
+      waybillVersion: json?['waybill_version']?.toString() ?? '',
     );
   }
 

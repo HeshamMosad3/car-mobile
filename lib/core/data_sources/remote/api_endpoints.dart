@@ -14,6 +14,7 @@ class ApiEndpoints {
    static String shippingApprove(int shippingId) => 'shipping/$shippingId/approve';
    static String shippingCancel(int shippingId) => 'shipping/$shippingId/cancel';
    static String shippingPay(int shippingId) => 'shipping/$shippingId/pay';
+   static String shippingWaybill(int shippingId) => 'shipping/$shippingId/waybill';
    static const String shippingStoreAddress = 'shipping/store-address';
    static const String shippingPendingActions = 'shipping/pending-actions';
    static const String userConversations = 'chat/conversations/user-conversations';
