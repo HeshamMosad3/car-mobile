@@ -9,8 +9,7 @@ import '../../../../core/utils/constants/assets_path.dart';
 import '../../../../core/utils/constants/colors_constants.dart';
 import '../../../../core/utils/size_config.dart';
 import '../../../../widgets/components.dart';
-import '../../../shared/notifications/screens/notifications_screen.dart';
-import '../../shipping_actions/widgets/pending_shipping_action_text.dart';
+import '../../../../widgets/notification_bell_button.dart';
 
 class HomeAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBarWidget({super.key});
@@ -36,7 +35,7 @@ class HomeAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       elevation: 0,
-      actions: const [PendingShippingActionText()],
+      actions: const [NotificationBellButton(showPendingActions: true)],
       leadingWidth: SizeConfig.widthResponsive(0.18),
       titleSpacing: 0,
       leading: const Padding(padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),

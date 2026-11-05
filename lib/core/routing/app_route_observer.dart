@@ -13,6 +13,9 @@ class AppRouteObserver extends NavigatorObserver {
 
   String? get currentRouteName => _stack.isEmpty ? null : _stack.last;
 
+  /// How many routes are on the stack. The splash screen plus the home page make 2.
+  int get depth => _stack.length;
+
   bool stackContains(String routeName) => _stack.contains(routeName);
 
   @override

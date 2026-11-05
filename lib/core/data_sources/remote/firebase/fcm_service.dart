@@ -7,12 +7,14 @@ import 'package:car_mediator_mobile/core/utils/connection_utils.dart';
 import 'package:car_mediator_mobile/core/utils/context_utils.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart' show Color;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/notification_payload.dart';
 import '../../../providers/conversation_provider.dart';
 import '../../../providers/notification_badge_provider.dart';
+import '../../../providers/shipping_provider.dart';
 import '../../../routing/notification_router.dart';
 import '../../../services/shared/device_registration_service.dart';
 import '../../local/secure_storage.dart';
@@ -135,7 +137,8 @@ class FcmService {
 
   static Future<void> initializeLocalNotifications() async {
     final InitializationSettings _initSettings = InitializationSettings(
-        android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+        // A white-silhouette icon: the full-colour launcher icon renders as a blank square in the status bar.
+        android: AndroidInitializationSettings("@drawable/ic_stat_notification"),
         iOS: DarwinInitializationSettings()
     );
     await FcmService.localNotificationsPlugin.initialize(_initSettings, onDidReceiveNotificationResponse: FcmService.onTapNotification);
@@ -194,6 +197,7 @@ class FcmService {
           channelDescription: _highImportanceChannel.description,
           priority: Priority.max,
           importance: Importance.max,
+          color: const Color(0xff052659),
         ),
       );
 
@@ -251,6 +255,8 @@ class FcmService {
       try {
         ctx.read<NotificationBadgeProvider>().fetchUnreadCounts();
         ctx.read<ConversationProvider>().onRealtimeMessageReceived(message.data);
+        // A status push can mean a new "next step" for the customer, so refresh it too.
+        ctx.read<ShippingProvider>().refresh();
       } catch (e) {
         log('Error updating providers on foreground FCM message: $e');
       }

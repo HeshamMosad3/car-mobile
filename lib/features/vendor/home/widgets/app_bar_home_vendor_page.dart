@@ -11,7 +11,7 @@ import '../../../../core/utils/constants/assets_path.dart';
 import '../../../../core/utils/constants/colors_constants.dart';
 import '../../../../core/utils/size_config.dart';
 import '../../../../widgets/components.dart';
-import '../../../shared/notifications/screens/notifications_screen.dart';
+import '../../../../widgets/notification_bell_button.dart';
 
 class AppBarHomeVendorPage extends StatelessWidget implements PreferredSizeWidget {
   const AppBarHomeVendorPage({super.key});
@@ -37,7 +37,7 @@ class AppBarHomeVendorPage extends StatelessWidget implements PreferredSizeWidge
           ],
         ),
         elevation: 0,
-        actions: const [],
+        actions: const [NotificationBellButton()],
         leadingWidth: SizeConfig.widthResponsive(0.18),
         titleSpacing: 0,
         leading:  Padding(padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),

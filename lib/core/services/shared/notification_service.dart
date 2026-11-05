@@ -83,6 +83,20 @@ class NotificationService extends BaseService  {
     }
   }
 
+  /// Marks every status-update notification (what the bell counts) as read.
+  Future<Map<String, dynamic>?> markAllRead() async {
+    try {
+      final response = await _apiService.postData('notifications/mark-all-read', body: {});
+      if (response != null && response['success'] == true && response['data'] != null) {
+        return response['data'] as Map<String, dynamic>;
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error marking all notifications read: $e');
+      return null;
+    }
+  }
+
   Future<Map<String, int>?> markCategoryRead(String category) async {
     try {
       final response = await _apiService.postData('notifications/mark-category-read', body: {'category': category});

@@ -53,6 +53,12 @@ class NotificationModel{
   final String? targetId;
   final String? readAt;
 
+  /// Where tapping it goes, worked out by the server ('chat', 'request_responses', 'request_details'
+  /// or 'home'), with the id and details that screen needs.
+  final String route;
+  final String? routeTargetId;
+  final Map<String, String> routeParams;
+
   const NotificationModel({
     this.id = '',
     this.title = '',
@@ -61,11 +67,17 @@ class NotificationModel{
     this.category,
     this.targetId,
     this.readAt,
+    this.route = '',
+    this.routeTargetId,
+    this.routeParams = const {},
   });
 
   bool get isRead => readAt != null && readAt!.isNotEmpty;
 
   factory NotificationModel.fromJson(Map<String, dynamic>? json) {
+    final destination = json?['destination'];
+    final params = destination is Map ? destination['params'] : null;
+
     return NotificationModel(
       id: json?['id']?.toString() ?? '',
       title: json?['title'] ?? '',
@@ -74,6 +86,9 @@ class NotificationModel{
       category: json?['category'],
       targetId: json?['target_id']?.toString(),
       readAt: json?['read_at'],
+      route: destination is Map ? destination['route']?.toString() ?? '' : '',
+      routeTargetId: destination is Map ? destination['target_id']?.toString() : null,
+      routeParams: params is Map ? params.map((k, v) => MapEntry(k.toString(), v.toString())) : const {},
     );
   }
 }

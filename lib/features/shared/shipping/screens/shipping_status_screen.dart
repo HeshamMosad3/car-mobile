@@ -45,7 +45,7 @@ class _ShippingStatusScreenState extends State<ShippingStatusScreen> {
     MapEntry('SearchingCarrier', 'البحث عن شركة شحن'),
     MapEntry('AwaitingPayment', 'دفع رسوم الشحن'),
     MapEntry('Paid', 'تم دفع الرسوم'),
-    MapEntry('BookingConfirmed', 'تأكيد الحجز'),
+    MapEntry('BookingConfirmed', 'تأكيد الشحن'),
     MapEntry('PickedUp', 'استلام الشحنة'),
     MapEntry('InTransit', 'في الطريق'),
     MapEntry('Delivered', 'تم التسليم'),
@@ -93,7 +93,7 @@ class _ShippingStatusScreenState extends State<ShippingStatusScreen> {
                         const SizedBox(height: 12),
                       ],
                       if (!widget.isVendor && shipping.paymentStatus == 'paid' && !shipping.isClosed) ...[
-                        _buildInfoCard('تم دفع رسوم الشحن، وجارٍ استكمال حجز الشحنة.'),
+                        _buildInfoCard('تم دفع رسوم الشحن، وجارٍ تأكيد الشحن.'),
                         const SizedBox(height: 12),
                       ],
                       if (_hasCarrierInfo(shipping)) ...[
@@ -208,10 +208,11 @@ class _ShippingStatusScreenState extends State<ShippingStatusScreen> {
           );
 
     return CardContainerWidget(children: [
-      Text('بيانات الحجز', style: txtBold04),
+      Text('بيانات تأكيد الشحن', style: txtBold04),
       const SizedBox(height: 8),
       row('شركة الشحن', shipping.carrierName),
       row('رقم التتبع', shipping.trackingNumber),
+      row('طريقة التسليم للشركة', shipping.pickupMethodLabel),
       row('بيانات الاستلام', shipping.pickupDetails),
     ]);
   }

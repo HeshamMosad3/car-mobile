@@ -35,7 +35,11 @@ class NotificationPayload {
 
   /// Unique per-destination key used both for the Android tray notification
   /// id/tag and for navigation-stack dedupe (see NotificationRouter).
-  String get routeKey => '$route:${targetId ?? '0'}';
+  ///
+  /// Written as a path ("/request_responses/4"): Flutter's navigator parses every route name as a
+  /// web address, and "request_responses:4" is not one (underscores can't start a scheme), which
+  /// threw and left the navigator locked on a black screen.
+  String get routeKey => '/$route/${targetId ?? '0'}';
 
   factory NotificationPayload.fromData(Map<String, dynamic> data) {
     final category = (data['category_v2'] ?? data['category'] ?? 'generic').toString();
@@ -90,19 +94,27 @@ class NotificationPayload {
   }
 
   /// A row from GET /notifications (see NotificationModel).
+  ///
+  /// [route], [routeTargetId] and [params] are the destination the server worked out for the row.
+  /// Without them it falls back to guessing from the category (an older backend).
   factory NotificationPayload.fromApiRow({
     required String? category,
     required String? targetId,
     required String title,
     required String body,
+    String route = '',
+    String? routeTargetId,
+    Map<String, String> params = const {},
   }) {
     final cat = category ?? 'generic';
+    final hasRoute = route.isNotEmpty;
     return NotificationPayload(
-      route: _routeFromLegacyCategory(cat),
+      route: hasRoute ? route : _routeFromLegacyCategory(cat),
       category: cat,
-      targetId: targetId,
+      targetId: hasRoute ? routeTargetId : targetId,
       title: title,
       body: body,
+      params: params,
     );
   }
 
@@ -133,13 +145,17 @@ class NotificationPayload {
       case 'conversations':
       case 'chat_message':
       case 'shipping_request':
+      case 'shipment_update':
         return 'chat';
       case 'company_responses':
       case 'vendor_response':
+      case 'request_update':
         return 'request_responses';
       case 'customer_requests':
       case 'new_request':
         return 'request_details';
+      case 'vendor_status':
+        return 'home';
       default:
         return 'notifications';
     }

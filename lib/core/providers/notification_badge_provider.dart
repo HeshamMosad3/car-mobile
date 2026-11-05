@@ -11,7 +11,11 @@ class NotificationBadgeProvider extends ChangeNotifier {
     'customer_requests': 0,
     'company_responses': 0,
     'conversations': 0,
+    'bell': 0,
   };
+
+  /// Unread status updates about the user's orders: what the bell shows.
+  int get bellCount => unreadCounts['bell'] ?? 0;
 
   Map<String, Map<int, int>> entityUnreadCounts = {
     'conversations': {},
@@ -98,7 +102,11 @@ class NotificationBadgeProvider extends ChangeNotifier {
     if (data['entities'] is Map) {
       final entities = data['entities'] as Map;
       entities.forEach((secKey, secValue) {
-        if (secValue is Map) {
+        // The server sends an empty list (not an empty map) once nothing is unread any more; without
+        // this the old per-item numbers would stay on screen.
+        if (secValue is List && secValue.isEmpty) {
+          entityUnreadCounts[secKey.toString()] = {};
+        } else if (secValue is Map) {
           final Map<int, int> itemMap = {};
           secValue.forEach((entId, count) {
             final parsedId = int.tryParse(entId.toString());
@@ -130,6 +138,20 @@ class NotificationBadgeProvider extends ChangeNotifier {
     }
   }
 
+  /// Called when the notifications screen opens: everything on it has now been seen.
+  Future<void> markAllRead() async {
+    if (bellCount != 0) {
+      unreadCounts['bell'] = 0;
+      notifyListeners();
+    }
+
+    final rawData = await _service.markAllRead();
+    if (rawData != null) {
+      _parseRawData(rawData);
+      notifyListeners();
+    }
+  }
+
   Future<void> markCategoryRead(String category) async {
     unreadCounts[category] = 0;
     entityUnreadCounts[category]?.clear();
@@ -155,6 +177,7 @@ class NotificationBadgeProvider extends ChangeNotifier {
       'customer_requests': 0,
       'company_responses': 0,
       'conversations': 0,
+      'bell': 0,
     };
     entityUnreadCounts = {
       'conversations': {},

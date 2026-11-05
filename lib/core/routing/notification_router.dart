@@ -79,6 +79,13 @@ class NotificationRouter {
       return;
     }
 
+    // "Home" = nothing more specific to open: go back to the app's main screen (the splash screen
+    // plus the home page are the two routes at the bottom of the stack).
+    if (payload.route == 'home') {
+      navigatorKey.currentState?.popUntil((_) => AppRouteObserver.instance.depth <= 2);
+      return;
+    }
+
     final destination = _buildDestination(payload, ctx);
     if (destination == null) return;
 

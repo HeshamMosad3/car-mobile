@@ -14,7 +14,7 @@ String shippingStatusLabel(String status) {
     case 'Paid':
       return 'تم دفع رسوم الشحن';
     case 'BookingConfirmed':
-      return 'تم تأكيد الحجز';
+      return 'تم تأكيد الشحن';
     case 'PickedUp':
       return 'تم استلام الشحنة';
     case 'InTransit':
@@ -70,6 +70,8 @@ class ShippingStatusModel {
   final String carrierName;
   final String trackingNumber;
   final String pickupDetails;
+  /// How the parcel reaches the carrier, in words (door pick-up, or the vendor takes it to a branch).
+  final String pickupMethodLabel;
   final String cancelReason;
   final bool needsData;
   final bool canPay;
@@ -86,6 +88,7 @@ class ShippingStatusModel {
     this.carrierName = '',
     this.trackingNumber = '',
     this.pickupDetails = '',
+    this.pickupMethodLabel = '',
     this.cancelReason = '',
     this.needsData = false,
     this.canPay = false,
@@ -105,6 +108,7 @@ class ShippingStatusModel {
       carrierName: json?['carrier_name'] ?? '',
       trackingNumber: json?['tracking_number'] ?? '',
       pickupDetails: json?['pickup_details'] ?? '',
+      pickupMethodLabel: json?['pickup_method_label'] ?? '',
       cancelReason: json?['cancel_reason'] ?? '',
       needsData: json?['needs_data'] == true,
       canPay: json?['can_pay'] == true,
